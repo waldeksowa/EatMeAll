@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>eat-me-all</artifactId>
+        <groupId>pl.wizard.software</groupId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>ear-me-all-ear</artifactId>
+    <packaging>ear</packaging>
+
+    <build>
+        <finalName>eat-me-all</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-ear-plugin</artifactId>
+                <version>3.0.1</version>
+                <configuration>
+                    <!--<defaultLibBundleDir>lib</defaultLibBundleDir>-->
+                    <modules>
+                        <webModule>
+                            <groupId>${project.groupId}</groupId>
+                            <artifactId>rest.base</artifactId>
+                            <contextRoot>/api</contextRoot>
+                        </webModule>
+                    </modules>
+                    <outputDirectory>${project.build.directory}/deployment</outputDirectory>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.wildfly.plugins</groupId>
+                <artifactId>wildfly-maven-plugin</artifactId>
+                <version>2.0.0.Final</version>
+                <configuration>
+                    <!--Local-->
+                    <hostname>127.0.0.1</hostname>
+                    <!--Docker-->
+                    <!--<hostname>192.168.99.100</hostname>-->
+                    <port>9990</port>
+                    <username>admin</username>
+                    <password>nimda</password>
+                    <filename>deployment/${project.build.finalName}.ear</filename>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>deploy</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>deploy</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <dependencies>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>rest.base</artifactId>
+            <version>${project.version}</version>
+            <type>war</type>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>db-connector</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+</project>

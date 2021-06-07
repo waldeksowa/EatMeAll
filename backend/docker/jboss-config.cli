@@ -1,0 +1,35 @@
+echo Configuring WildFly...
+embed-server --std-out=echo
+
+echo Adding PostgreSQL driver module to WildFly modules
+module add --name=org.postgresql\
+    --dependencies=javax.api,javax.transaction.api\
+    --resources=/tmp/postgresql-42.2.8.jar
+
+echo Registering PostgreSQL driver module
+/subsystem=datasources/jdbc-driver=postgresql:add(\
+    driver-name="postgresql",\
+    driver-module-name="org.postgresql",\
+    driver-class-name="org.postgresql.Driver",\
+    driver-xa-datasource-class-name="org.postgresql.xa.PGXADataSource")
+	
+echo Creating datasource
+    /subsystem=datasources/data-source="ema":add(\
+        jndi-name="java:/datasources/ema",\
+        enabled="true",\
+        use-java-context="true",\
+        connection-url="${env.JDBC_CONNECTION_URL}",\
+        driver-name="postgresql",\
+        user-name="${env.DB_USERNAME}",\
+        password="${env.DB_PASSWORD}",\
+        validate-on-match="false",\
+        background-validation="false")
+
+#echo Configure undertow
+#/subsystem=undertow/configuration=handler/file=authfilehandler:add(path="${jboss.home.dir}/files")
+#/subsystem=undertow/configuration=handler/file=authfilehandler:write-attribute(name="follow-symlink", value="false")
+#/subsystem=undertow/configuration=handler/file=authfilehandler:write-attribute(name="directory-listing", value="true")
+#/subsystem=undertow/server=default-server/host=default-host/location="/files":add(handler="authfilehandler")
+
+echo stopping embedded server
+stop-embedded-server
