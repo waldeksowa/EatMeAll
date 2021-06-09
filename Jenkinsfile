@@ -22,7 +22,7 @@ pipeline {
         stage('Build') {
             steps {
                 dir('backend/project'){
-                    sh "mvn clean install"
+                    sh "mvn clean install -Pdeploy"
                 }
             }
         }       
