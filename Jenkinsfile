@@ -43,6 +43,7 @@ pipeline {
 		success {
 			echo 'Build success'
 			sendDiscordMessage("${env.GIT_AUTHOR} ${env.DISCORD_SUCCESS_MSG}", "${env.DISCORD_TAG_USER}")
+			cleanWs()
 		}
 	}
 }
