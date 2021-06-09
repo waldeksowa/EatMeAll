@@ -38,7 +38,8 @@ pipeline {
 					echo 'Failure on non development branch'
 					sendDiscordMessage("${env.GIT_AUTHOR} ${env.DISCORD_FAILURE_MSG}", "${env.DISCORD_TAG_USER}")
 				}
-			}			
+			}
+			cleanWs()
 		}
 		success {
 			echo 'Build success'
