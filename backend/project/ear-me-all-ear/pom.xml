@@ -35,31 +35,6 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
             </plugin>
-
-            <plugin>
-                <groupId>org.wildfly.plugins</groupId>
-                <artifactId>wildfly-maven-plugin</artifactId>
-                <version>2.0.0.Final</version>
-                <configuration>
-                    <!--Local-->
-                    <hostname>127.0.0.1</hostname>
-                    <!--Docker-->
-                    <!--<hostname>192.168.99.100</hostname>-->
-                    <port>9990</port>
-                    <username>admin</username>
-                    <password>nimda</password>
-                    <filename>deployment/${project.build.finalName}.ear</filename>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>deploy</id>
-                        <phase>install</phase>
-                        <goals>
-                            <goal>deploy</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
         </plugins>
     </build>
 
@@ -76,4 +51,38 @@
             <version>${project.version}</version>
         </dependency>
     </dependencies>
+
+    <profiles>
+        <profile>
+            <id>deploy</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.wildfly.plugins</groupId>
+                        <artifactId>wildfly-maven-plugin</artifactId>
+                        <version>2.0.0.Final</version>
+                        <configuration>
+                            <!--Local-->
+                            <hostname>127.0.0.1</hostname>
+                            <!--Docker-->
+                            <!--<hostname>192.168.99.100</hostname>-->
+                            <port>9990</port>
+                            <username>admin</username>
+                            <password>nimda</password>
+                            <filename>deployment/${project.build.finalName}.ear</filename>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>deploy</id>
+                                <phase>install</phase>
+                                <goals>
+                                    <goal>deploy</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
