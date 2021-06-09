@@ -11,4 +11,4 @@ ${WILDFLY_HOME}/bin/jboss-cli.sh  --file=${WILDFLY_HOME}/customization/jboss-con
 
 EXPOSE 8080 8443 
 
-ENTRYPOINT /opt/jboss/wildfly/bin/standalone.sh -b 0.0.0.0 -bmanagement=0.0.0.0
+ENTRYPOINT /opt/jboss/wildfly/bin/standalone.sh -b 0.0.0.0 -bmanagement=0.0.0.0 --debug 0.0.0.0:8787
