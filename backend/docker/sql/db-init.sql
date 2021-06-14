@@ -46,7 +46,8 @@ CREATE TABLE public.products (
     name character varying(255),
     product_type integer,
     protein double precision,
-    roughage double precision
+    roughage double precision,
+    CONSTRAINT products_pkey PRIMARY KEY (id)
 );
 
 
