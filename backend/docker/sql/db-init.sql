@@ -912,3 +912,48 @@ INSERT INTO public.products(
 (	855	, current_timestamp, current_timestamp,0,	714.00	,	2.60	,	79.00	        ,'Majonez domowy z olejem słonecznikowym'	,	1.30	,	0.10	,	17	),
 (	856	, current_timestamp, current_timestamp,0,	162.00	,	22.00	,	6.40	        ,'Musztarda'	,	5.70	,	1.70	,	17	),
 (	857	, current_timestamp, current_timestamp,0,	343.00	,	0.00	,	0.10	        ,'Żelatyna'	,	84.20	,	0.00	,	17	);
+
+CREATE TABLE IF NOT EXISTS public.meals
+(
+    id bigint NOT NULL,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone,
+    version integer NOT NULL,
+    name character varying(255),
+    meal_time integer,
+    prepare_time integer,
+    author character varying(255),
+    description character varying(255),
+    parts bigint,
+    steps character varying(255),
+    CONSTRAINT meals_pkey PRIMARY KEY (id)
+)
+
+ALTER TABLE public.meals OWNER TO eatmeall;
+
+
+CREATE TABLE IF NOT EXISTS public.meals_products
+(
+    id bigint NOT NULL,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone,
+    version integer NOT NULL,
+    meal_id bigint NOT NULL,
+    product_id bigint NOT NULL,
+    amount integer,
+    special_amount integer,
+    unit integer,
+    CONSTRAINT meals_products_pkey PRIMARY KEY (id),
+    CONSTRAINT meal_fk FOREIGN KEY (meal_id)
+        REFERENCES public.meals (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+        NOT VALID,
+    CONSTRAINT product_fk FOREIGN KEY (product_id)
+        REFERENCES public.products (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+        NOT VALID
+)
+
+ALTER TABLE public.meals_products OWNER TO eatmeall;
