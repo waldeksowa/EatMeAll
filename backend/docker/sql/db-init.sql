@@ -913,7 +913,7 @@ INSERT INTO public.products(
 (	856	, current_timestamp, current_timestamp,0,	162.00	,	22.00	,	6.40	        ,'Musztarda'	,	5.70	,	1.70	,	17	),
 (	857	, current_timestamp, current_timestamp,0,	343.00	,	0.00	,	0.10	        ,'Żelatyna'	,	84.20	,	0.00	,	17	);
 
-CREATE TABLE IF NOT EXISTS public.meals
+CREATE TABLE public.meals
 (
     id bigint NOT NULL,
     created_at timestamp without time zone,
@@ -924,15 +924,14 @@ CREATE TABLE IF NOT EXISTS public.meals
     prepare_time integer,
     author character varying(255),
     description character varying(255),
-    parts bigint,
     steps character varying(255),
     CONSTRAINT meals_pkey PRIMARY KEY (id)
-)
+);
 
 ALTER TABLE public.meals OWNER TO eatmeall;
 
 
-CREATE TABLE IF NOT EXISTS public.meals_products
+CREATE TABLE public.meals_products
 (
     id bigint NOT NULL,
     created_at timestamp without time zone,
@@ -954,6 +953,6 @@ CREATE TABLE IF NOT EXISTS public.meals_products
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
         NOT VALID
-)
+);
 
 ALTER TABLE public.meals_products OWNER TO eatmeall;
