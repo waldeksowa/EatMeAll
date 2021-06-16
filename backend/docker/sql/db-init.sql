@@ -50,7 +50,6 @@ CREATE TABLE public.products (
     CONSTRAINT products_pkey PRIMARY KEY (id)
 );
 
-
 ALTER TABLE public.products OWNER TO eatmeall;
 
 
@@ -65,7 +64,6 @@ CREATE TABLE public.meals
     prepare_time integer,
     author character varying(255),
     description character varying(255),
-    steps character varying(255),
     CONSTRAINT meals_pkey PRIMARY KEY (id)
 );
 
@@ -97,6 +95,25 @@ CREATE TABLE public.meals_products
 );
 
 ALTER TABLE public.meals_products OWNER TO eatmeall;
+
+
+CREATE TABLE public.steps
+(
+    id bigint NOT NULL,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone,
+    version integer NOT NULL,
+    meal_id bigint NOT NULL,
+    description character varying(255),
+    CONSTRAINT steps_pkey PRIMARY KEY (id),
+    CONSTRAINT meal_fk FOREIGN KEY (meal_id)
+        REFERENCES public.meals (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+        NOT VALID,
+);
+
+ALTER TABLE public.steps OWNER TO eatmeall;
 
 
 INSERT INTO public.products(
