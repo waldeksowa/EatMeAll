@@ -4,23 +4,20 @@ import lombok.Data;
 import pl.wizard.software.AbstractBaseEntity;
 import pl.wizard.software.diet.products.ProductEntity;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "MEALS_PRODUCTS")
 @Data
 public class MealProductEntity extends AbstractBaseEntity {
 
-//    @ManyToOne
-//    @JoinColumn(name = "meal_id")
-//    private MealEntity meal;
-
     @ManyToOne
     @JoinColumn(name = "product_id")
     private ProductEntity product;
-
     private Integer amount;
-    private Integer specialAmount;
     private Integer unit;
 
 }

@@ -21,8 +21,6 @@ public class ProductEntity extends AbstractBaseEntity {
     private Double roughage;
     @Enumerated(EnumType.ORDINAL)
     private ProductTypeEnum productType;
-//    @OneToMany(mappedBy = "product")
-//    private Set<MealProductEntity> mealProducts;
 
     public enum ProductTypeEnum {
         FAKE("NUMBER_0"), CEREALS("zboża"), DAIRY("przetwory mleczne"), HAMS("wędliny"), RAW_MEAT("mięso"), POULTRY("drób"), EGGS("jajka"), FATS("tłuszcze"), MUSHROMS("grzyby"), NUTS("orzechy"),
