@@ -3,7 +3,10 @@ package pl.wizard.software.diet.products;
 import lombok.Data;
 import pl.wizard.software.AbstractBaseEntity;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.Table;
 
 
 @Entity
@@ -18,6 +21,8 @@ public class ProductEntity extends AbstractBaseEntity {
     private Double roughage;
     @Enumerated(EnumType.ORDINAL)
     private ProductTypeEnum productType;
+//    @OneToMany(mappedBy = "product")
+//    private Set<MealProductEntity> mealProducts;
 
     public enum ProductTypeEnum {
         FAKE("NUMBER_0"), CEREALS("zboża"), DAIRY("przetwory mleczne"), HAMS("wędliny"), RAW_MEAT("mięso"), POULTRY("drób"), EGGS("jajka"), FATS("tłuszcze"), MUSHROMS("grzyby"), NUTS("orzechy"),
