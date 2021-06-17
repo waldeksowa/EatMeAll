@@ -79,7 +79,6 @@ CREATE TABLE public.meals_products
     meal_id bigint NOT NULL,
     product_id bigint NOT NULL,
     amount integer,
-    special_amount integer,
     unit integer,
     CONSTRAINT meals_products_pkey PRIMARY KEY (id),
     CONSTRAINT meal_fk FOREIGN KEY (meal_id)
