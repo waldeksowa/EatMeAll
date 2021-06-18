@@ -15,7 +15,7 @@ public class MealService {
     private final MealDao mealRepository;
 
     public List<MealEntity> findAll() {
-        return mealRepository.findAll();
+        return mealRepository.findAllMeals();
     }
 
     public Optional<MealEntity> findById(Long id) {

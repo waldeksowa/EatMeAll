@@ -4,10 +4,7 @@ import lombok.Data;
 import pl.wizard.software.AbstractBaseEntity;
 import pl.wizard.software.diet.products.ProductEntity;
 
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "MEALS_PRODUCTS")
@@ -18,6 +15,10 @@ public class MealProductEntity extends AbstractBaseEntity {
     @JoinColumn(name = "product_id")
     private ProductEntity product;
     private Integer amount;
-    private Integer unit;
+    @Enumerated(EnumType.ORDINAL)
+    private unitTypeEnum unit;
 
+    public enum unitTypeEnum {
+        FAKE, GRAMS
+    }
 }
