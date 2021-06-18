@@ -14,16 +14,16 @@ public class MealEntity extends AbstractBaseEntity {
     private String author;
     private String description;
     @Enumerated(EnumType.ORDINAL)
-    private mealTimeEnum mealTime;
+    private MealTimeEnum mealTime;
     private Integer prepareTime;
-    @OneToMany
-    @JoinColumn(name = "meal_id")
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "mealId")
     private Set<MealProductEntity> products;
-    @OneToMany
-    @JoinColumn(name = "meal_id")
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "mealId")
     private Set<StepEntity> steps;
 
-    public enum mealTimeEnum {
+    public enum MealTimeEnum {
         FAKE, BREAKFAST, SECOND_BREAKFAST, LUNCH, DINNER, SUPPER
     }
-}
+ }

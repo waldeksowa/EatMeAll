@@ -4,6 +4,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pl.wizard.software.diet.dto.CreateMealDto;
+import pl.wizard.software.diet.dto.MealDto;
+import pl.wizard.software.diet.mapper.MealDtoMapper;
 import pl.wizard.software.diet.meals.MealEntity;
 
 import javax.validation.Valid;
@@ -18,8 +21,8 @@ public class MealAPI {
     private final MealService mealService;
 
     @GetMapping
-    public ResponseEntity<List<MealEntity>> findAll() {
-        return ResponseEntity.ok(mealService.findAll());
+    public ResponseEntity<List<MealDto>> findAll() {
+        return ResponseEntity.ok(MealDtoMapper.mapToMealDtos(mealService.findAll()));
     }
 
     @GetMapping("/{id}")
@@ -34,8 +37,8 @@ public class MealAPI {
     }
 
     @PostMapping
-    public ResponseEntity create(@Valid @RequestBody MealEntity meal) {
-        return ResponseEntity.ok(mealService.save(meal));
+    public ResponseEntity create(@Valid @RequestBody CreateMealDto meal) {
+        return ResponseEntity.ok(mealService.createMeal(meal));
     }
 
     @PutMapping("/{id}")

@@ -11,14 +11,10 @@ import javax.persistence.*;
 @Data
 public class MealProductEntity extends AbstractBaseEntity {
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "product_id")
     private ProductEntity product;
+    private long mealId;
     private Integer amount;
-    @Enumerated(EnumType.ORDINAL)
-    private unitTypeEnum unit;
 
-    public enum unitTypeEnum {
-        FAKE, GRAMS
-    }
 }
