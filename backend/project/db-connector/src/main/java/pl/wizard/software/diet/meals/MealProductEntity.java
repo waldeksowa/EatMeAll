@@ -11,7 +11,7 @@ import javax.persistence.*;
 @Data
 public class MealProductEntity extends AbstractBaseEntity {
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "product_id")
     private ProductEntity product;
     private long mealId;

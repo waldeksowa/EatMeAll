@@ -17,10 +17,10 @@ public class MealEntity extends AbstractBaseEntity {
     private MealTimeEnum mealTime;
     private Integer prepareTime;
     @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "mealId")
+    @JoinColumn(name = "mealId", updatable = false, insertable = false)
     private Set<MealProductEntity> products;
     @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "mealId")
+    @JoinColumn(name = "mealId", updatable = false, insertable = false)
     private Set<StepEntity> steps;
 
     public enum MealTimeEnum {
