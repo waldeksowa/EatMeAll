@@ -53,67 +53,6 @@ CREATE TABLE public.products (
 ALTER TABLE public.products OWNER TO eatmeall;
 
 
-CREATE TABLE public.meals
-(
-    id bigint NOT NULL,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
-    version integer NOT NULL,
-    name character varying(255),
-    meal_time integer,
-    prepare_time integer,
-    author character varying(255),
-    description character varying(255),
-    CONSTRAINT meals_pkey PRIMARY KEY (id)
-);
-
-ALTER TABLE public.meals OWNER TO eatmeall;
-
-
-CREATE TABLE public.meals_products
-(
-    id bigint NOT NULL,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
-    version integer NOT NULL,
-    meal_id bigint NOT NULL,
-    product_id bigint NOT NULL,
-    amount integer,
-    CONSTRAINT meals_products_pkey PRIMARY KEY (id),
-    CONSTRAINT meal_fk FOREIGN KEY (meal_id)
-        REFERENCES public.meals (id) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION
-        NOT VALID,
-    CONSTRAINT product_fk FOREIGN KEY (product_id)
-        REFERENCES public.products (id) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION
-        NOT VALID
-);
-
-ALTER TABLE public.meals_products OWNER TO eatmeall;
-
-
-CREATE TABLE public.steps
-(
-    id bigint NOT NULL,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
-    version integer NOT NULL,
-    meal_id bigint NOT NULL,
-    description character varying(255),
-    CONSTRAINT steps_pkey PRIMARY KEY (id),
-    CONSTRAINT meal_fk FOREIGN KEY (meal_id)
-        REFERENCES public.meals (id) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION
-        NOT VALID
-);
-
-ALTER TABLE public.steps OWNER TO eatmeall;
-
-
 INSERT INTO public.products(
 	id, created_at, updated_at, version, calorific, carbohydrates, fat, name, protein, roughage, product_type)
  VALUES (	1	, current_timestamp, current_timestamp,0,	283.00	,	59.20	,	1.70	,'Bagietki francuskie'	,	8.70	,	2.00	,	1	),
