@@ -79,7 +79,6 @@ CREATE TABLE public.meals_products
     meal_id bigint NOT NULL,
     product_id bigint NOT NULL,
     amount integer,
-    unit integer,
     CONSTRAINT meals_products_pkey PRIMARY KEY (id),
     CONSTRAINT meal_fk FOREIGN KEY (meal_id)
         REFERENCES public.meals (id) MATCH SIMPLE
@@ -109,7 +108,7 @@ CREATE TABLE public.steps
         REFERENCES public.meals (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
-        NOT VALID,
+        NOT VALID
 );
 
 ALTER TABLE public.steps OWNER TO eatmeall;
