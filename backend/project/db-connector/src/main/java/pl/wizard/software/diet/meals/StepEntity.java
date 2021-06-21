@@ -10,6 +10,6 @@ import javax.persistence.Table;
 @Table(name = "STEPS")
 @Data
 public class StepEntity extends AbstractBaseEntity {
-    private long mealId;
+
     private String description;
 }

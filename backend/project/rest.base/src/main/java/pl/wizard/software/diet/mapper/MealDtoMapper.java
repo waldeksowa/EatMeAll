@@ -21,10 +21,11 @@ public class MealDtoMapper {
         return MealDto.builder()
                 .id(meal.getId())
                 .name(meal.getName())
-                .author(meal.getAuthor())
-                .description(meal.getDescription())
-                .mealTime(meal.getMealTime())
-                .prepareTime(meal.getPrepareTime())
+                .calorific(meal.getCalorific())
+                .protein(meal.getProtein())
+                .fat(meal.getFat())
+                .carbohydrates(meal.getCarbohydrates())
+                .roughage(meal.getRoughage())
                 .build();
     }
 }

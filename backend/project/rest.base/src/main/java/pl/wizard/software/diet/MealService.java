@@ -11,6 +11,7 @@ import pl.wizard.software.diet.products.ProductEntity;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -18,8 +19,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class MealService {
     private final MealDao mealRepository;
-    private final MealProductDao mealProductRepository;
-    private final StepDao stepRepository;
     private final ProductDao productRepository;
 
     public List<MealEntity> findAll() {
@@ -39,34 +38,18 @@ public class MealService {
     }
 
     public MealEntity createMeal(CreateMealDto meal) {
-        MealEntity mealEntity = new MealEntity();
-        mealEntity.setAuthor(meal.getAuthor());
-        mealEntity.setDescription(meal.getDescription());
-        mealEntity.setName(meal.getName());
-        mealEntity.setMealTime(meal.getMealTime());
-        mealEntity.setPrepareTime(meal.getPrepareTime());
-//        mealEntity.setProducts(Set.copyOf(products));
-//        mealEntity.setSteps(Set.copyOf(steps));
-        MealEntity createdMeal = mealRepository.save(mealEntity);
+        Set<StepEntity> steps = meal.getSteps().stream().map(step -> convertToStep(step)).collect(Collectors.toSet());
+        Set<MealProductEntity> products = meal.getProducts().stream().map(product -> convertToMealProduct(product)).collect(Collectors.toSet());
+        MealEntity mealEntity = new MealEntity(
+                meal.getName(),
+                meal.getAuthor(),
+                meal.getDescription(),
+                meal.getMealTime(),
+                meal.getPrepareTime(),
+                steps,
+                products);
 
-        for (String step : meal.getSteps()) {
-            StepEntity aStepEntity = new StepEntity();
-            aStepEntity.setDescription(step);
-            aStepEntity.setMealId(createdMeal.getId());
-            stepRepository.save(aStepEntity);
-        }
-
-        List<MealProductEntity> products = meal.getProducts().stream()
-                .map(product -> convertToMealProduct(product))
-                .collect(Collectors.toList());
-
-        for (MealProductEntity mpe : products) {
-            mpe.setMealId(createdMeal.getId());
-            mealProductRepository.save(mpe);
-        }
-
-
-        return createdMeal;
+        return mealRepository.save(mealEntity);
     }
 
     private MealProductEntity convertToMealProduct(SimpleProductDto product) {
@@ -80,5 +63,11 @@ public class MealService {
             mealProduct.setAmount(product.getAmount());
             return mealProduct;
         }
+    }
+
+    private StepEntity convertToStep(String step) {
+        StepEntity stepEntity = new StepEntity();
+        stepEntity.setDescription(step);
+        return stepEntity;
     }
 }

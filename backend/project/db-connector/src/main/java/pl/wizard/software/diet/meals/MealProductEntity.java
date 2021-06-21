@@ -14,7 +14,6 @@ public class MealProductEntity extends AbstractBaseEntity {
     @ManyToOne
     @JoinColumn(name = "product_id")
     private ProductEntity product;
-    private long mealId;
     private Integer amount;
 
 }

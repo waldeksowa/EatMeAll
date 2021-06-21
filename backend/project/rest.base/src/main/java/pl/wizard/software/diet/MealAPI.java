@@ -2,6 +2,7 @@ package pl.wizard.software.diet;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.wizard.software.diet.dto.CreateMealDto;
@@ -38,7 +39,7 @@ public class MealAPI {
 
     @PostMapping
     public ResponseEntity create(@Valid @RequestBody CreateMealDto meal) {
-        return ResponseEntity.ok(mealService.createMeal(meal));
+        return ResponseEntity.status(HttpStatus.CREATED).body(mealService.createMeal(meal));
     }
 
     @PutMapping("/{id}")
@@ -57,7 +58,6 @@ public class MealAPI {
             log.error("Id " + id + " does not exists");
             ResponseEntity.badRequest().build();
         }
-
         mealService.deleteById(id);
 
         return ResponseEntity.ok().build();
