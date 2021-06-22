@@ -16,8 +16,10 @@ public class MealEntity extends AbstractBaseEntity {
     private String name;
     private String author;
     private String description;
+    @ElementCollection(targetClass = MealTimeEnum.class)
+    @CollectionTable(name="meal_time")
     @Enumerated(EnumType.ORDINAL)
-    private MealTimeEnum mealTime;
+    private Set<MealTimeEnum> mealTime;
     private int prepareTime;
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     @JoinColumn(name = "meal_id")
@@ -40,7 +42,7 @@ public class MealEntity extends AbstractBaseEntity {
     public MealEntity() {
     }
 
-    public MealEntity(String aName, String aAuthor, String aDescription, MealTimeEnum aMealTime, int aPrepareTime, Set<StepEntity> aSteps, Set<MealProductEntity> aProducts) {
+    public MealEntity(String aName, String aAuthor, String aDescription, Set<MealTimeEnum> aMealTime, int aPrepareTime, Set<StepEntity> aSteps, Set<MealProductEntity> aProducts) {
         name = aName;
         author = aAuthor;
         description = aDescription;
