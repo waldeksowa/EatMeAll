@@ -1,16 +1,19 @@
 package pl.wizard.software.diet.meals;
 
+import lombok.Builder;
 import lombok.Data;
 import pl.wizard.software.AbstractBaseEntity;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.List;
 import java.util.Set;
 
 @Entity
 @Table(name = "MEALS")
 @Data
+@Builder
 public class MealEntity extends AbstractBaseEntity {
 
     private String name;
@@ -26,7 +29,8 @@ public class MealEntity extends AbstractBaseEntity {
     private Set<MealProductEntity> products;
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     @JoinColumn(name = "meal_id")
-    private Set<StepEntity> steps;
+    @OrderBy("description")
+    private List<StepEntity> steps;
 
     @Transient
     private Double calorific;
@@ -38,19 +42,6 @@ public class MealEntity extends AbstractBaseEntity {
     private Double carbohydrates;
     @Transient
     private Double roughage;
-
-    public MealEntity() {
-    }
-
-    public MealEntity(String aName, String aAuthor, String aDescription, Set<MealTimeEnum> aMealTime, int aPrepareTime, Set<StepEntity> aSteps, Set<MealProductEntity> aProducts) {
-        name = aName;
-        author = aAuthor;
-        description = aDescription;
-        mealTime = aMealTime;
-        prepareTime = aPrepareTime;
-        steps = aSteps;
-        products = aProducts;
-    }
 
     @PostLoad
     private void init() {

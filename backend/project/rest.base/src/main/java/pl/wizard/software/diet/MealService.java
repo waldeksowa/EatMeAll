@@ -38,16 +38,17 @@ public class MealService {
     }
 
     public MealEntity createMeal(CreateMealDto meal) {
-        Set<StepEntity> steps = meal.getSteps().stream().map(step -> convertToStep(step)).collect(Collectors.toSet());
+        List<StepEntity> steps = meal.getSteps().stream().map(step -> convertToStep(step)).collect(Collectors.toList());
         Set<MealProductEntity> products = meal.getProducts().stream().map(product -> convertToMealProduct(product)).collect(Collectors.toSet());
-        MealEntity mealEntity = new MealEntity(
-                meal.getName(),
-                meal.getAuthor(),
-                meal.getDescription(),
-                meal.getMealTime(),
-                meal.getPrepareTime(),
-                steps,
-                products);
+        MealEntity mealEntity = MealEntity.builder()
+                .name(meal.getName())
+                .author(meal.getAuthor())
+                .description(meal.getDescription())
+                .mealTime(meal.getMealTime())
+                .prepareTime(meal.getPrepareTime())
+                .steps(steps)
+                .products(products)
+                .build();
 
         return mealRepository.save(mealEntity);
     }
