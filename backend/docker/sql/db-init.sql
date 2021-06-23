@@ -46,11 +46,12 @@ CREATE TABLE public.products (
     name character varying(255),
     product_type integer,
     protein double precision,
-    roughage double precision
+    roughage double precision,
+    CONSTRAINT products_pkey PRIMARY KEY (id)
 );
 
-
 ALTER TABLE public.products OWNER TO eatmeall;
+
 
 INSERT INTO public.products(
 	id, created_at, updated_at, version, calorific, carbohydrates, fat, name, protein, roughage, product_type)

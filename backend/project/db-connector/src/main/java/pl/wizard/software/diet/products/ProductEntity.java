@@ -3,7 +3,10 @@ package pl.wizard.software.diet.products;
 import lombok.Data;
 import pl.wizard.software.AbstractBaseEntity;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.Table;
 
 
 @Entity
