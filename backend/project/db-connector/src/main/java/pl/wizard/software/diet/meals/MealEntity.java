@@ -1,7 +1,6 @@
 package pl.wizard.software.diet.meals;
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 import pl.wizard.software.AbstractBaseEntity;
 
 import javax.persistence.*;
@@ -12,8 +11,11 @@ import java.util.Set;
 
 @Entity
 @Table(name = "MEALS")
-@Data
+@Getter
+@Setter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class MealEntity extends AbstractBaseEntity {
 
     private String name;
@@ -29,7 +31,7 @@ public class MealEntity extends AbstractBaseEntity {
     private Set<MealProductEntity> products;
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     @JoinColumn(name = "meal_id")
-    @OrderBy("description")
+    @OrderBy("position")
     private List<StepEntity> steps;
 
     @Transient
