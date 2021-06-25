@@ -16,13 +16,15 @@ import java.util.Set;
 @AllArgsConstructor
 public class ScheduleEntity extends AbstractBaseEntity {
 
-    @OneToMany
+    @ManyToMany
     private Set<MealEntity> meals;
+    @ElementCollection(targetClass = DayEnum.class)
+    @CollectionTable(name="schedule_day")
     @Enumerated(EnumType.ORDINAL)
-    private DayEnum day;
+    private Set<DayEnum> day;
 
     public enum DayEnum{
-        MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY
+        FAKE, MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY
     }
 }
 
