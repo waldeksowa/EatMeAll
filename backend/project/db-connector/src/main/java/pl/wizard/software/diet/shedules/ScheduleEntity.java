@@ -8,7 +8,7 @@ import javax.persistence.*;
 import java.util.Set;
 
 @Entity
-@Table(name = "MEALS")
+@Table(name = "SHEDULES")
 @Getter
 @Setter
 @Builder
@@ -16,8 +16,7 @@ import java.util.Set;
 @AllArgsConstructor
 public class ScheduleEntity extends AbstractBaseEntity {
 
-    @ManyToOne
-    @JoinColumn(name = "meal_id")
+    @OneToMany
     private Set<MealEntity> meals;
     @Enumerated(EnumType.ORDINAL)
     private DayEnum day;
