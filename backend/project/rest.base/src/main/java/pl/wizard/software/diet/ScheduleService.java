@@ -8,35 +8,19 @@ import pl.wizard.software.diet.mapper.MealDtoMapper;
 import pl.wizard.software.diet.meals.MealDao;
 import pl.wizard.software.diet.meals.MealEntity;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
-import static pl.wizard.software.diet.meals.MealEntity.*;
-import static pl.wizard.software.diet.meals.MealEntity.MealTimeEnum.LUNCH;
+import static pl.wizard.software.diet.meals.MealEntity.MealTimeEnum;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class ScheduleService {
 
-    public static final int MEAL_AMOUNT = 5;
     public static final int ONE_MEAL = 1;
     private final MealDao mealRepository;
-
-    public List<MealEntity> testSchedule() {
-        return mealRepository.findRandomByMealTime(LUNCH.ordinal(), 2);
-    }
-
-    public Map<Day, List<MealDto>> getScheduleTest() {
-        Map<Day, List<MealDto>> schedule = new HashMap<>();
-        for (Day day : Day.values()) {
-            List<MealDto> meals = new ArrayList<>();
-            for (int i = 1; i <= MEAL_AMOUNT; i++) {
-                meals.addAll(MealDtoMapper.mapToMealDtos(mealRepository.findRandomByMealTime(i, ONE_MEAL)));
-            }
-            schedule.put(day, meals);
-        }
-        return schedule;
-    }
 
     public Map<Day, Map<MealTimeEnum, MealDto>> getSchedule() {
         Map<Day, Map<MealTimeEnum, MealDto>> schedule = new HashMap<>();
