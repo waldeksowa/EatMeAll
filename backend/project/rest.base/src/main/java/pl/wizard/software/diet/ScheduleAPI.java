@@ -23,6 +23,6 @@ public class ScheduleAPI {
 
     @GetMapping
     public ResponseEntity<Map<Day, Map<MealTimeEnum, MealDto>>> getSchedule() {
-        return ResponseEntity.ok(scheduleService.getSchedule());
+        return ResponseEntity.ok(scheduleService.getScheduleByDay());
     }
 }
