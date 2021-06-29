@@ -21,7 +21,6 @@ public class MealDtoMapper {
         return MealDto.builder()
                 .id(meal.getId())
                 .name(meal.getName())
-                .mealTime(meal.getMealTime())
                 .calorific(meal.getCalorific())
                 .protein(meal.getProtein())
                 .fat(meal.getFat())
