@@ -21,7 +21,7 @@ import static pl.wizard.software.diet.meals.MealEntity.MealTimeEnum;
 @RequiredArgsConstructor
 public class ScheduleService {
 
-    public static final int ONE_WEEK = 7;
+    public static final int DAYS_IN_WEEK = 7;
     private final MealDao mealRepository;
 
     public Map<DayOfWeek, Map<MealTimeEnum, MealDto>> getScheduleByMealTime() {
@@ -29,17 +29,13 @@ public class ScheduleService {
         for (DayOfWeek day : DayOfWeek.values()) {
             schedule.put(day, new HashMap<>());
         }
-        for (MealTimeEnum mealTime : MealTimeEnum.values()) {
-            if (mealTime == MealTimeEnum.FAKE) {
-                continue;
-            } else {
-                List<MealEntity> meals = mealRepository.findRandomByMealTime(mealTime.ordinal(), ONE_WEEK);
-                for (DayOfWeek day : DayOfWeek.values()) {
-                    Optional<MealEntity> meal = meals.stream().findFirst();
-                    if (meal.isPresent()) {
-                        schedule.get(day).put(mealTime, MealDtoMapper.mapToMealDto(meal.get()));
-                        meals.remove(meal);
-                    }
+        for (int i = 1; i < MealTimeEnum.values().length; i++) {
+            List<MealEntity> meals = mealRepository.findRandomByMealTime(MealTimeEnum.values()[i].ordinal(), DAYS_IN_WEEK);
+            for (DayOfWeek day : DayOfWeek.values()) {
+                Optional<MealEntity> meal = meals.stream().findFirst();
+                if (meal.isPresent()) {
+                    schedule.get(day).put(MealTimeEnum.values()[i], MealDtoMapper.mapToMealDto(meal.get()));
+                    meals.remove(meal);
                 }
             }
         }
