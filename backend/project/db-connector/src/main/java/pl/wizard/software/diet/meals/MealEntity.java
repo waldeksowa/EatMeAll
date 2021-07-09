@@ -35,23 +35,32 @@ public class MealEntity extends AbstractBaseEntity {
     private List<StepEntity> steps;
 
     @Transient
-    private Double calorific;
+    private double calorific;
     @Transient
-    private Double protein;
+    private double protein;
     @Transient
-    private Double fat;
+    private double fat;
     @Transient
-    private Double carbohydrates;
+    private double carbohydrates;
     @Transient
-    private Double roughage;
+    private double roughage;
 
     @PostLoad
     private void init() {
-        calorific = new BigDecimal(products.stream().mapToDouble(p -> p.getProduct().getCalorific()).sum()).setScale(1, RoundingMode.HALF_UP).doubleValue();
-        protein = new BigDecimal(products.stream().mapToDouble(p -> p.getProduct().getProtein()).sum()).setScale(1, RoundingMode.HALF_UP).doubleValue();
-        fat = new BigDecimal(products.stream().mapToDouble(p -> p.getProduct().getFat()).sum()).setScale(1, RoundingMode.HALF_UP).doubleValue();
-        carbohydrates = new BigDecimal(products.stream().mapToDouble(p -> p.getProduct().getCarbohydrates()).sum()).setScale(1, RoundingMode.HALF_UP).doubleValue();
-        roughage = new BigDecimal(products.stream().mapToDouble(p -> p.getProduct().getRoughage()).sum()).setScale(1, RoundingMode.HALF_UP).doubleValue();
+        for (MealProductEntity product : products) {
+            double amountFactor = product.getAmount() / 100.0;
+            calorific += product.getProduct().getCalorific() * amountFactor;
+            protein += product.getProduct().getProtein() * amountFactor;
+            fat += product.getProduct().getFat() * amountFactor;
+            carbohydrates += product.getProduct().getCarbohydrates() * amountFactor;
+            roughage += product.getProduct().getRoughage() * amountFactor;
+        }
+
+        calorific = new BigDecimal(calorific).setScale(1, RoundingMode.HALF_UP).doubleValue();
+        protein = new BigDecimal(protein).setScale(1, RoundingMode.HALF_UP).doubleValue();
+        fat = new BigDecimal(fat).setScale(1, RoundingMode.HALF_UP).doubleValue();
+        carbohydrates = new BigDecimal(carbohydrates).setScale(1, RoundingMode.HALF_UP).doubleValue();
+        roughage = new BigDecimal(roughage).setScale(1, RoundingMode.HALF_UP).doubleValue();
     }
 
     public enum MealTimeEnum {
