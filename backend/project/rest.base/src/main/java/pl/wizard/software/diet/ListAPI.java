@@ -23,6 +23,10 @@ public class ListAPI {
 
     @GetMapping("/{ids}")
     public ResponseEntity<HashMap<ProductTypeEnum, List<ProductWithAmountDto>>> getList(@PathVariable List<Long> ids) {
+        if (ids.isEmpty()) {
+            log.error("List of meals is empty");
+            ResponseEntity.badRequest().build();
+        }
         return ResponseEntity.ok(listService.getShoppingList(ids));
     }
 }
