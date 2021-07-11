@@ -2,43 +2,22 @@
   <q-layout view="lHh Lpr lFf">
     <q-header elevated>
       <q-toolbar>
-        <q-btn
-          flat
-          dense
-          round
-          icon="menu"
-          aria-label="Menu"
-          @click="leftDrawerOpen = !leftDrawerOpen"
-        />
-
-        <q-toolbar-title>
-          Quasar App
-        </q-toolbar-title>
-
-        <div>Quasar v{{ $q.version }}</div>
+        <q-avatar >
+          <img src="https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg"/>
+        </q-avatar>
+        <q-toolbar-title>EatMeAll</q-toolbar-title>
       </q-toolbar>
-    </q-header>
 
-    <q-drawer
-      v-model="leftDrawerOpen"
-      show-if-above
-      bordered
-      content-class="bg-grey-1"
-    >
-      <q-list>
-        <q-item-label
-          header
-          class="text-grey-8"
-        >
-          Essential Links
-        </q-item-label>
-        <EssentialLink
-          v-for="link in essentialLinks"
-          :key="link.title"
-          v-bind="link"
-        />
-      </q-list>
-    </q-drawer>
+      <q-tabs v-model="tab" inline-label align="left" class="text-white desktop-only" >
+        <q-route-tab v-ripple v-for="(nav,index) in navs" exect :key="index" :to="nav.to" :icon="nav.icon" :label="nav.label" :name="nav.label"></q-route-tab>
+      </q-tabs>
+      <q-img class='header-image absolute-top' src="../assets/navbarphoto.jpg"></q-img>
+    </q-header>
+    <q-footer  >
+        <q-tabs v-model="tab" dense align="center" class="text-white mobile-only">
+          <q-route-tab v-ripple v-for="(nav,index) in navs" exect :key="index"  :to="nav.to" :icon="nav.icon" :label="nav.label" :name="nav.label"></q-route-tab>
+        </q-tabs>
+    </q-footer>
 
     <q-page-container>
       <router-view />
@@ -47,61 +26,44 @@
 </template>
 
 <script>
-import EssentialLink from 'components/EssentialLink.vue'
-
-const linksData = [
-  {
-    title: 'Docs',
-    caption: 'quasar.dev',
-    icon: 'school',
-    link: 'https://quasar.dev'
-  },
-  {
-    title: 'Github',
-    caption: 'github.com/quasarframework',
-    icon: 'code',
-    link: 'https://github.com/quasarframework'
-  },
-  {
-    title: 'Discord Chat Channel',
-    caption: 'chat.quasar.dev',
-    icon: 'chat',
-    link: 'https://chat.quasar.dev'
-  },
-  {
-    title: 'Forum',
-    caption: 'forum.quasar.dev',
-    icon: 'record_voice_over',
-    link: 'https://forum.quasar.dev'
-  },
-  {
-    title: 'Twitter',
-    caption: '@quasarframework',
-    icon: 'rss_feed',
-    link: 'https://twitter.quasar.dev'
-  },
-  {
-    title: 'Facebook',
-    caption: '@QuasarFramework',
-    icon: 'public',
-    link: 'https://facebook.quasar.dev'
-  },
-  {
-    title: 'Quasar Awesome',
-    caption: 'Community Quasar projects',
-    icon: 'favorite',
-    link: 'https://awesome.quasar.dev'
-  }
-];
+import { date } from 'quasar'
 
 export default {
   name: 'MainLayout',
-  components: { EssentialLink },
   data () {
     return {
       leftDrawerOpen: false,
-      essentialLinks: linksData
+      tab: 'home',
+      value:70,
+      rightListOpen:false,
+      navs:[
+        {label:'home', icon:'home', to:'/'},
+        {label:'lista', icon:'list', to:'/list'},
+        {label:'dodaj', icon:'add', to:'/dodajPosilek'},
+        {label:'o nas', icon:'info', to:'/info'}
+      ]
     }
-  }
+  },
+  computed:{
+    todaysDate(){
+      let timeStamp = Date.now()
+      return date.formatDate(timeStamp, 'DD.MM.YYYY')
+    },
+  },
+  watch: {
+    '$route':function () {
+      console.log(this.$router.currentRoute)
+    }
+  },
+
 }
 </script>
+<style type="scss">
+.header-image{
+  height: 100%;
+  z-index: -1;
+  opacity: 0.3;
+  filter: grayscale(100%);
+}
+
+</style>

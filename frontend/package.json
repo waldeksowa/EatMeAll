@@ -1,16 +1,14 @@
 {
-  "name": "eat-me-all",
+  "name": "ema",
   "version": "0.0.1",
-  "description": "Diet planner",
-  "productName": "eat-me-all",
-  "author": "Dream Team of SDK",
+  "description": "A Quasar Framework app",
+  "productName": "Quasar App",
+  "author": "PasjonatProgramowania <paw.szew1234@gmail.com>",
   "private": true,
   "scripts": {
     "lint": "eslint --ext .js,.vue ./",
     "test": "echo \"No test specified\" && exit 0",
-	"dev": "quasar dev",
-    "build": "quasar build",
-    "build:pwa": "quasar build -m pwa"
+    "build":"quasar build"
   },
   "dependencies": {
     "@quasar/extras": "^1.0.0",
