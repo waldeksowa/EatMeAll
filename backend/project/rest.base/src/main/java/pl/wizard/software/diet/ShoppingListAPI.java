@@ -17,7 +17,7 @@ import java.util.List;
 @RequestMapping("/v1/shoppinglist")
 @Slf4j
 @RequiredArgsConstructor
-public class ListAPI {
+public class ShoppingListAPI {
 
     private final ShoppingListService shoppingListService;
 
