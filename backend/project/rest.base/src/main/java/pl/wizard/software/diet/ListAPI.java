@@ -19,7 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ListAPI {
 
-    private final ShopppingListService shopppingListService;
+    private final ShoppingListService shoppingListService;
 
     @GetMapping("/{ids}")
     public ResponseEntity<HashMap<ProductTypeEnum, List<ProductWithAmountDto>>> getShoppingList(@PathVariable List<Long> ids) {
@@ -27,6 +27,6 @@ public class ListAPI {
             log.error("List of meals is empty");
             ResponseEntity.badRequest().build();
         }
-        return ResponseEntity.ok(shopppingListService.getShoppingList(ids));
+        return ResponseEntity.ok(shoppingListService.getShoppingList(ids));
     }
 }
