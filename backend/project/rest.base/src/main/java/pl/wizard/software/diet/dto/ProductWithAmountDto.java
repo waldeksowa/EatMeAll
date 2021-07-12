@@ -9,4 +9,5 @@ public class ProductWithAmountDto {
     private long id;
     private String name;
     private int amount;
+    private String specialAmount;
 }

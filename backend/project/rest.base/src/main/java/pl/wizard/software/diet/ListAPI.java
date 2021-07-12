@@ -14,19 +14,19 @@ import java.util.HashMap;
 import java.util.List;
 
 @RestController
-@RequestMapping("/v1/list")
+@RequestMapping("/v1/shoppinglist")
 @Slf4j
 @RequiredArgsConstructor
 public class ListAPI {
 
-    private final ListService listService;
+    private final ShopppingListService shopppingListService;
 
     @GetMapping("/{ids}")
-    public ResponseEntity<HashMap<ProductTypeEnum, List<ProductWithAmountDto>>> getList(@PathVariable List<Long> ids) {
+    public ResponseEntity<HashMap<ProductTypeEnum, List<ProductWithAmountDto>>> getShoppingList(@PathVariable List<Long> ids) {
         if (ids.isEmpty()) {
             log.error("List of meals is empty");
             ResponseEntity.badRequest().build();
         }
-        return ResponseEntity.ok(listService.getShoppingList(ids));
+        return ResponseEntity.ok(shopppingListService.getShoppingList(ids));
     }
 }

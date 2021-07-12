@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class ListService {
+public class ShopppingListService {
 
     private final MealDao mealRepository;
 
