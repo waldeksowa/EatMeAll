@@ -32,7 +32,11 @@ public class ShoppingListServiceTest {
     @Before
     public void init() {
         shoppingListService = new ShoppingListService(mealRepository);
+    }
 
+    @Test
+    public void shouldReturnShoppingListWithTwoProductsWhenHaveTwoTheSameMeals() {
+        //given
         ProductEntity firstProduct = new ProductEntity();
         firstProduct.setId(1L);
         firstProduct.setName("first product");
@@ -57,12 +61,9 @@ public class ShoppingListServiceTest {
         meal.setProducts(Set.of(firstMealProduct, secondMealProduct));
 
         Mockito.lenient().when(mealRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(meal));
-    }
-
-    @Test
-    public void shouldReturnShoppingListWithTwoProducts() {
+        //when
         HashMap<ProductEntity.ProductTypeEnum, List<ProductWithAmountDto>> result = shoppingListService.getShoppingList(List.of(1L, 2L));
-
+        //then
         assertEquals(1, result.keySet().size());
         assertTrue(result.keySet().stream().anyMatch(key -> key == CEREALS));
         assertEquals(2, result.get(CEREALS).size());
@@ -70,6 +71,40 @@ public class ShoppingListServiceTest {
                 .anyMatch(product -> product.getName().equals("first product") && product.getAmount() == 20));
         assertTrue(result.get(CEREALS).stream()
                 .anyMatch(product -> product.getName().equals("second product") && product.getAmount() == 40));
+    }
+
+    @Test
+    public void shouldReturnShoppingListWithOneProductWhenHaveTwoMealsWithTheSameProduct() {
+        //given
+        ProductEntity product = new ProductEntity();
+        product.setId(1L);
+        product.setName("test product");
+        product.setProductType(CEREALS);
+
+        MealProductEntity mealProduct = new MealProductEntity();
+        mealProduct.setId(100L);
+        mealProduct.setAmount(100);
+        mealProduct.setProduct(product);
+
+        MealEntity firstMeal = new MealEntity();
+        firstMeal.setId(1L);
+        firstMeal.setName("first meal");
+        firstMeal.setProducts(Set.of(mealProduct));
+        MealEntity secondMeal = new MealEntity();
+        secondMeal.setId(2L);
+        secondMeal.setName("second meal");
+        secondMeal.setProducts(Set.of(mealProduct));
+
+        Mockito.lenient().when(mealRepository.findById(Mockito.eq(1L))).thenReturn(Optional.of(firstMeal));
+        Mockito.lenient().when(mealRepository.findById(Mockito.eq(2L))).thenReturn(Optional.of(secondMeal));
+        //when
+        HashMap<ProductEntity.ProductTypeEnum, List<ProductWithAmountDto>> result = shoppingListService.getShoppingList(List.of(1L, 2L));
+        //then
+        assertEquals(1, result.keySet().size());
+        assertTrue(result.keySet().stream().anyMatch(key -> key == CEREALS));
+        assertEquals(1, result.get(CEREALS).size());
+        assertTrue(result.get(CEREALS).stream()
+                .anyMatch(prod -> prod.getName().equals("test product") && prod.getAmount() == 200));
     }
 
 }

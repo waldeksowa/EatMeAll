@@ -13,6 +13,7 @@ public class ProductDtoMapper {
                 .id(mealProduct.getProduct().getId())
                 .name(mealProduct.getProduct().getName())
                 .amount(mealProduct.getAmount())
+                .specialAmount("")
                 .build();
     }
 
