@@ -14,6 +14,8 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
+import static pl.wizard.software.diet.meals.MealEntity.*;
+
 @RestController
 @RequestMapping("/v1/meals")
 @Slf4j
@@ -35,6 +37,11 @@ public class MealAPI {
         }
 
         return ResponseEntity.ok(stock.get());
+    }
+
+    @GetMapping("/random/{amount}/{mealTime}")
+    public ResponseEntity<List<MealDto>> findRandomByAmountAndMealTime(@PathVariable int amount, @PathVariable MealTimeEnum mealTime) {
+        return ResponseEntity.ok(MealDtoMapper.mapToMealDtos(mealService.findRandomByAmountAndMealTime(amount, mealTime)));
     }
 
     @PostMapping

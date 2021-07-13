@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import pl.wizard.software.diet.dto.CreateMealDto;
 import pl.wizard.software.diet.dto.SimpleProductDto;
 import pl.wizard.software.diet.meals.*;
+import pl.wizard.software.diet.meals.MealEntity.MealTimeEnum;
 import pl.wizard.software.diet.products.ProductDao;
 import pl.wizard.software.diet.products.ProductEntity;
 
@@ -70,5 +71,9 @@ public class MealService {
         StepEntity stepEntity = new StepEntity();
         stepEntity.setDescription(step);
         return stepEntity;
+    }
+
+    public List<MealEntity> findRandomByAmountAndMealTime(int amount, MealTimeEnum mealTime) {
+        return mealRepository.findRandomByMealTime(mealTime.ordinal(), amount);
     }
 }
