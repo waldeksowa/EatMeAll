@@ -14,6 +14,9 @@ public class MealProductEntity extends AbstractBaseEntity {
     @ManyToOne
     @JoinColumn(name = "product_id")
     private ProductEntity product;
-    private Integer amount;
+    private int amount;
+    private int specialAmount;
+    @Enumerated(value = EnumType.ORDINAL)
+    private SpecialAmountEnum specialAmountUnit;
 
 }

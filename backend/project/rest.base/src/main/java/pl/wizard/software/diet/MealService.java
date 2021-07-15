@@ -10,9 +10,7 @@ import pl.wizard.software.diet.meals.MealEntity.MealTimeEnum;
 import pl.wizard.software.diet.products.ProductDao;
 import pl.wizard.software.diet.products.ProductEntity;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -63,6 +61,8 @@ public class MealService {
             MealProductEntity mealProduct = new MealProductEntity();
             mealProduct.setProduct(prod.get());
             mealProduct.setAmount(product.getAmount());
+            mealProduct.setSpecialAmount(product.getSpecialAmount());
+            mealProduct.setSpecialAmountUnit(product.getSpecialAmountUnit());
             return mealProduct;
         }
     }
@@ -75,5 +75,13 @@ public class MealService {
 
     public List<MealEntity> findRandomByAmountAndMealTime(int amount, MealTimeEnum mealTime) {
         return mealRepository.findRandomByMealTime(mealTime.ordinal(), amount);
+    }
+
+    public Map<SpecialAmountEnum, String> getSpecialAmountList() {
+        Map<SpecialAmountEnum, String> specialAmountList = new HashMap<>();
+        for (SpecialAmountEnum specialamount : SpecialAmountEnum.values()) {
+            specialAmountList.put(specialamount, specialamount.nameByAmount(1));
+        }
+        return specialAmountList;
     }
 }
