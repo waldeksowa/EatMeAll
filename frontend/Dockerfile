@@ -5,6 +5,6 @@ COPY package*.json ./
 COPY ./entrypoint.sh /entrypoint.sh
 RUN npm install
 COPY . .
-RUN npm run build
+RUN npm run build && chmod +x /entrypoint.sh
 #ENTRYPOINT /entrypoint.sh
 CMD ./entrypoint.sh && npx quasar dev
