@@ -12,7 +12,7 @@ services:
         volumes:
           - ./backend/docker/sql:/docker-entrypoint-initdb.d
     wildfly:
-        build: ./backend/docker
+        build: ./backend
         container_name: wildfly
         depends_on:
             - db
@@ -39,3 +39,4 @@ services:
         environment:
           - CHOKIDAR_USEPOLLING=true npm start
           - NODE_ENV=development
+          - SERVER_URL=localhost:8080

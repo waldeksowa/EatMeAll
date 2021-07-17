@@ -2,7 +2,7 @@
   <q-page>
     <div class="q-gutter-y-md  q-col-gutter-md q-pa-md fit row wrap justify-center items-start content-start" >
       <div class="col-grow col-sm-9">
-        <q-form class="q-col-gutter-y-lg"> 
+        <q-form class="q-col-gutter-y-lg">
           <div class="text-h4  text-center">Dame Posiłku</div>
           <q-input filled class="" v-model.trim="recipe.name" label="Nazwa Posiłku" lazy-rules :rules="[val => val && val.length > 0 || 'To pole jest wymagane']" />
           <q-input filled type="number" v-model.number="recipe.time" label="Czas Przygotowania (min)" lazy-rules :rules="[val => !!val || 'To pole jest wymagane']" />
@@ -28,12 +28,12 @@
                   </template>
                 </q-input>
               </div>
-            </div>  
+            </div>
             <div class="q-mb-lg">
               <q-btn flat class="bg-primary full-width text-white btn-h"  icon="receipt_long" label="Dodaj Krok" @click="addRow()"></q-btn>
             </div>
           </div>
-          
+
           <div class="q-col-gutter-y-lg q-mt-lg">
             <div class="text-h4 text-center"> Posilek Zawiera</div>
             <div class=" text-body1 ">Kcal (20/{{ returnMealCalories() }})Kcal</div>
@@ -128,9 +128,9 @@
   </q-page>
 </template>
 <script>
-import {mapGetters} from 'vuex'
 import { Notify } from 'quasar'
 import json from './../assets/ALL_PRODUCTS.json'
+import {MEALS} from "src/EndpointAddresses";
 
 export default {
   name: 'PageIndex',
@@ -165,7 +165,7 @@ export default {
         {label: 'Podwieczorek', value:"DINNER", checked:false, cal:200},
         {label: 'Kolacja', value:"SUPPER", checked:false, cal:100}
       ],
-      
+
     }
   },
   methods: {
@@ -207,7 +207,7 @@ export default {
     },
     returnProductsBySelectedType(){
       let arr=[]
-      for(const {type,products} of this.products){ 
+      for(const {type,products} of this.products){
         if(this.dropdownType === type ) return products
         if(this.dropdownType === 'wszystko') arr.push(...products)
       }
@@ -223,7 +223,7 @@ export default {
       for(const{checked,cal} of this.checkboxOptions) {
         if(checked && cal > max) max = cal
       }
-      return max 
+      return max
     },
     showProductsToFind(aP){
       return aP.name.toLowerCase().trim().includes(this.toFind.toLowerCase().trim());
@@ -242,11 +242,11 @@ export default {
       })
     },
     checkMealData(){
-      try{        
+      try{
         const errorMissingMealData = "Nie uzupełniles danych posiłku"
 
         if(!this.recipe.name || !this.recipe.author || !this.recipe.description || !parseInt(this.recipe.time))
-          throw new Error(errorMissingMealData) 
+          throw new Error(errorMissingMealData)
       }catch(e){
         this.formFieldAreEmptyNotify(e.message)
       }
@@ -258,13 +258,13 @@ export default {
         let productsIdAndAmount = []
 
         for(const {amount, product} of this.recipe.addedProducts) {
-          if(parseInt(amount) <= 0) throw new Error(errorMissingAmount) 
-      
-          if(product) 
+          if(parseInt(amount) <= 0) throw new Error(errorMissingAmount)
+
+          if(product)
             productsIdAndAmount.push({amount:amount,id:product.id})
         }
 
-        if(productsIdAndAmount.length === 0) throw new Error(errorMissingProducts) 
+        if(productsIdAndAmount.length === 0) throw new Error(errorMissingProducts)
 
         return [productsIdAndAmount,null]
       }catch(e){
@@ -280,8 +280,8 @@ export default {
         for(const {value,checked} of this.checkboxOptions){
           if(checked) mealTiemArr.push(value)
         }
-        if(mealTiemArr.length === 0) throw new Error(errorMissingMealTime) 
-        return [mealTiemArr,null]  
+        if(mealTiemArr.length === 0) throw new Error(errorMissingMealTime)
+        return [mealTiemArr,null]
       }catch(e){
         this.formFieldAreEmptyNotify(e.message)
         return [null,e]
@@ -295,16 +295,16 @@ export default {
         if(!this.areStepsHiden) {
           for(const {name} of this.recipe.steps){
             if(!name) {
-              throw new Error(errorMissingSteps) 
+              throw new Error(errorMissingSteps)
             } else {
               stepsArr.push(name)
             }
           }
-          if(stepsArr.length === 0) throw new Error(errorMissingSteps) 
+          if(stepsArr.length === 0) throw new Error(errorMissingSteps)
         }
         return[stepsArr,null]
       }catch(e){
-        
+
         this.formFieldAreEmptyNotify(e.message)
         return[null,e]
       }
@@ -328,7 +328,7 @@ export default {
         prepareTime:this.recipe.time,
         mealTime: mealTiemArr,
         steps: stepsArr,
-        products:productsIdAndAmount 
+        products:productsIdAndAmount
       }
 
       const requestOptions = {
@@ -336,7 +336,7 @@ export default {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(requestData)
       };
-      fetch('http://localhost:8080/api/v1/meals/',requestOptions)
+      fetch(MEALS,requestOptions)
       .then(r => r.json())
       .then(d => (this.postId = d.id))
       this.sucessfulNotify()
