@@ -53,6 +53,16 @@ CREATE TABLE public.products (
 ALTER TABLE public.products OWNER TO eatmeall;
 
 
+CREATE SEQUENCE public.steps_position_seq
+    INCREMENT 1
+    START 1
+    MINVALUE 1
+    MAXVALUE 2147483647
+    CACHE 1;
+
+ALTER SEQUENCE public.steps_position_seq OWNER TO eatmeall;
+
+
 CREATE TABLE public.meals (
     id bigint NOT NULL,
     created_at timestamp without time zone,
@@ -104,16 +114,6 @@ CREATE TABLE public.meal_time (
 ALTER TABLE public.meal_time OWNER to eatmeall;
 
 
-CREATE SEQUENCE public.steps_position_seq
-    INCREMENT 1
-    START 1
-    MINVALUE 1
-    MAXVALUE 2147483647
-    CACHE 1;
-
-ALTER SEQUENCE public.steps_position_seq OWNER TO eatmeall;
-
-
 CREATE TABLE public.steps
 (
     id bigint NOT NULL,
@@ -121,7 +121,7 @@ CREATE TABLE public.steps
     updated_at timestamp without time zone,
     version integer NOT NULL,
     description character varying(255),
-    "position" integer NOT NULL DEFAULT nextval('steps_position_seq'::regclass),
+    step_position integer NOT NULL DEFAULT nextval('public.steps_position_seq'::regclass),
     meal_id bigint,
     CONSTRAINT steps_pkey PRIMARY KEY (id),
     CONSTRAINT fk_steps_meal_id FOREIGN KEY (meal_id)
