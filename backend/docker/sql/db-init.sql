@@ -53,6 +53,86 @@ CREATE TABLE public.products (
 ALTER TABLE public.products OWNER TO eatmeall;
 
 
+CREATE TABLE public.meals (
+    id bigint NOT NULL,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone,
+    version integer NOT NULL,
+    author character varying(255),
+    description character varying(255),
+    name character varying(255),
+    prepare_time integer,
+    CONSTRAINT meals_pkey PRIMARY KEY (id)
+);
+
+ALTER TABLE public.meals OWNER to eatmeall;
+
+
+CREATE TABLE public.meals_products (
+    id bigint NOT NULL,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone,
+    version integer NOT NULL,
+    amount integer,
+    special_amount integer,
+    special_amount_unit integer,
+    product_id bigint,
+    meal_id bigint,
+    CONSTRAINT meals_products_pkey PRIMARY KEY (id),
+    CONSTRAINT fk_meals_products_meal_id FOREIGN KEY (meal_id)
+        REFERENCES public.meals (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT fk_meals_products_product_id FOREIGN KEY (product_id)
+        REFERENCES public.products (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+);
+
+ALTER TABLE public.meals_products OWNER to eatmeall;
+
+
+CREATE TABLE public.meal_time (
+    meal_entity_id bigint NOT NULL,
+    meal_time integer,
+    CONSTRAINT fk_meal_time_meal_id FOREIGN KEY (meal_entity_id)
+        REFERENCES public.meals (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+);
+
+ALTER TABLE public.meal_time OWNER to eatmeall;
+
+
+CREATE SEQUENCE public.steps_position_seq
+    INCREMENT 1
+    START 1
+    MINVALUE 1
+    MAXVALUE 2147483647
+    CACHE 1;
+
+ALTER SEQUENCE public.steps_position_seq OWNER TO eatmeall;
+
+
+CREATE TABLE public.steps
+(
+    id bigint NOT NULL,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone,
+    version integer NOT NULL,
+    description character varying(255),
+    "position" integer NOT NULL DEFAULT nextval('steps_position_seq'::regclass),
+    meal_id bigint,
+    CONSTRAINT steps_pkey PRIMARY KEY (id),
+    CONSTRAINT fk_steps_meal_id FOREIGN KEY (meal_id)
+        REFERENCES public.meals (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+);
+
+ALTER TABLE public.steps OWNER to eatmeall;
+
+
 INSERT INTO public.products(
 	id, created_at, updated_at, version, calorific, carbohydrates, fat, name, protein, roughage, product_type)
  VALUES (	1	, current_timestamp, current_timestamp,0,	283.00	,	59.20	,	1.70	,'Bagietki francuskie'	,	8.70	,	2.00	,	1	),
