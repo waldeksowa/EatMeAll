@@ -121,7 +121,7 @@ CREATE TABLE public.steps
     updated_at timestamp without time zone,
     version integer NOT NULL,
     description character varying(255),
-    step_position integer NOT NULL DEFAULT nextval('public.steps_position_seq'::regclass),
+    "position" integer NOT NULL DEFAULT nextval('public.steps_position_seq'::regclass),
     meal_id bigint,
     CONSTRAINT steps_pkey PRIMARY KEY (id),
     CONSTRAINT fk_steps_meal_id FOREIGN KEY (meal_id)
