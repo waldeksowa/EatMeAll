@@ -9,11 +9,13 @@ public class ProductDtoMapper {
     }
 
     public static ProductWithAmountDto mapToProductWithAmountDto(MealProductEntity mealProduct) {
+        String specialAmount = mealProduct.getSpecialAmount() > 0 ?
+                    mealProduct.getSpecialAmount() + " " + mealProduct.getSpecialAmountUnit().nameByAmount(mealProduct.getSpecialAmount()) : "";
         return ProductWithAmountDto.builder()
                 .id(mealProduct.getProduct().getId())
                 .name(mealProduct.getProduct().getName())
                 .amount(mealProduct.getAmount())
-                .specialAmount("")
+                .specialAmount(specialAmount)
                 .build();
     }
 
