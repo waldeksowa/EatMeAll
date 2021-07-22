@@ -992,3 +992,15 @@ INSERT INTO public.products(
 (	855	, current_timestamp, current_timestamp,0,	714.00	,	2.60	,	79.00	        ,'Majonez domowy z olejem słonecznikowym'	,	1.30	,	0.10	,	17	),
 (	856	, current_timestamp, current_timestamp,0,	162.00	,	22.00	,	6.40	        ,'Musztarda'	,	5.70	,	1.70	,	17	),
 (	857	, current_timestamp, current_timestamp,0,	343.00	,	0.00	,	0.10	        ,'Żelatyna'	,	84.20	,	0.00	,	17	);
+
+CREATE TABLE accounts(
+    username VARCHAR(30) NOT NULL,
+    password VARCHAR(30) NOT NULL,
+    email VARCHAR(30) NOT NULL
+);
+
+INSERT INTO accounts VALUES
+( 'admin','password','admin@admin.com' ),
+( 'user1','password321','user@user.com' ),
+( 'user2','password123','user2@user.com' );
+
