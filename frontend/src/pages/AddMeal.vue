@@ -53,7 +53,7 @@
             <div class="text-h4 text-center q-mt-lg">Skladniki Posilku</div>
               <div class="q-pb-md" v-if="recipe.addedProducts.length !== 0">
                 <div v-for="(p,i) in recipe.addedProducts" :key="i">
-                  <q-card class="my-card" flat bordered>
+                  <q-card class="my-card full-width" flat bordered>
                     <q-item class="row" >
                       <q-item-section >
                         <div class="text-body1 q-mt-sm q-mb-xs" >{{ p.product.name }}</div>
@@ -105,7 +105,7 @@
                   <q-icon class='text-black' style='font-size: 32px' name="chevron_right"></q-icon>
                 </div>
                 <div v-for="(p,k) in returnProductsBySelectedType()" :key="k">
-                  <q-card class="my-card" flat bordered v-if="showProductsToFind(p)" >
+                  <q-card class="my-card full-width" flat bordered v-if="showProductsToFind(p)" >
                     <div>
                       <q-item>
                         <q-item-section >
@@ -247,8 +247,10 @@ export default {
 
         if(!this.recipe.name || !this.recipe.author || !this.recipe.description || !parseInt(this.recipe.time))
           throw new Error(errorMissingMealData)
+          return true
       }catch(e){
         this.formFieldAreEmptyNotify(e.message)
+        return false
       }
     },
     checkProducts(){
@@ -310,12 +312,12 @@ export default {
       }
     },
     checkForm(){
-      this.checkMealData()
+      const mealData = this.checkMealData()
       const [productsIdAndAmount,errorProductsIdAndAmount] = this.checkProducts()
       const [mealTiemArr,errorMealTiemArr] = this.chechkMealTime()
       const [stepsArr,errorStepsArr] = this.checkMealSteps()
 
-      if(!errorProductsIdAndAmount && !errorMealTiemArr && !errorStepsArr)
+      if(!errorProductsIdAndAmount && !errorMealTiemArr && !errorStepsArr && mealData)
         return [productsIdAndAmount,mealTiemArr,stepsArr]
     },
     post(){
