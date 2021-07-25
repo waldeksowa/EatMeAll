@@ -7,7 +7,9 @@ import org.springframework.web.bind.annotation.*;
 import pl.wizard.software.diet.products.ProductEntity;
 
 import javax.validation.Valid;
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 
@@ -19,7 +21,7 @@ public class ProductAPI {
     private final ProductService productService;
 
     @GetMapping
-    public ResponseEntity<List<ProductEntity>> findAll() {
+    public ResponseEntity<Collection<ProductWithTypeDto>> findAll() {
         return ResponseEntity.ok(productService.findAll());
     }
 
