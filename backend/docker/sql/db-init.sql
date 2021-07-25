@@ -35,6 +35,21 @@ ALTER TABLE public.hibernate_sequences OWNER TO eatmeall;
 -- Name: products; Type: TABLE; Schema: public; Owner: eatmeall
 --
 
+CREATE TABLE public.accounts(
+    id bigint NOT NULL,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone,
+    version integer NOT NULL,
+    username VARCHAR(30) NOT NULL,
+    password VARCHAR(30) NOT NULL,
+    email VARCHAR(30) NOT NULL
+);
+
+INSERT INTO public.accounts VALUES
+( 1	, current_timestamp, current_timestamp,0,'admin','password','admin@admin.com' ),
+( 1	, current_timestamp, current_timestamp,0,'user1','passwor1','user@user.com' ),
+( 1	, current_timestamp, current_timestamp,0,'user2','password2','user2@user.com' );
+
 CREATE TABLE public.products (
     id bigint NOT NULL,
     created_at timestamp without time zone,
@@ -992,15 +1007,3 @@ INSERT INTO public.products(
 (	855	, current_timestamp, current_timestamp,0,	714.00	,	2.60	,	79.00	        ,'Majonez domowy z olejem słonecznikowym'	,	1.30	,	0.10	,	17	),
 (	856	, current_timestamp, current_timestamp,0,	162.00	,	22.00	,	6.40	        ,'Musztarda'	,	5.70	,	1.70	,	17	),
 (	857	, current_timestamp, current_timestamp,0,	343.00	,	0.00	,	0.10	        ,'Żelatyna'	,	84.20	,	0.00	,	17	);
-
-CREATE TABLE accounts(
-    username VARCHAR(30) NOT NULL,
-    password VARCHAR(30) NOT NULL,
-    email VARCHAR(30) NOT NULL
-);
-
-INSERT INTO accounts VALUES
-( 'admin','password','admin@admin.com' ),
-( 'user1','password321','user@user.com' ),
-( 'user2','password123','user2@user.com' );
-

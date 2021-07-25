@@ -32,7 +32,7 @@ public class ProductEntity extends AbstractBaseEntity {
             productType = aType;
         }
 
-        String getProductType() {
+        public String getProductType() {
             return productType;
         }
     }
