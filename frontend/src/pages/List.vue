@@ -2,7 +2,7 @@
     <q-page>
         <div>
             <div v-if="showWeekView">
-            
+
             <div class="q-gutter-y-lg " v-for="m in meals" :key="m.id">
                 <div class="row no-wrap q-gutter-md justify-center mobile-column" >
                 <div class="col-grow col-shrink" v-for="(t,j) in 5" :key="j">
@@ -50,7 +50,7 @@
                         </q-chip>
                         </div>
                     </q-card-section> -->
-          
+
                     </q-card>
                     <q-card class="my-card bg-primary" v-else>
                     <q-item to="/dodajposilek" name="dodaj" class="full-width full-height ">
@@ -70,7 +70,7 @@
                     <q-input filled type="text" v-model="dataSelectedDialog.name" label="Nazwa Przepisu" :disable="disableEditing" lazy-rules :rules="[val => !!val || 'To pole jest wymagane']" />
                     <q-input filled type="text" v-model="dataSelectedDialog.prepareTime" label="Czas Przygotowania" :disable="disableEditing" lazy-rules :rules="[val => !!val || 'To pole jest wymagane']" />
                     <q-input filled type="text" v-model="dataSelectedDialog.author" label="Autor" :disable="disableEditing" lazy-rules :rules="[val => !!val || 'To pole jest wymagane']" />
-                    <q-input filled type="text" v-model="dataSelectedDialog.description" label="Opis" :disable="disableEditing" lazy-rules :rules="[val => !!val || 'To pole jest wymagane']" />            
+                    <q-input filled type="text" v-model="dataSelectedDialog.description" label="Opis" :disable="disableEditing" lazy-rules :rules="[val => !!val || 'To pole jest wymagane']" />
                     <div class="q-col-gutter-y-lg q-mt-lg">
                         <div class="text-h4 text-center"> Posilek Zawiera</div>
                         <div class=" text-body1 ">Kalorie: {{dataSelectedDialog.calorific}} Kcal</div>
@@ -83,7 +83,7 @@
                         <div class="text-body1 ">Błonnik ({{dataSelectedDialog.roughage}}/100)g</div>
                         <q-linear-progress stripe rounded size="20px" :value="calcValueforProgressBar(dataSelectedDialog.roughage)" color="orange" class="q-mt-sm" />
                     </div>
-                    
+
                     <div class="text-subtitle2">Skladniki</div>
                     <div class="q-gutter-xs" style="max-width: 300px" >
                         <q-chip v-for="(p,j) in dataSelectedDialog.products" :key="j" :label="returnPrdoductData(p)">
@@ -110,6 +110,7 @@ import { date } from 'quasar'
 import { Notify } from 'quasar'
 import { mapGetters } from 'vuex'
 import mealForm  from './AddMeal.vue'
+import {MEALS} from "src/EndpointAddresses";
 
 export default {
   name: 'PageIndex',
@@ -147,9 +148,9 @@ export default {
           return "https://images.unsplash.com/photo-1598515213345-d710d121c709?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
          default:
           return "https://images.unsplash.com/photo-1575282247585-d56c93eb0d8b?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1489&q=80"
-      }   
+      }
     },
-    calcValueforProgressBar(aVal){ 
+    calcValueforProgressBar(aVal){
       return aVal/100;
     },
     showDialog(aMeal,aMealTime){
@@ -167,13 +168,13 @@ export default {
     returnMealTime(aMealTime){
       // console.log("~ aMealTime", aMealTime)
       // console.log("~ mealTime", mealTime)
-      
+
       for(const {label,value} of this.mealTimeValues) {
-        if(aMealTime === value) return label  
+        if(aMealTime === value) return label
       }
     },
     sortMealTime(aMealTime){
-      let ordering = {}; 
+      let ordering = {};
       let sortOrder = []
       for(const {value} of this.mealTimeValues){
         sortOrder.push(value)
@@ -185,8 +186,8 @@ export default {
           return(ordering[a] - ordering[b]) || a.localeCompare(b);
       });
     },
-    async fetchMealdata(){      
-      let responce = await fetch('http://localhost:8080/api/v1/meals/')
+    async fetchMealdata(){
+      let responce = await fetch(MEALS)
 
       if(!responce.ok){
        this.errorMesage('Ups... Cos poszlo nie tak')
@@ -195,7 +196,7 @@ export default {
 
       let result = await responce.json()
       for (const {id} of result.reverse()){
-        let detailResponce = await fetch(`http://localhost:8080/api/v1/meals/${id}`)
+        let detailResponce = await fetch(MEALS + {id})
         let detailResult = await detailResponce.json()
         this.meals.push(detailResult)
       }
@@ -231,13 +232,13 @@ export default {
   }
 }
 .long-word{
-  overflow:hidden; 
-  white-space:nowrap; 
+  overflow:hidden;
+  white-space:nowrap;
   text-overflow: ellipsis;
 }
 .mobile-column{
   @media (max-width:1100px) {
-    flex-direction: column; 
+    flex-direction: column;
     justify-content: center;
     align-items: center;
   }
@@ -245,5 +246,5 @@ export default {
 .big-size{
   font-size:48px;
 }
-  
+
 </style>

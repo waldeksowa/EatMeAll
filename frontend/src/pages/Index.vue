@@ -15,7 +15,7 @@
         <div class="q-gutter-sm">
           <div class="" v-for="(d,i) in s.meal" :key="i">
             <div class="text-center text-body1">
-              
+
             </div>
             <q-card class="my-card-min" >
                <q-card-section>
@@ -28,29 +28,29 @@
                   <q-tooltip>
                       <div class="text-body2">{{d.name}}</div>
                   </q-tooltip>
-                  
+
                   <div class="long-word">
                     {{ d.name}}
                   </div>
                 </div>
               </q-img>
-                  
-             
+
+
                 <q-expansion-item
-              
+
                   expand-separator
                   icon="restaurant"
                   label="Wartości"
-                >           
+                >
                 <div class="text-center">
                   <div>Kalorie: {{s.meal[i].calorific}}Kcal</div>
                   <div>Tłuszcze: {{s.meal[i].fat}}(g)</div>
                   <div>Weglodowany: {{s.meal[i].carbohydrates}}(g)</div>
                   <div>Proteiny: {{s.meal[i].protein}}(g)</div>
                   <div>Blonnik: {{s.meal[i].roughage}}(g)</div>
-                </div>  
+                </div>
                 </q-expansion-item>
-              
+
             </q-card>
           </div>
         </div>
@@ -67,6 +67,7 @@
 
 <script>
 import { Notify } from 'quasar'
+import {SCHEDULE} from "src/EndpointAddresses";
 export default {
   name: 'PageIndex',
   data() {
@@ -76,7 +77,7 @@ export default {
       selectedMeal:Object,
       mealsSchedule:[],
       showMealDialog:false,
-      dataSelectedDialog:{},   
+      dataSelectedDialog:{},
     }
   },
   watch:{
@@ -91,10 +92,10 @@ export default {
     this.parseLocalStorageValues()
   },
   methods: {
-    async fetchScheduledata(){     
+    async fetchScheduledata(){
       this.removeLocalStorage()
       try{
-        let responce = await fetch('http://localhost:8080/api/v1/schedule/')
+        let responce = await fetch(SCHEDULE);
 
         if(!responce.ok){
           this.errorMesage('Ups... Cos poszlo nie tak')
@@ -103,7 +104,7 @@ export default {
 
         let result = await responce.json()
         this.prepareScheduleaData(result)
-       
+
       }catch(e){
         this.errorMesage('Ups... Cos poszlo nie tak')
         console.log(e)
@@ -120,8 +121,8 @@ export default {
       }
 
       this.sortMealDay(arr)
-      // this.sortMealTimeAndMealData(arr) 
-      
+      // this.sortMealTimeAndMealData(arr)
+
       this.mealsSchedule = arr
     },
     sortMealDay(Aaray){
@@ -223,12 +224,12 @@ export default {
           return "https://images.unsplash.com/photo-1598515213345-d710d121c709?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
          default:
           return "https://images.unsplash.com/photo-1575282247585-d56c93eb0d8b?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1489&q=80"
-      }   
+      }
     },
   },
-  
+
   created() {
-    
+
   },
   components:{
     'moreInfoDialog': require('../components/meals/MoreInfoDialog.vue').default,
@@ -240,7 +241,7 @@ export default {
 <style lang="sass">
 .dialog
   width:90vw
-  height: 90vh  
+  height: 90vh
 
 div:first-letter
   text-transform: uppercase
@@ -252,22 +253,22 @@ div:first-letter
 
 .my-card-min
   height: 100%
-  @media (max-width:1100px) 
+  @media (max-width:1100px)
     width:90vw
-  
+
 .long-word
   overflow: hidden
   white-space: nowrap
   text-overflow: ellipsis
 
 .mobile-column
-  @media (max-width:1100px) 
+  @media (max-width:1100px)
     flex-direction: column
     justify-content: center
     align-items: center
-  
+
 .big-size
   font-size:48px
 
-  
+
 </style>

@@ -3,6 +3,8 @@
 // import vueResource from 'vue-resource'
 // Vue.use(vueResource)
 
+import {ALL_PRODUCTS, MEALS} from "src/EndpointAddresses";
+
 const state = {
   meals:[],
   products:[],
@@ -23,7 +25,7 @@ const mutations = {
 const actions = {
   fetchData({ commit }) {
     return new Promise((resolve, reject) => {
-      Vue.http.get("http://localhost:8080/api/v1/products")
+      Vue.http.get(ALL_PRODUCTS)
         .then((response) => {
           commit("FETCH_DATA", response.body);
           resolve();
@@ -34,11 +36,11 @@ const actions = {
     });
   },
   fetchDataMeals({ commit }) {
-    fetch('http://localhost:8080/api/v1/meals/')
+    fetch(MEALS)
     .then(r => r.json())
     .then(d => {
       for(const {id} of d){
-        fetch(`http://localhost:8080/api/v1/meals/${id}`)
+        fetch(MEALS + {id})
         .then(r => r.json())
         .then(d => state.meals = d);
       }
@@ -47,7 +49,7 @@ const actions = {
   // fetchMealschedule(){
   //   let response
   //   try {
-  //       response = await Vue.http.get('http://localhost:8080/api/v1/schedule/')
+  //       response = await Vue.http.get(SCHEDULE)
   //   } catch (ex) {
   //       return
   //   }
