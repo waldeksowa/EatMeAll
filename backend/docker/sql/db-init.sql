@@ -171,6 +171,29 @@ CREATE TABLE public.members
 ALTER TABLE public.members OWNER to eatmeall;
 
 
+CREATE TABLE public.excluded_products
+(
+    id bigint NOT NULL,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone,
+    version integer NOT NULL,
+    product_id bigint,
+    member_id bigint,
+    CONSTRAINT excluded_products_pkey PRIMARY KEY (id),
+    CONSTRAINT fk_excluded_products_product_id FOREIGN KEY (product_id)
+        REFERENCES public.products (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+    CONSTRAINT fk_excluded_products_member_id FOREIGN KEY (member_id)
+        REFERENCES public.members (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+);
+
+ALTER TABLE public.excluded_products OWNER to eatmeall;
+
+
+
 INSERT INTO public.products(
 	id, created_at, updated_at, version, calorific, carbohydrates, fat, name, protein, roughage, product_type)
  VALUES (	1	, current_timestamp, current_timestamp,0,	283.00	,	59.20	,	1.70	,'Bagietki francuskie'	,	8.70	,	2.00	,	1	),
