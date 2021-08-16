@@ -148,6 +148,29 @@ CREATE TABLE public.steps
 ALTER TABLE public.steps OWNER to eatmeall;
 
 
+CREATE TABLE public.members
+(
+    id bigint NOT NULL,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone,
+    version integer NOT NULL,
+    name character varying(255),
+    age integer,
+    weight integer,
+    fat integer,
+    mussels integer,
+    water integer,
+    recomend_calories integer,
+    recomend_carbohydrates integer,
+    recomend_fat integer,
+    recomend_protein integer,
+    recomend_roughage integer,
+    CONSTRAINT members_pkey PRIMARY KEY (id)
+);
+
+ALTER TABLE public.members OWNER to eatmeall;
+
+
 INSERT INTO public.products(
 	id, created_at, updated_at, version, calorific, carbohydrates, fat, name, protein, roughage, product_type)
  VALUES (	1	, current_timestamp, current_timestamp,0,	283.00	,	59.20	,	1.70	,'Bagietki francuskie'	,	8.70	,	2.00	,	1	),
