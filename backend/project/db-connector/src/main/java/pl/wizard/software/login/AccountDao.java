@@ -4,8 +4,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 
-public interface AccountDao extends JpaRepository<Account, Long> {
+public interface AccountDao extends JpaRepository<AccountEntity, Long> {
 
-    @Query("SELECT a FROM Account a WHERE a.username = ?1")
-    Account findByUsername(String username);
+    @Query("SELECT a FROM AccountEntity a WHERE a.username = ?1")
+    AccountEntity findByUsername(String username);
 }

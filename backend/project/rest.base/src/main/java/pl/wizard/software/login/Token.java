@@ -2,6 +2,7 @@ package pl.wizard.software.login;
 
 import java.time.LocalTime;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 
 public class Token {
@@ -26,6 +27,14 @@ public class Token {
 
     LocalTime getExpiredTime() {
         return expiredTime;
+    }
+
+    boolean isNonExpired(Token aToken){
+        LocalTime LocalTimeNow = LocalTime.now();
+        if((LocalTimeNow.compareTo(aToken.getExpiredTime())) < 0){
+            throw new IllegalArgumentException("Token is invalid");
+        }
+        return true;
     }
 
     @Override
