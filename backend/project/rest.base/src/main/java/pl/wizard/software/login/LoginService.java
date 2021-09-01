@@ -13,28 +13,36 @@ public class LoginService{
 
     private final AccountDao accountDao;
 
-    private final HashSet<String> tokens;
+    private final HashSet<Token> tokens;
+
+    private final TokenFactory tokenFactory;
+
 
     public Optional<AccountEntity> findByID(Long Id){
         return accountDao.findById(Id);
     }
 
-    HashSet<String> getTokens() {
+    HashSet<Token> getTokens() {
         return tokens;
     }
 
     public Optional<Long> getAccountByIdToken(Token aToken){
-        if(tokens.contains(aToken)){
+        if(tokens.contains(aToken) && aToken.isNonExpired(aToken)){
          return Optional.of(aToken.getAccountID());
         }
             return Optional.empty();
     }
 
-    Token login(AccountEntity aUser) {
+    Token login(Credencials aUser) {
         AccountEntity account = accountDao.findByUsername(aUser.getUsername());
-        if(account.getPassword().equals(aUser.getPassword())){
-            Token loginToken = new Token(account.getId());
-            tokens.add(loginToken.getToken());
+        if(account == null){
+            account = accountDao.findByEmail(aUser.getEmail());
+        }
+        if(account != null && account.getPassword().equals(aUser.getPassword())){
+            Token loginToken = tokenFactory.createToken(account.getId());
+
+            tokens.remove(loginToken);
+            tokens.add(loginToken);
 
             return loginToken;
         } else {

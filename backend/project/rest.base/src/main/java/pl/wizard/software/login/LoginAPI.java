@@ -18,7 +18,7 @@ public class LoginAPI {
     private final LoginService loginService;
 
     @PostMapping
-    ResponseEntity <Token>login(@Valid @RequestBody AccountEntity aUser){
+    ResponseEntity <Token>login(@Valid @RequestBody Credencials aUser){
         return ResponseEntity.ok(loginService.login(aUser));
     }
 
