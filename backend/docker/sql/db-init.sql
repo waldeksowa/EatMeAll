@@ -160,11 +160,11 @@ CREATE TABLE public.members
     fat integer,
     mussels integer,
     water integer,
-    recomend_calories integer,
-    recomend_carbohydrates integer,
-    recomend_fat integer,
-    recomend_protein integer,
-    recomend_roughage integer,
+    recomended_calories integer,
+    recomended_carbohydrates integer,
+    recomended_fat integer,
+    recomended_protein integer,
+    recomended_roughage integer,
     CONSTRAINT members_pkey PRIMARY KEY (id)
 );
 
