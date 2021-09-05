@@ -2,14 +2,14 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 
 // we first import the module
-import products from './store'
+import store from './store'
 Vue.config.devtools = true
 Vue.use(Vuex)
 
 export default function (/* { ssrContext } */) {
   const Store = new Vuex.Store({
     modules: {
-      products
+      store
     },
 
     strict: process.env.DEV

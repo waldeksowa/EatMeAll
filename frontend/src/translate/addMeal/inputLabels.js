@@ -1,0 +1,5 @@
+export const INPUT_NAME = "Nazwa Posiłku"
+export const INPUT_TIME = "Czas Posiłku"
+export const INPUT_AUTHOR = "Autor Posiłku"
+export const INPUT_DESCRIPTION = "Opis Posiłku"
+export const ERROR_RULES = "To pole jest wymagane"
