@@ -165,7 +165,12 @@ CREATE TABLE public.members
     recommended_fat integer,
     recommended_protein integer,
     recommended_roughage integer,
-    CONSTRAINT members_pkey PRIMARY KEY (id)
+    account_id bigint,
+    CONSTRAINT members_pkey PRIMARY KEY (id),
+    CONSTRAINT fk_members_account_id FOREIGN KEY (account_id)
+            REFERENCES public.accounts (id) MATCH SIMPLE
+            ON UPDATE NO ACTION
+            ON DELETE NO ACTION
 );
 
 ALTER TABLE public.members OWNER to eatmeall;
