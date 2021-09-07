@@ -16,7 +16,7 @@ import java.util.Objects;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Account extends AbstractBaseEntity {
+public class AccountEntity extends AbstractBaseEntity {
 
     private String username;
     private String password;
@@ -26,7 +26,7 @@ public class Account extends AbstractBaseEntity {
     public boolean equals(Object aO) {
         if (this == aO) return true;
         if (aO == null || getClass() != aO.getClass()) return false;
-        Account that = (Account) aO;
+        AccountEntity that = (AccountEntity) aO;
         return Objects.equals(username, that.username) &&
                 Objects.equals(password, that.password) &&
                 Objects.equals(email, that.email);
