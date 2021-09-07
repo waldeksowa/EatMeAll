@@ -49,4 +49,15 @@ public class MemberAPI {
 
         return ResponseEntity.ok(memberService.save(member));
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity delete(@PathVariable Long id) {
+        if (!memberService.findById(id).isPresent()) {
+            log.error("Member with id " + id + " does not exists");
+            ResponseEntity.badRequest().build();
+        }
+        memberService.deleteById(id);
+
+        return ResponseEntity.ok().build();
+    }
 }
