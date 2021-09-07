@@ -18,16 +18,16 @@ import java.util.Set;
 public class MemberEntity extends AbstractBaseEntity {
 
     private String name;
-    private int age;
-    private int weight;
-    private int fat;
-    private int mussels;
-    private int water;
-    private int recommendedCalories;
-    private int recommendedCarbohydrates;
-    private int recommendedFat;
-    private int recommendedProtein;
-    private int recommendedRoughage;
+    private Integer age;
+    private Integer weight;
+    private Integer fat;
+    private Integer mussels;
+    private Integer water;
+    private Integer recommendedCalories;
+    private Integer recommendedCarbohydrates;
+    private Integer recommendedFat;
+    private Integer recommendedProtein;
+    private Integer recommendedRoughage;
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     @JoinColumn(name = "member_id")
     private Set<ScheduleEntity> schedules;

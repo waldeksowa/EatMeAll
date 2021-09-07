@@ -2,13 +2,12 @@ package pl.wizard.software.diet;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import pl.wizard.software.diet.members.MemberEntity;
 
+import javax.validation.Valid;
 import java.util.Collection;
 import java.util.Optional;
 
@@ -29,10 +28,25 @@ public class MemberAPI {
     public ResponseEntity<MemberEntity> findById(@PathVariable Long id) {
         Optional<MemberEntity> stock = memberService.findById(id);
         if (!stock.isPresent()) {
-            log.error("Member with id " + id + " is not exists");
+            log.error("Member with id " + id + " does not exists");
             ResponseEntity.badRequest().build();
         }
 
         return ResponseEntity.ok(stock.get());
+    }
+
+    @PostMapping
+    public ResponseEntity create(@Valid @RequestBody MemberEntity member) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(memberService.save(member));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<MemberEntity> update(@PathVariable Long id, @Valid @RequestBody MemberEntity member) {
+        if (!memberService.findById(id).isPresent()) {
+            log.error("Member with id " + id + " does not exists");
+            ResponseEntity.badRequest().build();
+        }
+
+        return ResponseEntity.ok(memberService.save(member));
     }
 }
