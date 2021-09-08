@@ -33,6 +33,20 @@ public class LoginService{
             return Optional.empty();
     }
 
+    public Optional<Long> getAccountIdByTokenUUID(String aUUID){
+        Optional<Token> token = tokens.stream()
+                .filter(t -> t.getToken().equals(aUUID))
+                .findFirst();
+        if (token.isPresent()) {
+            Token accountToken = token.get();
+            if (accountToken.isNonExpired(accountToken)) {
+                return Optional.of(accountToken.getAccountID());
+            }
+            return Optional.empty();
+        }
+        return Optional.empty();
+    }
+
     Token login(Credencials aUser) {
         AccountEntity account = accountDao.findByUsername(aUser.getUsername());
         if(account == null){

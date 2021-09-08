@@ -6,27 +6,40 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.wizard.software.diet.members.MemberEntity;
+import pl.wizard.software.login.LoginService;
 
 import javax.validation.Valid;
 import java.util.Collection;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/v1/members")
+@RequestMapping("/v2/members")
 @Slf4j
 @RequiredArgsConstructor
 public class MemberAPI {
 
     private final MemberService memberService;
+    private final LoginService loginService;
 
     @GetMapping
-    public ResponseEntity<Collection<MemberEntity>> findAll() {
-        return ResponseEntity.ok(memberService.findAll());
+    public ResponseEntity<Collection<MemberEntity>> findAll(@RequestHeader("Authorization") String token) {
+        Optional<Long> accountId = loginService.getAccountIdByTokenUUID(token.substring(7));
+        if (!accountId.isPresent()) {
+            log.error("Authorization token expired");
+            ResponseEntity.badRequest().build();
+        }
+
+        return ResponseEntity.ok(memberService.findAllForAccount(accountId.get()));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<MemberEntity> findById(@PathVariable Long id) {
-        Optional<MemberEntity> stock = memberService.findById(id);
+    public ResponseEntity<MemberEntity> findById(@RequestHeader("Authorization") String token, @PathVariable Long id) {
+        Optional<Long> accountId = loginService.getAccountIdByTokenUUID(token.substring(7));
+        if (!accountId.isPresent()) {
+            log.error("Authorization token expired");
+            ResponseEntity.badRequest().build();
+        }
+        Optional<MemberEntity> stock = memberService.findByIdForAccount(accountId.get(), id);
         if (!stock.isPresent()) {
             log.error("Member with id " + id + " does not exists");
             ResponseEntity.badRequest().build();
@@ -36,13 +49,24 @@ public class MemberAPI {
     }
 
     @PostMapping
-    public ResponseEntity create(@Valid @RequestBody MemberEntity member) {
+    public ResponseEntity create(@RequestHeader("Authorization") String token, @Valid @RequestBody MemberEntity member) {
+        Optional<Long> accountId = loginService.getAccountIdByTokenUUID(token.substring(7));
+        if (!accountId.isPresent()) {
+            log.error("Authorization token expired");
+            ResponseEntity.badRequest().build();
+        }
+
         return ResponseEntity.status(HttpStatus.CREATED).body(memberService.save(member));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<MemberEntity> update(@PathVariable Long id, @Valid @RequestBody MemberEntity member) {
-        if (!memberService.findById(id).isPresent()) {
+    public ResponseEntity<MemberEntity> update(@RequestHeader("Authorization") String token, @PathVariable Long id, @Valid @RequestBody MemberEntity member) {
+        Optional<Long> accountId = loginService.getAccountIdByTokenUUID(token.substring(7));
+        if (!accountId.isPresent()) {
+            log.error("Authorization token expired");
+            ResponseEntity.badRequest().build();
+        }
+        if (!memberService.findByIdForAccount(accountId.get(), id).isPresent()) {
             log.error("Member with id " + id + " does not exists");
             ResponseEntity.badRequest().build();
         }
@@ -51,8 +75,13 @@ public class MemberAPI {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity delete(@PathVariable Long id) {
-        if (!memberService.findById(id).isPresent()) {
+    public ResponseEntity delete(@RequestHeader("Authorization") String token, @PathVariable Long id) {
+        Optional<Long> accountId = loginService.getAccountIdByTokenUUID(token.substring(7));
+        if (!accountId.isPresent()) {
+            log.error("Authorization token expired");
+            ResponseEntity.badRequest().build();
+        }
+        if (!memberService.findByIdForAccount(accountId.get(), id).isPresent()) {
             log.error("Member with id " + id + " does not exists");
             ResponseEntity.badRequest().build();
         }

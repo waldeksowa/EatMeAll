@@ -34,4 +34,5 @@ public class MemberEntity extends AbstractBaseEntity {
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     @JoinColumn(name = "member_id")
     private Set<ExcludedProductEntity> excludedProducts;
+    private Long accountId;
 }

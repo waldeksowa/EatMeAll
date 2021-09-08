@@ -20,8 +20,16 @@ public class MemberService {
         return memberRepository.findAll();
     }
 
+    public List<MemberEntity> findAllForAccount(Long accountId) {
+        return memberRepository.findAllForAccount(accountId);
+    }
+
     public Optional<MemberEntity> findById(Long id) {
         return memberRepository.findById(id);
+    }
+
+    public Optional<MemberEntity> findByIdForAccount(Long accountId, Long memberId) {
+        return memberRepository.findByIdForAccount(accountId, memberId);
     }
 
     public MemberEntity save(MemberEntity stock) {
