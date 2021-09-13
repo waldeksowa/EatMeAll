@@ -21,7 +21,7 @@ public class MemberService {
     }
 
     public List<MemberEntity> findAllForAccount(Long accountId) {
-        return memberRepository.findAllForAccount(accountId);
+        return memberRepository.findAllMembers(accountId);
     }
 
     public Optional<MemberEntity> findById(Long id) {
@@ -29,7 +29,7 @@ public class MemberService {
     }
 
     public Optional<MemberEntity> findByIdForAccount(Long accountId, Long memberId) {
-        return memberRepository.findByIdForAccount(accountId, memberId);
+        return memberRepository.findMemberById(accountId, memberId);
     }
 
     public MemberEntity save(MemberEntity stock) {

@@ -19,10 +19,10 @@ public class MemberEntity extends AbstractBaseEntity {
 
     private String name;
     private Integer age;
-    private Double weight;
-    private Double fat;
-    private Double mussels;
-    private Double water;
+    private Double currentWeight;
+    private Double currentFat;
+    private Double currentMussels;
+    private Double currentWater;
     private Double recommendedCalories;
     private Double recommendedCarbohydrates;
     private Double recommendedFat;

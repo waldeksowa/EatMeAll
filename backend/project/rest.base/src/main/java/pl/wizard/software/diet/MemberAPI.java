@@ -26,7 +26,7 @@ public class MemberAPI {
         Optional<Long> accountId = loginService.getAccountIdByTokenUUID(token.substring(7));
         if (!accountId.isPresent()) {
             log.error("Authorization token expired");
-            ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().build();
         }
 
         return ResponseEntity.ok(memberService.findAllForAccount(accountId.get()));
@@ -37,12 +37,12 @@ public class MemberAPI {
         Optional<Long> accountId = loginService.getAccountIdByTokenUUID(token.substring(7));
         if (!accountId.isPresent()) {
             log.error("Authorization token expired");
-            ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().build();
         }
         Optional<MemberEntity> stock = memberService.findByIdForAccount(accountId.get(), id);
         if (!stock.isPresent()) {
             log.error("Member with id " + id + " does not exists");
-            ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().build();
         }
 
         return ResponseEntity.ok(stock.get());
@@ -53,7 +53,7 @@ public class MemberAPI {
         Optional<Long> accountId = loginService.getAccountIdByTokenUUID(token.substring(7));
         if (!accountId.isPresent()) {
             log.error("Authorization token expired");
-            ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().build();
         }
 
         return ResponseEntity.status(HttpStatus.CREATED).body(memberService.save(member));
@@ -64,11 +64,11 @@ public class MemberAPI {
         Optional<Long> accountId = loginService.getAccountIdByTokenUUID(token.substring(7));
         if (!accountId.isPresent()) {
             log.error("Authorization token expired");
-            ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().build();
         }
         if (!memberService.findByIdForAccount(accountId.get(), id).isPresent()) {
             log.error("Member with id " + id + " does not exists");
-            ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().build();
         }
 
         return ResponseEntity.ok(memberService.save(member));
@@ -79,11 +79,11 @@ public class MemberAPI {
         Optional<Long> accountId = loginService.getAccountIdByTokenUUID(token.substring(7));
         if (!accountId.isPresent()) {
             log.error("Authorization token expired");
-            ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().build();
         }
         if (!memberService.findByIdForAccount(accountId.get(), id).isPresent()) {
             log.error("Member with id " + id + " does not exists");
-            ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().build();
         }
         memberService.deleteById(id);
 
