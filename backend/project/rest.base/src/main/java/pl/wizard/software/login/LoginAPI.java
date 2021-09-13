@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/v1/login")
+@RequestMapping("/v2/login")
 @RequiredArgsConstructor
 public class LoginAPI {
 
