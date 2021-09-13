@@ -45,7 +45,8 @@ CREATE TABLE public.accounts(
     email VARCHAR(30) NOT NULL
 );
 
-INSERT INTO public.accounts VALUES(id, created_at, updated_at, version, username, password, email)
+INSERT INTO public.accounts(
+    id, created_at, updated_at, version, username, password, email) VALUES
 ( 1	, current_timestamp, current_timestamp,0,'admin','password','admin@admin.com' ),
 ( 2	, current_timestamp, current_timestamp,0,'user1','passwor1','user@user.com' ),
 ( 3	, current_timestamp, current_timestamp,0,'user2','password2','user2@user.com' );
