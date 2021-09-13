@@ -19,15 +19,15 @@ public class MemberEntity extends AbstractBaseEntity {
 
     private String name;
     private Integer age;
-    private Integer weight;
-    private Integer fat;
-    private Integer mussels;
-    private Integer water;
-    private Integer recommendedCalories;
-    private Integer recommendedCarbohydrates;
-    private Integer recommendedFat;
-    private Integer recommendedProtein;
-    private Integer recommendedRoughage;
+    private Double weight;
+    private Double fat;
+    private Double mussels;
+    private Double water;
+    private Double recommendedCalories;
+    private Double recommendedCarbohydrates;
+    private Double recommendedFat;
+    private Double recommendedProtein;
+    private Double recommendedRoughage;
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     @JoinColumn(name = "member_id")
     private Set<ScheduleEntity> schedules;
