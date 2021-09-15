@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Token",
+  "type": "object",
+  "properties": {
+    "token": {
+      "description": "The unique UUID for a account",
+      "type": "string"
+    },
+    "accountID": {
+      "description": "The unique identifier for a account in db",
+      "type": "number",
+      "minimum": 1
+    },
+    "expiredTime": {
+      "description": "Time to token expires",
+      "type": "string"
+    }
+  },
+  "required": [ "token", "accountID", "expiredTime" ]
+}
