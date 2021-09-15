@@ -5,10 +5,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import pl.wizard.software.AbstractBaseEntity;
+import pl.wizard.software.diet.members.MemberEntity;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "ACCOUNTS")
@@ -21,6 +22,9 @@ public class AccountEntity extends AbstractBaseEntity {
     private String username;
     private String password;
     private String email;
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @JoinColumn(name = "accountId")
+    private Set<MemberEntity> members;
 
     @Override
     public boolean equals(Object aO) {

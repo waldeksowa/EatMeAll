@@ -45,10 +45,11 @@ CREATE TABLE public.accounts(
     email VARCHAR(30) NOT NULL
 );
 
-INSERT INTO public.accounts VALUES
+INSERT INTO public.accounts(
+    id, created_at, updated_at, version, username, password, email) VALUES
 ( 1	, current_timestamp, current_timestamp,0,'admin','password','admin@admin.com' ),
-( 1	, current_timestamp, current_timestamp,0,'user1','passwor1','user@user.com' ),
-( 1	, current_timestamp, current_timestamp,0,'user2','password2','user2@user.com' );
+( 2	, current_timestamp, current_timestamp,0,'user1','passwor1','user@user.com' ),
+( 3	, current_timestamp, current_timestamp,0,'user2','password2','user2@user.com' );
 
 CREATE TABLE public.products (
     id bigint NOT NULL,
@@ -146,6 +147,80 @@ CREATE TABLE public.steps
 );
 
 ALTER TABLE public.steps OWNER to eatmeall;
+
+
+CREATE TABLE public.members
+(
+    id bigint NOT NULL,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone,
+    version integer NOT NULL,
+    name character varying(255),
+    age integer,
+    current_weight double precision,
+    current_fat double precision,
+    current_mussels double precision,
+    current_water double precision,
+    recommended_calories double precision,
+    recommended_carbohydrates double precision,
+    recommended_fat double precision,
+    recommended_protein double precision,
+    recommended_roughage double precision,
+    account_id bigint,
+    CONSTRAINT members_pkey PRIMARY KEY (id),
+    CONSTRAINT fk_members_account_id FOREIGN KEY (account_id)
+            REFERENCES public.accounts (id) MATCH SIMPLE
+            ON UPDATE NO ACTION
+            ON DELETE NO ACTION
+);
+
+ALTER TABLE public.members OWNER to eatmeall;
+
+
+CREATE TABLE public.excluded_products
+(
+    id bigint NOT NULL,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone,
+    version integer NOT NULL,
+    product_id bigint,
+    member_id bigint,
+    CONSTRAINT excluded_products_pkey PRIMARY KEY (id),
+    CONSTRAINT fk_excluded_products_product_id FOREIGN KEY (product_id)
+        REFERENCES public.products (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT fk_excluded_products_member_id FOREIGN KEY (member_id)
+        REFERENCES public.members (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+);
+
+ALTER TABLE public.excluded_products OWNER to eatmeall;
+
+
+CREATE TABLE public.shedules
+(
+    id bigint NOT NULL,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone,
+    version integer NOT NULL,
+    meal_time integer,
+    meal_day integer,
+    meal_id bigint,
+    member_id bigint,
+    CONSTRAINT shedules_pkey PRIMARY KEY (id),
+    CONSTRAINT fk_shedules_meal_id FOREIGN KEY (meal_id)
+            REFERENCES public.meals (id) MATCH SIMPLE
+            ON UPDATE NO ACTION
+            ON DELETE NO ACTION,
+    CONSTRAINT fk_shedules_member_id FOREIGN KEY (member_id)
+        REFERENCES public.members (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+);
+
+ALTER TABLE public.shedules OWNER to eatmeall;
 
 
 INSERT INTO public.products(
