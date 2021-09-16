@@ -12,6 +12,7 @@
         <module>db-connector</module>
         <module>rest.base</module>
         <module>ear-me-all-ear</module>
+        <module>rest.test</module>
     </modules>
 
     <properties>

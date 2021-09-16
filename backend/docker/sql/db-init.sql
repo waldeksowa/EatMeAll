@@ -42,8 +42,11 @@ CREATE TABLE public.accounts(
     version integer NOT NULL,
     username VARCHAR(30) NOT NULL,
     password VARCHAR(30) NOT NULL,
-    email VARCHAR(30) NOT NULL
+    email VARCHAR(30) NOT NULL,
+    CONSTRAINT accounts_pkey PRIMARY KEY (id)
 );
+
+ALTER TABLE public.accounts OWNER TO eatmeall;
 
 INSERT INTO public.accounts(
     id, created_at, updated_at, version, username, password, email) VALUES
