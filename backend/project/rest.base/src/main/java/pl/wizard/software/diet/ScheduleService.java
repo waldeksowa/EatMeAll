@@ -3,10 +3,13 @@ package pl.wizard.software.diet;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import pl.wizard.software.diet.dto.CreateScheduleDto;
 import pl.wizard.software.diet.dto.MealDto;
 import pl.wizard.software.diet.mapper.MealDtoMapper;
 import pl.wizard.software.diet.meals.MealDao;
 import pl.wizard.software.diet.meals.MealEntity;
+import pl.wizard.software.diet.meals.MealTimeEnum;
+import pl.wizard.software.diet.schedules.ScheduleEntity;
 
 import java.time.DayOfWeek;
 import java.util.HashMap;
@@ -14,7 +17,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import static pl.wizard.software.diet.meals.MealEntity.MealTimeEnum;
 
 @Service
 @Slf4j
@@ -40,5 +42,9 @@ public class ScheduleService {
             }
         }
         return schedule;
+    }
+
+    public ScheduleEntity createSchedule(List<CreateScheduleDto> schedule) {
+        return null;
     }
 }
