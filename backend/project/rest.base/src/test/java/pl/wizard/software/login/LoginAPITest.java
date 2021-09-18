@@ -2,6 +2,12 @@ package pl.wizard.software.login;
 
 import org.junit.Test;
 
+//import io.restassured.http.ContentType;
+//import static io.restassured.RestAssured.*;
+//import static org.hamcrest.Matchers.*;
+//import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
+
+
 public class LoginAPITest {
 
     private static final String REQUEST_BODY = "{\"username\": \"admin\", \"password\": \"password\"}";
