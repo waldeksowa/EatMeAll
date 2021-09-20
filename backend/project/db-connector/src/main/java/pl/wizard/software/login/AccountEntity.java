@@ -23,7 +23,7 @@ public class AccountEntity extends AbstractBaseEntity {
     private String password;
     private String email;
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-    @JoinColumn(name = "accountId")
+    @JoinColumn(name = "account_id")
     private Set<MemberEntity> members;
 
     @Override
