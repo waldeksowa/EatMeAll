@@ -21,7 +21,7 @@ public enum MealTimeEnum {
         return name;
     }
 
-    public static MealTimeEnum formName(String name) {
+    public static MealTimeEnum forName(String name) {
         return nameToValue.get(name);
     }
 }

@@ -8,20 +8,23 @@ import org.springframework.web.bind.annotation.*;
 import pl.wizard.software.diet.dto.CreateScheduleDto;
 import pl.wizard.software.diet.dto.MealDto;
 import pl.wizard.software.diet.meals.MealTimeEnum;
+import pl.wizard.software.login.LoginService;
 
 import javax.validation.Valid;
 import java.time.DayOfWeek;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 
 @RestController
-@RequestMapping("/v1/schedule")
+@RequestMapping("/v2/schedule")
 @Slf4j
 @RequiredArgsConstructor
 public class ScheduleAPI {
 
     private final ScheduleService scheduleService;
+    private final LoginService loginService;
 
     @GetMapping
     public ResponseEntity<Map<DayOfWeek, Map<MealTimeEnum, MealDto>>> getSchedule() {
@@ -29,7 +32,13 @@ public class ScheduleAPI {
     }
 
     @PostMapping
-    public ResponseEntity create(@Valid @RequestBody List<CreateScheduleDto> schedule) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(scheduleService.createSchedule(schedule));
+    public ResponseEntity create(@RequestHeader("Authorization") String token, @Valid @RequestBody List<CreateScheduleDto> schedule) {
+        Optional<Long> accountId = loginService.getAccountIdByTokenUUID(token.substring(7));
+        if (!accountId.isPresent()) {
+            log.error("Authorization token expired");
+            return ResponseEntity.badRequest().build();
+        }
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(scheduleService.createSchedule(schedule, accountId.get()));
     }
 }

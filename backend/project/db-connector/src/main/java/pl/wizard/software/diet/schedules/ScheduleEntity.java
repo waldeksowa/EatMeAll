@@ -1,5 +1,6 @@
 package pl.wizard.software.diet.schedules;
 
+import lombok.Builder;
 import lombok.Data;
 import pl.wizard.software.AbstractBaseEntity;
 import pl.wizard.software.diet.meals.MealTimeEnum;
@@ -10,6 +11,7 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "SCHEDULES")
 @Data
+@Builder
 public class ScheduleEntity extends AbstractBaseEntity {
 
     private LocalDate mealDate;

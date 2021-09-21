@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import pl.wizard.software.diet.dto.CreateScheduleDto;
 import pl.wizard.software.diet.dto.MealDto;
+import pl.wizard.software.diet.dto.MealWithTimeDto;
 import pl.wizard.software.diet.mapper.MealDtoMapper;
 import pl.wizard.software.diet.meals.MealDao;
 import pl.wizard.software.diet.meals.MealEntity;
@@ -12,10 +13,7 @@ import pl.wizard.software.diet.meals.MealTimeEnum;
 import pl.wizard.software.diet.schedules.ScheduleEntity;
 
 import java.time.DayOfWeek;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 
 @Service
@@ -44,7 +42,25 @@ public class ScheduleService {
         return schedule;
     }
 
-    public ScheduleEntity createSchedule(List<CreateScheduleDto> schedule) {
-        return null;
+    public Set<ScheduleEntity> createSchedule(List<CreateScheduleDto> schedule, Long memberId) {
+        Set<ScheduleEntity> scheduleToCreate = new HashSet<>();
+        for (CreateScheduleDto createScheduleDto : schedule) {
+            for (MealWithTimeDto meal : createScheduleDto.getMeals()) {
+                Optional<MealEntity> mealRepositoryById = mealRepository.findById(meal.getMealId());
+                if (!mealRepositoryById.isPresent()) {
+                    log.error("Meal with Id " + meal.getMealId() + " does not exists");
+                    return null;
+                } else {
+                    ScheduleEntity scheduleEntity = ScheduleEntity.builder()
+                            .mealDate(createScheduleDto.getMealDate())
+                            .mealTime(MealTimeEnum.forName(meal.getMealTime()))
+                            .mealId(meal.getMealId())
+                            .memberId(memberId)
+                            .build();
+                    scheduleToCreate.add(scheduleEntity);
+                }
+            }
+        }
+        return scheduleToCreate;
     }
 }
