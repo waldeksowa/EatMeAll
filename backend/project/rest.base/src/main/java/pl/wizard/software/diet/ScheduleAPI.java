@@ -22,7 +22,7 @@ public class ScheduleAPI {
     private final ScheduleService scheduleService;
 
     @GetMapping
-    public ResponseEntity<Map<DayOfWeek, Map<MealTimeEnum, MealDto>>> getSchedule() {
+    public ResponseEntity<Map<DayOfWeek, DayDto>> getSchedule() {
         return ResponseEntity.ok(scheduleService.getScheduleByMealTime());
     }
 }

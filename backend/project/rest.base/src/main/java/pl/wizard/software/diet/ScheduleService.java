@@ -24,10 +24,10 @@ public class ScheduleService {
     public static final int DAYS_IN_WEEK = 7;
     private final MealDao mealRepository;
 
-    public Map<DayOfWeek, Map<MealTimeEnum, MealDto>> getScheduleByMealTime() {
-        Map<DayOfWeek, Map<MealTimeEnum, MealDto>> schedule = new HashMap<>();
+    public Map<DayOfWeek, DayDto> getScheduleByMealTime() {
+        Map<DayOfWeek, DayDto> schedule = new HashMap<>();
         for (DayOfWeek day : DayOfWeek.values()) {
-            schedule.put(day, new HashMap<>());
+            schedule.put(day, new DayDto());
         }
         for (int i = 1; i < MealTimeEnum.values().length; i++) {
             List<MealEntity> meals = mealRepository.findRandomByMealTime(MealTimeEnum.values()[i].ordinal(), DAYS_IN_WEEK);
@@ -35,7 +35,7 @@ public class ScheduleService {
                 Optional<MealEntity> meal = meals.stream().findFirst();
                 if (meal.isPresent()) {
                     schedule.get(day).put(MealTimeEnum.values()[i], MealDtoMapper.mapToMealDto(meal.get()));
-                    meals.remove(meal);
+                    meals.remove(meal.get());
                 }
             }
         }
