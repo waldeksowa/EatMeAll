@@ -202,28 +202,23 @@ CREATE TABLE public.excluded_products
 ALTER TABLE public.excluded_products OWNER to eatmeall;
 
 
-CREATE TABLE public.shedules
+CREATE TABLE public.schedules
 (
     id bigint NOT NULL,
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
     version integer NOT NULL,
-    meal_time integer,
-    meal_day integer,
-    meal_id bigint,
+    schedule_date date,
+    schedule character varying(1000),
     member_id bigint,
-    CONSTRAINT shedules_pkey PRIMARY KEY (id),
-    CONSTRAINT fk_shedules_meal_id FOREIGN KEY (meal_id)
-            REFERENCES public.meals (id) MATCH SIMPLE
-            ON UPDATE NO ACTION
-            ON DELETE NO ACTION,
-    CONSTRAINT fk_shedules_member_id FOREIGN KEY (member_id)
+    CONSTRAINT schedules_pkey PRIMARY KEY (id),
+    CONSTRAINT fk_schedules_member_id FOREIGN KEY (member_id)
         REFERENCES public.members (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 );
 
-ALTER TABLE public.shedules OWNER to eatmeall;
+ALTER TABLE public.schedules OWNER to eatmeall;
 
 
 INSERT INTO public.products(
