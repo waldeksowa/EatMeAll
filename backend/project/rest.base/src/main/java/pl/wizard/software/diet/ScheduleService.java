@@ -55,6 +55,7 @@ public class ScheduleService {
                 .get();
         for (CreateScheduleDto createScheduleDto : schedule) {
             ScheduleForDayDto scheduleForDay = new ScheduleForDayDto();
+            scheduleForDay.setDate(createScheduleDto.getDate());
             for (ScheduleForDayDto meal : createScheduleDto.getMeals()) {
                 fillMeals(scheduleForDay, meal);
             }
@@ -63,7 +64,7 @@ public class ScheduleService {
         Gson gson = new Gson();
         ScheduleEntity scheduleEntity = ScheduleEntity.builder()
                 .memberId(memberId)
-                .date(scheduleDate)
+                .scheduleDate(scheduleDate)
                 .schedule(gson.toJson(scheduleForWeek))
                 .build();
 

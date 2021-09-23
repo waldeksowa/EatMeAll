@@ -15,7 +15,7 @@ import java.time.LocalDate;
 @Builder
 public class ScheduleEntity extends AbstractBaseEntity {
 
-    private LocalDate date;
+    private LocalDate scheduleDate;
     private String schedule;
 //    @Enumerated(EnumType.ORDINAL)
 //    private MealTimeEnum mealTime;
