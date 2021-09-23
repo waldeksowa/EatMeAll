@@ -3,9 +3,10 @@ package pl.wizard.software.diet.schedules;
 import lombok.Builder;
 import lombok.Data;
 import pl.wizard.software.AbstractBaseEntity;
-import pl.wizard.software.diet.meals.MealTimeEnum;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.time.LocalDate;
 
 @Entity
@@ -14,11 +15,12 @@ import java.time.LocalDate;
 @Builder
 public class ScheduleEntity extends AbstractBaseEntity {
 
-    private LocalDate mealDate;
-    @Enumerated(EnumType.ORDINAL)
-    private MealTimeEnum mealTime;
-    @Column(name = "meal_id")
-    private Long mealId;
+    private LocalDate date;
+    private String schedule;
+//    @Enumerated(EnumType.ORDINAL)
+//    private MealTimeEnum mealTime;
+//    @Column(name = "meal_id")
+//    private Long mealId;
     @Column(name = "member_id")
     private Long memberId;
 }
