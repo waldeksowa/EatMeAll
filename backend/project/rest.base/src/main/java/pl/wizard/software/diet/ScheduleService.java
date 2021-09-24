@@ -1,9 +1,10 @@
 package pl.wizard.software.diet;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.util.SerializationUtils;
 import pl.wizard.software.diet.dto.MealDto;
 import pl.wizard.software.diet.dto.ScheduleForDayDto;
 import pl.wizard.software.diet.mapper.MealDtoMapper;
@@ -13,9 +14,15 @@ import pl.wizard.software.diet.meals.MealTimeEnum;
 import pl.wizard.software.diet.schedules.ScheduleDao;
 import pl.wizard.software.diet.schedules.ScheduleEntity;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 
 @Service
@@ -46,29 +53,32 @@ public class ScheduleService {
     }
 
     public ScheduleEntity createSchedule(List<ScheduleForDayDto> schedule, Long memberId) {
-        List<ScheduleForDayDto> scheduleForWeek = new ArrayList<>();
         LocalDate scheduleDate = schedule.stream()
                 .map(s -> s.getDate())
                 .sorted()
                 .findFirst()
                 .get();
 
-        ScheduleEntity scheduleEntity = ScheduleEntity.builder()
-                .memberId(memberId)
-                .scheduleDate(scheduleDate)
-                .schedule(SerializationUtils.serialize(schedule))
-                .build();
-
-        return scheduleRepository.save(scheduleEntity);
+        try {
+            byte[] data = new ObjectMapper().writeValueAsBytes(schedule);
+            ScheduleEntity scheduleEntity = ScheduleEntity.builder()
+                    .memberId(memberId)
+                    .scheduleDate(scheduleDate)
+                    .schedule(data)
+                    .build();
+            return scheduleRepository.save(scheduleEntity);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
-    private boolean isMealExists(Long mealId) {
-        Optional<MealEntity> meal = mealRepository.findById(mealId);
-        if (meal.isPresent()) {
-            return true;
-        } else {
-            log.error("Meal with Id " + mealId + " does not exists");
-            return false;
+    private byte[] convertToBytes(Object object) throws IOException {
+        try (ByteArrayOutputStream bos = new ByteArrayOutputStream();
+             ObjectOutputStream out = new ObjectOutputStream(bos)) {
+            out.writeObject(object);
+            return bos.toByteArray();
         }
     }
+
 }

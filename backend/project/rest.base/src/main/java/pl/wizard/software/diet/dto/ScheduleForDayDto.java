@@ -4,11 +4,12 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 @Getter
 @Setter
-public class ScheduleForDayDto {
+public class ScheduleForDayDto implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate date;
     private Long breakfast;
