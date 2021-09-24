@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.wizard.software.diet.dto.CreateScheduleDto;
 import pl.wizard.software.diet.dto.MealDto;
+import pl.wizard.software.diet.dto.ScheduleForDayDto;
 import pl.wizard.software.diet.meals.MealTimeEnum;
 import pl.wizard.software.login.LoginService;
 
@@ -32,7 +33,7 @@ public class ScheduleAPI {
     }
 
     @PostMapping
-    public ResponseEntity create(@RequestHeader("Authorization") String token, @Valid @RequestBody List<CreateScheduleDto> schedule) {
+    public ResponseEntity create(@RequestHeader("Authorization") String token, @Valid @RequestBody List<ScheduleForDayDto> schedule) {
         Optional<Long> accountId = loginService.getAccountIdByTokenUUID(token.substring(7));
         if (!accountId.isPresent()) {
             log.error("Authorization token expired");

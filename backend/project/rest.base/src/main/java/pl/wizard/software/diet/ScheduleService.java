@@ -1,10 +1,9 @@
 package pl.wizard.software.diet;
 
-import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import pl.wizard.software.diet.dto.CreateScheduleDto;
+import org.springframework.util.SerializationUtils;
 import pl.wizard.software.diet.dto.MealDto;
 import pl.wizard.software.diet.dto.ScheduleForDayDto;
 import pl.wizard.software.diet.mapper.MealDtoMapper;
@@ -46,57 +45,21 @@ public class ScheduleService {
         return schedule;
     }
 
-    public ScheduleEntity createSchedule(List<CreateScheduleDto> schedule, Long memberId) {
+    public ScheduleEntity createSchedule(List<ScheduleForDayDto> schedule, Long memberId) {
         List<ScheduleForDayDto> scheduleForWeek = new ArrayList<>();
         LocalDate scheduleDate = schedule.stream()
                 .map(s -> s.getDate())
                 .sorted()
                 .findFirst()
                 .get();
-        for (CreateScheduleDto createScheduleDto : schedule) {
-            ScheduleForDayDto scheduleForDay = new ScheduleForDayDto();
-            scheduleForDay.setDate(createScheduleDto.getDate());
-            for (ScheduleForDayDto meal : createScheduleDto.getMeals()) {
-                fillMeals(scheduleForDay, meal);
-            }
-            scheduleForWeek.add(scheduleForDay);
-        }
-        Gson gson = new Gson();
+
         ScheduleEntity scheduleEntity = ScheduleEntity.builder()
                 .memberId(memberId)
                 .scheduleDate(scheduleDate)
-                .schedule(gson.toJson(scheduleForWeek))
+                .schedule(SerializationUtils.serialize(schedule))
                 .build();
 
         return scheduleRepository.save(scheduleEntity);
-    }
-
-    private void fillMeals(ScheduleForDayDto scheduleForDay, ScheduleForDayDto meal) {
-        if (meal.getBreakfast() != null) {
-            if (isMealExists(meal.getBreakfast())) {
-                scheduleForDay.setBreakfast(meal.getBreakfast());
-            }
-        }
-        if (meal.getSecondBreakfast() != null) {
-            if (isMealExists(meal.getSecondBreakfast())) {
-                scheduleForDay.setSecondBreakfast(meal.getSecondBreakfast());
-            }
-        }
-        if (meal.getLunch() != null) {
-            if (isMealExists(meal.getLunch())) {
-                scheduleForDay.setLunch(meal.getLunch());
-            }
-        }
-        if (meal.getDinner() != null) {
-            if (isMealExists(meal.getDinner())) {
-                scheduleForDay.setDinner(meal.getDinner());
-            }
-        }
-        if (meal.getSupper() != null) {
-            if (isMealExists(meal.getSupper())) {
-                scheduleForDay.setSupper(meal.getSupper());
-            }
-        }
     }
 
     private boolean isMealExists(Long mealId) {

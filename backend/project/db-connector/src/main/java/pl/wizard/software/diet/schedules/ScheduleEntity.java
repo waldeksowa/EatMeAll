@@ -6,6 +6,7 @@ import pl.wizard.software.AbstractBaseEntity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Lob;
 import javax.persistence.Table;
 import java.time.LocalDate;
 
@@ -16,11 +17,8 @@ import java.time.LocalDate;
 public class ScheduleEntity extends AbstractBaseEntity {
 
     private LocalDate scheduleDate;
-    private String schedule;
-//    @Enumerated(EnumType.ORDINAL)
-//    private MealTimeEnum mealTime;
-//    @Column(name = "meal_id")
-//    private Long mealId;
+    @Lob
+    private byte[] schedule;
     @Column(name = "member_id")
     private Long memberId;
 }
