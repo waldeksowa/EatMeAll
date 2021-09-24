@@ -209,7 +209,7 @@ CREATE TABLE public.schedules
     updated_at timestamp without time zone,
     version integer NOT NULL,
     schedule_date date,
-    schedule character varying(1000),
+    schedule bytea,
     member_id bigint,
     CONSTRAINT schedules_pkey PRIMARY KEY (id),
     CONSTRAINT fk_schedules_member_id FOREIGN KEY (member_id)
