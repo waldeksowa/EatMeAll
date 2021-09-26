@@ -16,7 +16,7 @@ import java.time.LocalDate;
 @Builder
 public class ScheduleEntity extends AbstractBaseEntity {
 
-    private LocalDate scheduleDate;
+    private LocalDate date;
     @Lob
     @Column(name = "schedule", columnDefinition = "BLOB")
     private byte[] schedule;

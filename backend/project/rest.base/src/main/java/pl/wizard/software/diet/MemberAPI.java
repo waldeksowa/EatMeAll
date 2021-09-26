@@ -29,7 +29,7 @@ public class MemberAPI {
             return ResponseEntity.badRequest().build();
         }
 
-        return ResponseEntity.ok(memberService.findAllForAccount(accountId.get()));
+        return ResponseEntity.ok(memberService.findAllMembers(accountId.get()));
     }
 
     @GetMapping("/{id}")
