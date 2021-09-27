@@ -3,6 +3,7 @@ package pl.wizard.software.diet;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import pl.wizard.software.diet.dto.CreateScheduleDto;
 import pl.wizard.software.diet.dto.MealDto;
 import pl.wizard.software.diet.dto.ScheduleForDayDto;
 import pl.wizard.software.diet.dto.ScheduleForWeekDto;
@@ -15,11 +16,7 @@ import pl.wizard.software.diet.schedules.ScheduleEntity;
 
 import java.io.*;
 import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -50,39 +47,56 @@ public class ScheduleService {
         return schedule;
     }
 
-    public ScheduleForWeekDto createSchedule(List<ScheduleForDayDto> schedule, Long memberId) {
-        LocalDate scheduleDate = schedule.stream()
+    public ScheduleForWeekDto createSchedule(CreateScheduleDto schedule) {
+        Date scheduleDate = schedule.getSchedule().stream()
                 .map(s -> s.getDate())
                 .sorted()
                 .findFirst()
                 .get();
 
         ScheduleEntity scheduleEntity = ScheduleEntity.builder()
-                .memberId(memberId)
-                .date(scheduleDate)
-                .schedule(convertToBytes(schedule))
+                .memberId(schedule.getMemberId())
+                .scheduleDate(scheduleDate)
+                .schedule(convertToBytes(schedule.getSchedule()))
                 .build();
 
         return convertToScheduleForWeek(scheduleRepository.save(scheduleEntity));
     }
 
-    public List<ScheduleForWeekDto> findAllSchedules(Long accountId) {
-        return scheduleRepository.findAllSchedules(accountId).stream()
+    public List<ScheduleForWeekDto> findAll(Long accountId) {
+        return scheduleRepository.findAll(accountId).stream()
                 .map(scheduleEntity -> convertToScheduleForWeek(scheduleEntity))
                 .collect(Collectors.toList());
     }
 
     public Optional<ScheduleForWeekDto> findById(Long accountId, Long scheduleId) {
         Optional<ScheduleEntity> schedule = scheduleRepository.findById(accountId, scheduleId);
-        if (schedule.isPresent()) {
-            return Optional.of(convertToScheduleForWeek(schedule.get()));
-        } else {
-            return Optional.empty();
-        }
+        return getScheduleForWeekDto(schedule);
     }
 
     public Optional<ScheduleForWeekDto> findByMember(Long accountId, Long memberId) {
         Optional<ScheduleEntity> schedule = scheduleRepository.findByMember(accountId, memberId);
+        return getScheduleForWeekDto(schedule);
+    }
+
+    public ScheduleForWeekDto save(ScheduleForWeekDto schedule) {
+        ScheduleEntity scheduleEntity = new ScheduleEntity();
+        scheduleEntity.setId(schedule.getId());
+        scheduleEntity.setCreatedAt(schedule.getCreatedAt());
+        scheduleEntity.setUpdatedAt(new Date());
+        scheduleEntity.setVersion(schedule.getVersion());
+        scheduleEntity.setScheduleDate(schedule.getScheduleDate());
+        scheduleEntity.setMemberId(schedule.getMemberId());
+        scheduleEntity.setSchedule(convertToBytes(schedule.getSchedule()));
+
+        return convertToScheduleForWeek(scheduleRepository.save(scheduleEntity));
+    }
+
+    public void deleteById(Long scheduleId) {
+        scheduleRepository.deleteById(scheduleId);
+    }
+
+    private Optional<ScheduleForWeekDto> getScheduleForWeekDto(Optional<ScheduleEntity> schedule) {
         if (schedule.isPresent()) {
             return Optional.of(convertToScheduleForWeek(schedule.get()));
         } else {
@@ -90,11 +104,15 @@ public class ScheduleService {
         }
     }
 
-    private ScheduleForWeekDto convertToScheduleForWeek(ScheduleEntity scheduleEntityAfterSave) {
+    private ScheduleForWeekDto convertToScheduleForWeek(ScheduleEntity scheduleEntity) {
         return ScheduleForWeekDto.builder()
-                .scheduleDate(scheduleEntityAfterSave.getDate())
-                .memberId(scheduleEntityAfterSave.getMemberId())
-                .schedule(convertFromBytes(scheduleEntityAfterSave.getSchedule()))
+                .Id(scheduleEntity.getId())
+                .createdAt(scheduleEntity.getCreatedAt())
+                .updatedAt(scheduleEntity.getUpdatedAt())
+                .version(scheduleEntity.getVersion())
+                .scheduleDate(scheduleEntity.getScheduleDate())
+                .memberId(scheduleEntity.getMemberId())
+                .schedule(convertFromBytes(scheduleEntity.getSchedule()))
                 .build();
     }
 

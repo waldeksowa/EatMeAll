@@ -5,8 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pl.wizard.software.diet.dto.CreateScheduleDto;
 import pl.wizard.software.diet.dto.MealDto;
-import pl.wizard.software.diet.dto.ScheduleForDayDto;
 import pl.wizard.software.diet.dto.ScheduleForWeekDto;
 import pl.wizard.software.diet.meals.MealTimeEnum;
 import pl.wizard.software.login.LoginService;
@@ -14,13 +14,12 @@ import pl.wizard.software.login.LoginService;
 import javax.validation.Valid;
 import java.time.DayOfWeek;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 
 @RestController
-@RequestMapping("/v2/schedule")
+@RequestMapping("/v2/schedules")
 @Slf4j
 @RequiredArgsConstructor
 public class ScheduleAPI {
@@ -36,7 +35,7 @@ public class ScheduleAPI {
             return ResponseEntity.badRequest().build();
         }
 
-        return ResponseEntity.ok(scheduleService.findAllSchedules(accountId.get()));
+        return ResponseEntity.ok(scheduleService.findAll(accountId.get()));
     }
 
     @GetMapping("/{id}")
@@ -79,29 +78,44 @@ public class ScheduleAPI {
     }
 
     @PostMapping
-    public ResponseEntity create(@RequestHeader("Authorization") String token, @Valid @RequestBody List<ScheduleForDayDto> schedule) {
+    public ResponseEntity create(@RequestHeader("Authorization") String token, @Valid @RequestBody CreateScheduleDto schedule) {
         Optional<Long> accountId = loginService.getAccountIdByTokenUUID(token.substring(7));
         if (!accountId.isPresent()) {
             log.error("Authorization token expired");
             return ResponseEntity.badRequest().build();
         }
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(scheduleService.createSchedule(schedule, accountId.get()));
+        return ResponseEntity.status(HttpStatus.CREATED).body(scheduleService.createSchedule(schedule));
     }
 
-//    @DeleteMapping("/{id}")
-//    public ResponseEntity delete(@RequestHeader("Authorization") String token, @PathVariable Long id) {
-//        Optional<Long> accountId = loginService.getAccountIdByTokenUUID(token.substring(7));
-//        if (!accountId.isPresent()) {
-//            log.error("Authorization token expired");
-//            return ResponseEntity.badRequest().build();
-//        }
-//        if (!memberService.findByIdForAccount(accountId.get(), id).isPresent()) {
-//            log.error("Member with id " + id + " does not exists");
-//            return ResponseEntity.badRequest().build();
-//        }
-//        memberService.deleteById(id);
-//
-//        return ResponseEntity.ok().build();
-//    }
+    @PutMapping("/{id}")
+    public ResponseEntity<ScheduleForWeekDto> update(@RequestHeader("Authorization") String token, @PathVariable Long scheduleId, @Valid @RequestBody ScheduleForWeekDto schedule) {
+        Optional<Long> accountId = loginService.getAccountIdByTokenUUID(token.substring(7));
+        if (!accountId.isPresent()) {
+            log.error("Authorization token expired");
+            return ResponseEntity.badRequest().build();
+        }
+        if (!scheduleService.findById(accountId.get(), scheduleId).isPresent()) {
+            log.error("Schedule with id " + scheduleId + " does not exists");
+            return ResponseEntity.badRequest().build();
+        }
+
+        return ResponseEntity.ok(scheduleService.save(schedule));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity delete(@RequestHeader("Authorization") String token, @PathVariable Long scheduleId) {
+        Optional<Long> accountId = loginService.getAccountIdByTokenUUID(token.substring(7));
+        if (!accountId.isPresent()) {
+            log.error("Authorization token expired");
+            return ResponseEntity.badRequest().build();
+        }
+        if (!scheduleService.findById(accountId.get(), scheduleId).isPresent()) {
+            log.error("Schedule with id " + scheduleId + " does not exists");
+            return ResponseEntity.badRequest().build();
+        }
+        scheduleService.deleteById(scheduleId);
+
+        return ResponseEntity.ok().build();
+    }
 }

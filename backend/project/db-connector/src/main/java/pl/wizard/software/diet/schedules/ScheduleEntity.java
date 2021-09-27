@@ -1,23 +1,23 @@
 package pl.wizard.software.diet.schedules;
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 import pl.wizard.software.AbstractBaseEntity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Lob;
-import javax.persistence.Table;
-import java.time.LocalDate;
+import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "SCHEDULES")
-@Data
+@Getter
+@Setter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ScheduleEntity extends AbstractBaseEntity {
 
-    private LocalDate date;
+    private Date scheduleDate;
     @Lob
+    @Basic(fetch = FetchType.EAGER)
     @Column(name = "schedule", columnDefinition = "BLOB")
     private byte[] schedule;
     @Column(name = "member_id")
