@@ -3,6 +3,7 @@ package pl.wizard.software.diet;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import pl.wizard.software.diet.dto.CreateScheduleDto;
 import pl.wizard.software.diet.dto.MealDto;
 import pl.wizard.software.diet.dto.ScheduleForDayDto;
@@ -63,17 +64,20 @@ public class ScheduleService {
         return convertToScheduleForWeek(scheduleRepository.save(scheduleEntity));
     }
 
+    @Transactional
     public List<ScheduleForWeekDto> findAll(Long accountId) {
         return scheduleRepository.findAll(accountId).stream()
                 .map(scheduleEntity -> convertToScheduleForWeek(scheduleEntity))
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public Optional<ScheduleForWeekDto> findById(Long accountId, Long scheduleId) {
         Optional<ScheduleEntity> schedule = scheduleRepository.findById(accountId, scheduleId);
         return getScheduleForWeekDto(schedule);
     }
 
+    @Transactional
     public Optional<ScheduleForWeekDto> findByMember(Long accountId, Long memberId) {
         Optional<ScheduleEntity> schedule = scheduleRepository.findByMember(accountId, memberId);
         return getScheduleForWeekDto(schedule);

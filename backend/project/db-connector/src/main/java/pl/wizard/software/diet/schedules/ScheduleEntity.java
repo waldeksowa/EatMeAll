@@ -17,7 +17,6 @@ public class ScheduleEntity extends AbstractBaseEntity {
 
     private Date scheduleDate;
     @Lob
-    @Basic(fetch = FetchType.EAGER)
     @Column(name = "schedule", columnDefinition = "BLOB")
     private byte[] schedule;
     @Column(name = "member_id")
