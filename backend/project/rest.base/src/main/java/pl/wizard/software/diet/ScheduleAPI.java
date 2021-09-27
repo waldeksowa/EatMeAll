@@ -39,16 +39,16 @@ public class ScheduleAPI {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ScheduleForWeekDto> findById(@RequestHeader("Authorization") String token, @PathVariable Long scheduleId) {
+    public ResponseEntity<ScheduleForWeekDto> findById(@RequestHeader("Authorization") String token, @PathVariable Long id) {
         Optional<Long> accountId = loginService.getAccountIdByTokenUUID(token.substring(7));
         if (!accountId.isPresent()) {
             log.error("Authorization token expired");
             return ResponseEntity.badRequest().build();
         }
 
-        Optional<ScheduleForWeekDto> stock = scheduleService.findById(accountId.get(), scheduleId);
+        Optional<ScheduleForWeekDto> stock = scheduleService.findById(accountId.get(), id);
         if (!stock.isPresent()) {
-            log.error("Schedule with Id " + scheduleId + " does not exists");
+            log.error("Schedule with Id " + id + " does not exists");
             ResponseEntity.badRequest().build();
         }
 
@@ -56,16 +56,16 @@ public class ScheduleAPI {
     }
 
     @GetMapping("/member/{id}")
-    public ResponseEntity<ScheduleForWeekDto> findByMember(@RequestHeader("Authorization") String token, @PathVariable Long memberId) {
+    public ResponseEntity<ScheduleForWeekDto> findByMember(@RequestHeader("Authorization") String token, @PathVariable Long id) {
         Optional<Long> accountId = loginService.getAccountIdByTokenUUID(token.substring(7));
         if (!accountId.isPresent()) {
             log.error("Authorization token expired");
             return ResponseEntity.badRequest().build();
         }
 
-        Optional<ScheduleForWeekDto> stock = scheduleService.findByMember(accountId.get(), memberId);
+        Optional<ScheduleForWeekDto> stock = scheduleService.findByMember(accountId.get(), id);
         if (!stock.isPresent()) {
-            log.error("Schedule for member with Id " + memberId + " does not exists");
+            log.error("Schedule for member with Id " + id + " does not exists");
             ResponseEntity.badRequest().build();
         }
 
