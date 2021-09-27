@@ -18,8 +18,8 @@ public interface ScheduleDao extends JpaRepository<ScheduleEntity, Long> {
             "where m.account_id = ?1 and s.id = ?2", nativeQuery = true)
     Optional<ScheduleEntity> findById(Long accountId, Long scheduleId);
 
-    @Query(value = "select s.* from ScheduleEntity s " +
-            "left join MemberEntity m on s.member_id = m.Id " +
+    @Query(value = "select s.* from schedules s " +
+            "left join members m on s.member_id = m.id " +
             "where m.account_id = ?1 and s.member_id = ?2 " +
             "order by s.schedule_date DESC " +
             "limit 1", nativeQuery = true)
