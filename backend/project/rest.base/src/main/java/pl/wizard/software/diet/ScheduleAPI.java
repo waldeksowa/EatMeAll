@@ -89,14 +89,14 @@ public class ScheduleAPI {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ScheduleForWeekDto> update(@RequestHeader("Authorization") String token, @PathVariable Long scheduleId, @Valid @RequestBody ScheduleForWeekDto schedule) {
+    public ResponseEntity<ScheduleForWeekDto> update(@RequestHeader("Authorization") String token, @PathVariable Long id, @Valid @RequestBody ScheduleForWeekDto schedule) {
         Optional<Long> accountId = loginService.getAccountIdByTokenUUID(token.substring(7));
         if (!accountId.isPresent()) {
             log.error("Authorization token expired");
             return ResponseEntity.badRequest().build();
         }
-        if (!scheduleService.findById(accountId.get(), scheduleId).isPresent()) {
-            log.error("Schedule with id " + scheduleId + " does not exists");
+        if (!scheduleService.findById(accountId.get(), id).isPresent()) {
+            log.error("Schedule with id " + id + " does not exists");
             return ResponseEntity.badRequest().build();
         }
 
@@ -104,17 +104,17 @@ public class ScheduleAPI {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity delete(@RequestHeader("Authorization") String token, @PathVariable Long scheduleId) {
+    public ResponseEntity delete(@RequestHeader("Authorization") String token, @PathVariable Long id) {
         Optional<Long> accountId = loginService.getAccountIdByTokenUUID(token.substring(7));
         if (!accountId.isPresent()) {
             log.error("Authorization token expired");
             return ResponseEntity.badRequest().build();
         }
-        if (!scheduleService.findById(accountId.get(), scheduleId).isPresent()) {
-            log.error("Schedule with id " + scheduleId + " does not exists");
+        if (!scheduleService.findById(accountId.get(), id).isPresent()) {
+            log.error("Schedule with id " + id + " does not exists");
             return ResponseEntity.badRequest().build();
         }
-        scheduleService.deleteById(scheduleId);
+        scheduleService.deleteById(id);
 
         return ResponseEntity.ok().build();
     }
