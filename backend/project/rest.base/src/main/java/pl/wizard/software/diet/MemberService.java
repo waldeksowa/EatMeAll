@@ -20,7 +20,7 @@ public class MemberService {
         return memberRepository.findAll();
     }
 
-    public List<MemberEntity> findAllMembers(Long accountId) {
+    public List<MemberEntity> findAllForAccount(Long accountId) {
         return memberRepository.findAllMembers(accountId);
     }
 
