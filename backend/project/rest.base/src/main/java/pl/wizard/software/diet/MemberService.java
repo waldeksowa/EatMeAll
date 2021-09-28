@@ -18,11 +18,6 @@ public class MemberService {
     private final MemberDao memberRepository;
 
     @Transactional
-    public List<MemberEntity> findAll() {
-        return memberRepository.findAll();
-    }
-
-    @Transactional
     public List<MemberEntity> findAllMembers(Long accountId) {
         return memberRepository.findAllMembers(accountId);
     }
@@ -33,7 +28,7 @@ public class MemberService {
     }
 
     @Transactional
-    public Optional<MemberEntity> findByIdForAccount(Long accountId, Long memberId) {
+    public Optional<MemberEntity> findMemberById(Long accountId, Long memberId) {
         return memberRepository.findMemberById(accountId, memberId);
     }
 

@@ -6,16 +6,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.wizard.software.diet.dto.CreateScheduleDto;
 import pl.wizard.software.diet.dto.MealDto;
-import pl.wizard.software.diet.dto.ScheduleForDayDto;
 import pl.wizard.software.diet.dto.ScheduleForWeekDto;
 import pl.wizard.software.diet.mapper.MealDtoMapper;
+import pl.wizard.software.diet.mapper.ScheduleDtoMapper;
 import pl.wizard.software.diet.meals.MealDao;
 import pl.wizard.software.diet.meals.MealEntity;
 import pl.wizard.software.diet.meals.MealTimeEnum;
 import pl.wizard.software.diet.schedules.ScheduleDao;
 import pl.wizard.software.diet.schedules.ScheduleEntity;
 
-import java.io.*;
 import java.time.DayOfWeek;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -58,16 +57,16 @@ public class ScheduleService {
         ScheduleEntity scheduleEntity = ScheduleEntity.builder()
                 .memberId(schedule.getMemberId())
                 .scheduleDate(scheduleDate)
-                .schedule(convertToBytes(schedule.getSchedule()))
+                .schedule(ScheduleDtoMapper.convertToBytes(schedule.getSchedule()))
                 .build();
 
-        return convertToScheduleForWeek(scheduleRepository.save(scheduleEntity));
+        return ScheduleDtoMapper.mapToScheduleDto(scheduleRepository.save(scheduleEntity));
     }
 
     @Transactional
     public List<ScheduleForWeekDto> findAll(Long accountId) {
         return scheduleRepository.findAll(accountId).stream()
-                .map(scheduleEntity -> convertToScheduleForWeek(scheduleEntity))
+                .map(scheduleEntity -> ScheduleDtoMapper.mapToScheduleDto(scheduleEntity))
                 .collect(Collectors.toList());
     }
 
@@ -84,16 +83,8 @@ public class ScheduleService {
     }
 
     public ScheduleForWeekDto save(ScheduleForWeekDto schedule) {
-        ScheduleEntity scheduleEntity = new ScheduleEntity();
-        scheduleEntity.setId(schedule.getId());
-        scheduleEntity.setCreatedAt(schedule.getCreatedAt());
-        scheduleEntity.setUpdatedAt(new Date());
-        scheduleEntity.setVersion(schedule.getVersion());
-        scheduleEntity.setScheduleDate(schedule.getScheduleDate());
-        scheduleEntity.setMemberId(schedule.getMemberId());
-        scheduleEntity.setSchedule(convertToBytes(schedule.getSchedule()));
-
-        return convertToScheduleForWeek(scheduleRepository.save(scheduleEntity));
+        ScheduleEntity scheduleEntity = ScheduleDtoMapper.mapToScheduleEntity(schedule);
+        return ScheduleDtoMapper.mapToScheduleDto(scheduleRepository.save(scheduleEntity));
     }
 
     public void deleteById(Long scheduleId) {
@@ -102,44 +93,10 @@ public class ScheduleService {
 
     private Optional<ScheduleForWeekDto> getScheduleForWeekDto(Optional<ScheduleEntity> schedule) {
         if (schedule.isPresent()) {
-            return Optional.of(convertToScheduleForWeek(schedule.get()));
+            return Optional.of(ScheduleDtoMapper.mapToScheduleDto(schedule.get()));
         } else {
             return Optional.empty();
         }
     }
 
-    private ScheduleForWeekDto convertToScheduleForWeek(ScheduleEntity scheduleEntity) {
-        return ScheduleForWeekDto.builder()
-                .Id(scheduleEntity.getId())
-                .createdAt(scheduleEntity.getCreatedAt())
-                .updatedAt(scheduleEntity.getUpdatedAt())
-                .version(scheduleEntity.getVersion())
-                .scheduleDate(scheduleEntity.getScheduleDate())
-                .memberId(scheduleEntity.getMemberId())
-                .schedule(convertFromBytes(scheduleEntity.getSchedule()))
-                .build();
-    }
-
-    private byte[] convertToBytes(List<ScheduleForDayDto> schedule) {
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        try {
-            ObjectOutputStream out = new ObjectOutputStream(bos);
-            out.writeObject(schedule);
-            return bos.toByteArray();
-        } catch (IOException e) {
-            log.error("Error when serialize schedule", e);
-        }
-        return null;
-    }
-
-    private List<ScheduleForDayDto> convertFromBytes(byte[] schedule) {
-        ByteArrayInputStream bis = new ByteArrayInputStream(schedule);
-        try {
-            ObjectInputStream in = new ObjectInputStream(bis);
-            return (List<ScheduleForDayDto>)in.readObject();
-        } catch (Exception e) {
-            log.error("Error when deserialize schedule", e);
-        }
-        return null;
-    }
 }

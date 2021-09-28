@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pl.wizard.software.diet.dto.MemberDto;
+import pl.wizard.software.diet.mapper.MemberDtoMapper;
 import pl.wizard.software.diet.members.MemberEntity;
 import pl.wizard.software.login.LoginService;
 
@@ -22,30 +24,30 @@ public class MemberAPI {
     private final LoginService loginService;
 
     @GetMapping
-    public ResponseEntity<Collection<MemberEntity>> findAll(@RequestHeader("Authorization") String token) {
+    public ResponseEntity<Collection<MemberDto>> findAll(@RequestHeader("Authorization") String token) {
         Optional<Long> accountId = loginService.getAccountIdByTokenUUID(token.substring(7));
         if (!accountId.isPresent()) {
             log.error("Authorization token expired");
             return ResponseEntity.badRequest().build();
         }
 
-        return ResponseEntity.ok(memberService.findAllMembers(accountId.get()));
+        return ResponseEntity.ok(MemberDtoMapper.mapToMemberDtos(memberService.findAllMembers(accountId.get())));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<MemberEntity> findById(@RequestHeader("Authorization") String token, @PathVariable Long id) {
+    public ResponseEntity<MemberDto> findById(@RequestHeader("Authorization") String token, @PathVariable Long id) {
         Optional<Long> accountId = loginService.getAccountIdByTokenUUID(token.substring(7));
         if (!accountId.isPresent()) {
             log.error("Authorization token expired");
             return ResponseEntity.badRequest().build();
         }
-        Optional<MemberEntity> stock = memberService.findByIdForAccount(accountId.get(), id);
+        Optional<MemberEntity> stock = memberService.findMemberById(accountId.get(), id);
         if (!stock.isPresent()) {
             log.error("Member with id " + id + " does not exists");
             return ResponseEntity.badRequest().build();
         }
 
-        return ResponseEntity.ok(stock.get());
+        return ResponseEntity.ok(MemberDtoMapper.mapToMemberDto(stock.get()));
     }
 
     @PostMapping
@@ -66,7 +68,7 @@ public class MemberAPI {
             log.error("Authorization token expired");
             return ResponseEntity.badRequest().build();
         }
-        if (!memberService.findByIdForAccount(accountId.get(), id).isPresent()) {
+        if (!memberService.findMemberById(accountId.get(), id).isPresent()) {
             log.error("Member with id " + id + " does not exists");
             return ResponseEntity.badRequest().build();
         }
@@ -81,7 +83,7 @@ public class MemberAPI {
             log.error("Authorization token expired");
             return ResponseEntity.badRequest().build();
         }
-        if (!memberService.findByIdForAccount(accountId.get(), id).isPresent()) {
+        if (!memberService.findMemberById(accountId.get(), id).isPresent()) {
             log.error("Member with id " + id + " does not exists");
             return ResponseEntity.badRequest().build();
         }

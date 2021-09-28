@@ -6,6 +6,7 @@ import pl.wizard.software.diet.meals.MealEntity;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
 public class MealDtoMapper {
 
     private MealDtoMapper() {
