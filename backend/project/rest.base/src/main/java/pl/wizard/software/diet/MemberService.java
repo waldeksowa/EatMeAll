@@ -23,7 +23,7 @@ public class MemberService {
     }
 
     @Transactional
-    public List<MemberEntity> findAllForAccount(Long accountId) {
+    public List<MemberEntity> findAllMembers(Long accountId) {
         return memberRepository.findAllMembers(accountId);
     }
 

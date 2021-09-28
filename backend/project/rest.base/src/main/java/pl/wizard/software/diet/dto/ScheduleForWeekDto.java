@@ -1,5 +1,6 @@
 package pl.wizard.software.diet.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -13,6 +14,7 @@ public class ScheduleForWeekDto {
     private Date createdAt;
     private Date updatedAt;
     private int version;
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date scheduleDate;
     private List<ScheduleForDayDto> schedule;
     private Long memberId;
