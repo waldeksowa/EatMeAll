@@ -18,7 +18,8 @@ public class MemberDtoMapper {
     }
 
     public static MemberDto mapToMemberDto(MemberEntity memberEntity) {
-        MemberDto memberDto = MemberDto.builder()
+        return MemberDto.builder()
+                .id(memberEntity.getId())
                 .name(memberEntity.getName())
                 .age(memberEntity.getAge())
                 .currentWeight(memberEntity.getCurrentWeight())
@@ -34,7 +35,5 @@ public class MemberDtoMapper {
                 .excludedProducts(memberEntity.getExcludedProducts())
                 .accountId(memberEntity.getAccountId())
                 .build();
-        memberDto.setId(memberEntity.getId());
-        return memberDto;
     }
 }
