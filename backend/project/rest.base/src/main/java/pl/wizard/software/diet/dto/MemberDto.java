@@ -3,9 +3,6 @@ package pl.wizard.software.diet.dto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import pl.wizard.software.diet.products.ExcludedProductEntity;
-
-import java.util.Set;
 
 @Getter
 @Setter
@@ -23,7 +20,6 @@ public class MemberDto {
     private Double recommendedFat;
     private Double recommendedProtein;
     private Double recommendedRoughage;
-    private Set<ScheduleForWeekDto> schedules;
-    private Set<ExcludedProductEntity> excludedProducts;
+    private ScheduleForWeekDto schedule;
     private Long accountId;
 }

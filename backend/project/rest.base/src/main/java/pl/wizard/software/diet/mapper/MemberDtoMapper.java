@@ -2,22 +2,14 @@ package pl.wizard.software.diet.mapper;
 
 import pl.wizard.software.diet.dto.MemberDto;
 import pl.wizard.software.diet.members.MemberEntity;
-
-import java.util.List;
-import java.util.stream.Collectors;
+import pl.wizard.software.diet.schedules.ScheduleEntity;
 
 public class MemberDtoMapper {
 
     private MemberDtoMapper() {
     }
 
-    public static List<MemberDto> mapToMemberDtos(List<MemberEntity> members) {
-        return members.stream()
-                .map(member -> mapToMemberDto(member))
-                .collect(Collectors.toList());
-    }
-
-    public static MemberDto mapToMemberDto(MemberEntity memberEntity) {
+    public static MemberDto mapToMemberDto(MemberEntity memberEntity, ScheduleEntity schedule) {
         return MemberDto.builder()
                 .id(memberEntity.getId())
                 .name(memberEntity.getName())
@@ -31,8 +23,7 @@ public class MemberDtoMapper {
                 .recommendedFat(memberEntity.getRecommendedFat())
                 .recommendedProtein(memberEntity.getRecommendedProtein())
                 .recommendedRoughage(memberEntity.getRecommendedRoughage())
-                .schedules(ScheduleDtoMapper.mapToScheduleDtos(memberEntity.getSchedules()))
-                .excludedProducts(memberEntity.getExcludedProducts())
+                .schedule(ScheduleDtoMapper.mapToScheduleDto(schedule))
                 .accountId(memberEntity.getAccountId())
                 .build();
     }
