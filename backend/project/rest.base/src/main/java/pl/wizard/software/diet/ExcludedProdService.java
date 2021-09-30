@@ -3,6 +3,7 @@ package pl.wizard.software.diet;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import pl.wizard.software.diet.dto.ExcludedProductsDto;
 import pl.wizard.software.diet.products.ExcludedProductDao;
 import pl.wizard.software.diet.products.ExcludedProductEntity;
@@ -41,6 +42,7 @@ public class ExcludedProdService {
         excludedProductRepository.deleteById(productId);
     }
 
+    @Transactional
     public ExcludedProductsDto create(ExcludedProductsDto excludedProduct) {
         ExcludedProductsDto productDto = ExcludedProductsDto.builder()
                 .memberId(excludedProduct.getMemberId())
