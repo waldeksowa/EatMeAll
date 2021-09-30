@@ -18,5 +18,4 @@ public class ProductDtoMapper {
                 .specialAmount(specialAmount)
                 .build();
     }
-
 }
