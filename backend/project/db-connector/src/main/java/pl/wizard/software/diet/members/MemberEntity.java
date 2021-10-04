@@ -18,6 +18,7 @@ public class MemberEntity extends AbstractBaseEntity {
 
     private String name;
     private Integer age;
+    private Integer height;
     private Double currentWeight;
     private Double currentFat;
     private Double currentMussels;

@@ -14,6 +14,7 @@ public class MemberDtoMapper {
                 .id(memberEntity.getId())
                 .name(memberEntity.getName())
                 .age(memberEntity.getAge())
+                .height(memberEntity.getHeight())
                 .currentWeight(memberEntity.getCurrentWeight())
                 .currentFat(memberEntity.getCurrentFat())
                 .currentMussels(memberEntity.getCurrentMussels())

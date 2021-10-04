@@ -24,7 +24,7 @@ public class MemberAPI {
 
     @GetMapping
     public ResponseEntity<Collection<MemberEntity>> findAll(@RequestHeader("Authorization") String token) {
-        Optional<Long> accountId = loginService.getAccountIdByTokenUUID(token.substring(7));
+        Optional<Long> accountId = loginService.getAccountIdByTokenUUID(token);
         if (!accountId.isPresent()) {
             log.error("Authorization token expired");
             return ResponseEntity.badRequest().build();
@@ -35,7 +35,7 @@ public class MemberAPI {
 
     @GetMapping("/{id}")
     public ResponseEntity<MemberDto> findById(@RequestHeader("Authorization") String token, @PathVariable Long id) {
-        Optional<Long> accountId = loginService.getAccountIdByTokenUUID(token.substring(7));
+        Optional<Long> accountId = loginService.getAccountIdByTokenUUID(token);
         if (!accountId.isPresent()) {
             log.error("Authorization token expired");
             return ResponseEntity.badRequest().build();
@@ -51,7 +51,7 @@ public class MemberAPI {
 
     @PostMapping
     public ResponseEntity create(@RequestHeader("Authorization") String token, @Valid @RequestBody MemberEntity member) {
-        Optional<Long> accountId = loginService.getAccountIdByTokenUUID(token.substring(7));
+        Optional<Long> accountId = loginService.getAccountIdByTokenUUID(token);
         if (!accountId.isPresent()) {
             log.error("Authorization token expired");
             return ResponseEntity.badRequest().build();
@@ -63,7 +63,7 @@ public class MemberAPI {
 
     @PutMapping("/{id}")
     public ResponseEntity<MemberEntity> update(@RequestHeader("Authorization") String token, @PathVariable Long id, @Valid @RequestBody MemberEntity member) {
-        Optional<Long> accountId = loginService.getAccountIdByTokenUUID(token.substring(7));
+        Optional<Long> accountId = loginService.getAccountIdByTokenUUID(token);
         if (!accountId.isPresent()) {
             log.error("Authorization token expired");
             return ResponseEntity.badRequest().build();
@@ -78,7 +78,7 @@ public class MemberAPI {
 
     @DeleteMapping("/{id}")
     public ResponseEntity delete(@RequestHeader("Authorization") String token, @PathVariable Long id) {
-        Optional<Long> accountId = loginService.getAccountIdByTokenUUID(token.substring(7));
+        Optional<Long> accountId = loginService.getAccountIdByTokenUUID(token);
         if (!accountId.isPresent()) {
             log.error("Authorization token expired");
             return ResponseEntity.badRequest().build();

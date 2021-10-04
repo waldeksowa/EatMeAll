@@ -27,7 +27,7 @@ public class ExcludedProdAPI {
 
     @GetMapping("/{id}")
     public ResponseEntity<ProductEntity> findById(@RequestHeader("Authorization") String token, @PathVariable Long id) {
-        Optional<Long> accountId = loginService.getAccountIdByTokenUUID(token.substring(7));
+        Optional<Long> accountId = loginService.getAccountIdByTokenUUID(token);
         if (!accountId.isPresent()) {
             log.error("Authorization token expired");
             return ResponseEntity.badRequest().build();
@@ -43,7 +43,7 @@ public class ExcludedProdAPI {
 
     @GetMapping("/member/{memberId}")
     public ResponseEntity<List<Long>> findByMember(@RequestHeader("Authorization") String token, @PathVariable Long memberId) {
-        Optional<Long> accountId = loginService.getAccountIdByTokenUUID(token.substring(7));
+        Optional<Long> accountId = loginService.getAccountIdByTokenUUID(token);
         if (!accountId.isPresent()) {
             log.error("Authorization token expired");
             return ResponseEntity.badRequest().build();
@@ -59,7 +59,7 @@ public class ExcludedProdAPI {
 
     @PostMapping
     public ResponseEntity create(@RequestHeader("Authorization") String token, @Valid @RequestBody ExcludedProductsDto excludedProduct) {
-        Optional<Long> accountId = loginService.getAccountIdByTokenUUID(token.substring(7));
+        Optional<Long> accountId = loginService.getAccountIdByTokenUUID(token);
         if (!accountId.isPresent()) {
             log.error("Authorization token expired");
             return ResponseEntity.badRequest().build();
@@ -74,7 +74,7 @@ public class ExcludedProdAPI {
 
     @PutMapping("/{productId}")
     public ResponseEntity<ExcludedProductEntity> update(@RequestHeader("Authorization") String token, @PathVariable Long productId, @Valid @RequestBody ExcludedProductEntity excludedProduct) {
-        Optional<Long> accountId = loginService.getAccountIdByTokenUUID(token.substring(7));
+        Optional<Long> accountId = loginService.getAccountIdByTokenUUID(token);
         if (!accountId.isPresent()) {
             log.error("Authorization token expired");
             return ResponseEntity.badRequest().build();
@@ -93,7 +93,7 @@ public class ExcludedProdAPI {
 
     @DeleteMapping("/{productId}")
     public ResponseEntity delete(@RequestHeader("Authorization") String token, @PathVariable Long productId) {
-        Optional<Long> accountId = loginService.getAccountIdByTokenUUID(token.substring(7));
+        Optional<Long> accountId = loginService.getAccountIdByTokenUUID(token);
         if (!accountId.isPresent()) {
             log.error("Authorization token expired");
             return ResponseEntity.badRequest().build();
