@@ -6,7 +6,7 @@ const state = {
     fat: FATS,
     protein: PROTEINS
   },
-  jwt: null,
+  jwt: "8a9bdfe3-6bd8-4134-af96-1c36e8bba6ce",
 
 }
 const mutations = {
