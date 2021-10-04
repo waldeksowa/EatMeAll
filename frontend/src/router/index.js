@@ -1,3 +1,4 @@
+import { TouchSwipe } from 'quasar'
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 
@@ -17,7 +18,7 @@ Vue.use(VueRouter)
  * with the Router instance.
  */
 
-export default function (/* { store, ssrContext } */) {
+export default function ({ store,/* ssrContext */ }) {
   const Router = new VueRouter({
     scrollBehavior: () => ({ x: 0, y: 0 }),
     routes,
@@ -27,7 +28,21 @@ export default function (/* { store, ssrContext } */) {
     // quasar.conf.js -> build -> publicPath
     mode: process.env.VUE_ROUTER_MODE,
     base: process.env.VUE_ROUTER_BASE
-  })
 
+
+  })
+  Router.beforeEach((to, from, next) => {
+    let auth = store.getters['store/jwt'];
+    if (!auth && (to.path !== "/" && to.path !== "/rejestracja")) {
+      if (to.path === "/") {
+        next({ path: '/' });
+      } else if (to.path === "/rejestracja") {
+        next({ path: '/rejestracja' });
+      }
+    }
+    else {
+      next()
+    }
+  })
   return Router
 }

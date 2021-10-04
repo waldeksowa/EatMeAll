@@ -6,16 +6,22 @@ const state = {
     fat: FATS,
     protein: PROTEINS
   },
+  jwt: null,
 
 }
 const mutations = {
-
+  updateJwt(state, payload) {
+    state.jwt = payload;
+  }
 }
 const actions = {
-
+  updateJwt({ commit }, payload) {
+    commit('updateJwt', payload)
+  }
 }
 const getters = {
-  macrosName: state => state.macrosName,
+  macrosName: (state) => { return state.macrosName },
+  jwt: (state) => { return state.jwt }
 }
 
 export default {
