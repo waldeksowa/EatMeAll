@@ -2,6 +2,7 @@ package pl.wizard.software.diet.members;
 
 import lombok.*;
 import pl.wizard.software.AbstractBaseEntity;
+import pl.wizard.software.diet.products.ExcludedProductEntity;
 import pl.wizard.software.diet.schedules.ScheduleEntity;
 
 import javax.persistence.*;
@@ -31,5 +32,8 @@ public class MemberEntity extends AbstractBaseEntity {
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     @JoinColumn(name = "memberId")
     private Set<ScheduleEntity> schedules;
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @JoinColumn(name = "memberId")
+    private Set<ExcludedProductEntity> excludedProducts;
     private Long accountId;
 }
