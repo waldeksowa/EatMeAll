@@ -3,7 +3,6 @@ package pl.wizard.software.diet.members;
 import lombok.*;
 import pl.wizard.software.AbstractBaseEntity;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
@@ -28,6 +27,5 @@ public class MemberEntity extends AbstractBaseEntity {
     private Double recommendedFat;
     private Double recommendedProtein;
     private Double recommendedRoughage;
-    @Column(name = "account_id")
     private Long accountId;
 }
