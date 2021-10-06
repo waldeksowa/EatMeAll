@@ -63,13 +63,13 @@ public class ScheduleAPI {
             return ResponseEntity.badRequest().build();
         }
 
-        Optional<ScheduleForWeekDto> stock = scheduleService.findByMember(accountId.get(), id);
-        if (!stock.isPresent()) {
+        Optional<ScheduleForWeekDto> schedule = scheduleService.findByMember(accountId.get(), id);
+        if (!schedule.isPresent()) {
             log.error("Schedule for member with Id " + id + " does not exists");
             ResponseEntity.badRequest().build();
         }
 
-        return ResponseEntity.ok(stock.get());
+        return ResponseEntity.ok(schedule.get());
     }
 
     @GetMapping("/random")

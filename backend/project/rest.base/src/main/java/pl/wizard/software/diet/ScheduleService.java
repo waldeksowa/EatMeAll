@@ -2,6 +2,8 @@ package pl.wizard.software.diet;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.wizard.software.diet.dto.CreateScheduleDto;
@@ -78,7 +80,8 @@ public class ScheduleService {
 
     @Transactional
     public Optional<ScheduleForWeekDto> findByMember(Long accountId, Long memberId) {
-        Optional<ScheduleEntity> schedule = scheduleRepository.findByMember(accountId, memberId);
+        Pageable topOne = PageRequest.of(1, 1);
+        Optional<ScheduleEntity> schedule = scheduleRepository.findByMMMember(accountId, memberId, topOne).stream().findFirst();
         return getScheduleForWeekDto(schedule);
     }
 

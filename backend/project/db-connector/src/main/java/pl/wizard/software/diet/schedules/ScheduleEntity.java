@@ -17,7 +17,7 @@ public class ScheduleEntity extends AbstractBaseEntity {
 
     private Date scheduleDate;
     @Lob
-    @Column(name = "schedule", columnDefinition = "BLOB")
+    @Column(columnDefinition = "BLOB")
     private byte[] schedule;
     private Long memberId;
 }

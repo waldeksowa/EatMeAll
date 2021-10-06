@@ -16,7 +16,5 @@ public class ExcludedProductEntity extends AbstractBaseEntity {
 
     @Column(name = "product_id")
     private Long productId;
-//    @Column(name = "member_id")
     private Long memberId;
-
 }
