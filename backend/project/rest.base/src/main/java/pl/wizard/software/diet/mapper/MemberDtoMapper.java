@@ -1,8 +1,13 @@
 package pl.wizard.software.diet.mapper;
 
 import pl.wizard.software.diet.dto.MemberDto;
+import pl.wizard.software.diet.dto.MemberWithoutScheduleAndProdsDto;
 import pl.wizard.software.diet.members.MemberEntity;
 import pl.wizard.software.diet.schedules.ScheduleEntity;
+
+import javax.persistence.Tuple;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MemberDtoMapper {
 
@@ -27,5 +32,29 @@ public class MemberDtoMapper {
                 .schedule(ScheduleDtoMapper.mapToScheduleDto(schedule))
                 .accountId(memberEntity.getAccountId())
                 .build();
+    }
+
+    public static List<MemberWithoutScheduleAndProdsDto> mapToMemberWithoutScheduleAndProdsDtos(List<Tuple> memberWithoutSchedule) {
+        List<MemberWithoutScheduleAndProdsDto> members = new ArrayList<>();
+        for (Tuple row : memberWithoutSchedule) {
+            members.add(MemberWithoutScheduleAndProdsDto.builder()
+                    .id((Long) row.get(0))
+                    .name((String) row.get(1))
+                    .age((Integer) row.get(2))
+                    .height((Integer) row.get(3))
+                    .currentWeight((Double) row.get(4))
+                    .currentFat((Double) row.get(5))
+                    .currentMussels((Double) row.get(6))
+                    .currentWater((Double) row.get(7))
+                    .recommendedCalories((Double) row.get(8))
+                    .recommendedCarbohydrates((Double) row.get(9))
+                    .recommendedFat((Double) row.get(10))
+                    .recommendedProtein((Double) row.get(11))
+                    .recommendedRoughage((Double) row.get(12))
+                    .accountId((Long) row.get(13))
+                    .build()
+            );
+        }
+        return members;
     }
 }

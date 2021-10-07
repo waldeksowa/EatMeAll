@@ -42,7 +42,7 @@ public class ExcludedProdAPI {
     }
 
     @GetMapping("/member/{memberId}")
-    public ResponseEntity<List<Long>> findByMember(@RequestHeader("Authorization") String token, @PathVariable Long memberId) {
+    public ResponseEntity<List<ProductEntity>> findByMember(@RequestHeader("Authorization") String token, @PathVariable Long memberId) {
         Optional<Long> accountId = loginService.getAccountIdByTokenUUID(token);
         if (!accountId.isPresent()) {
             log.error("Authorization token expired");

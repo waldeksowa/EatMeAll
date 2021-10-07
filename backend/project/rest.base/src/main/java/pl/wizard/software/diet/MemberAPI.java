@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.wizard.software.diet.dto.MemberDto;
+import pl.wizard.software.diet.dto.MemberWithoutScheduleAndProdsDto;
 import pl.wizard.software.diet.members.MemberEntity;
 import pl.wizard.software.login.LoginService;
 
@@ -23,13 +24,12 @@ public class MemberAPI {
     private final LoginService loginService;
 
     @GetMapping
-    public ResponseEntity<Collection<MemberEntity>> findAll(@RequestHeader("Authorization") String token) {
+    public ResponseEntity<Collection<MemberWithoutScheduleAndProdsDto>> findAll(@RequestHeader("Authorization") String token) {
         Optional<Long> accountId = loginService.getAccountIdByTokenUUID(token);
         if (!accountId.isPresent()) {
             log.error("Authorization token expired");
             return ResponseEntity.badRequest().build();
         }
-
         return ResponseEntity.ok(memberService.findAllMembers(accountId.get()));
     }
 

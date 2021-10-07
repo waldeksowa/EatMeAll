@@ -10,9 +10,9 @@ import pl.wizard.software.diet.products.ExcludedProductEntity;
 import pl.wizard.software.diet.products.ProductDao;
 import pl.wizard.software.diet.products.ProductEntity;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -26,7 +26,7 @@ public class ExcludedProdService {
         return excludedProductRepository.findById(productId);
     }
 
-    public List<Long> findByMember(Long memberId) {
+    public List<ProductEntity> findByMember(Long memberId) {
         return excludedProductRepository.findByMember(memberId);
     }
 
@@ -43,22 +43,24 @@ public class ExcludedProdService {
     }
 
     @Transactional
-    public ExcludedProductsDto create(ExcludedProductsDto excludedProduct) {
-        ExcludedProductsDto productDto = ExcludedProductsDto.builder()
-                .memberId(excludedProduct.getMemberId())
-                .products(new ArrayList<>())
-                .build();
+    public List<ProductEntity> create(ExcludedProductsDto excludedProduct) {
+        List<Long> actualProducts = findByMember(excludedProduct.getMemberId()).stream()
+                .map(prod -> prod.getId())
+                .collect(Collectors.toList());
+        excludedProduct.getProducts().removeAll(actualProducts);
+
         for (Long productId : excludedProduct.getProducts()) {
-            if (!productRepository.findById(productId).isPresent()) {
+            Optional<ProductEntity> product = productRepository.findById(productId);
+            if (!product.isPresent()) {
                 log.error("Excluded product with id " + productId + " does not exists");
             } else {
                 ExcludedProductEntity excludedProductEntity = ExcludedProductEntity.builder()
                         .memberId(excludedProduct.getMemberId())
-                        .productId(productId)
+                        .product(product.get())
                         .build();
-                productDto.getProducts().add(excludedProductRepository.save(excludedProductEntity).getProductId());
+                excludedProductRepository.save(excludedProductEntity);
             }
         }
-        return productDto;
+        return findByMember(excludedProduct.getMemberId());
     }
 }

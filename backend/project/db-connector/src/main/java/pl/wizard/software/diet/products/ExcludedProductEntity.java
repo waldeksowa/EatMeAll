@@ -14,7 +14,8 @@ import javax.persistence.*;
 @AllArgsConstructor
 public class ExcludedProductEntity extends AbstractBaseEntity {
 
-    @Column(name = "product_id")
-    private Long productId;
+    @OneToOne
+    @JoinColumn(name = "product_id")
+    private ProductEntity product;
     private Long memberId;
 }

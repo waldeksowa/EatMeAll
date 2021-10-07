@@ -81,7 +81,7 @@ public class ScheduleService {
     @Transactional
     public Optional<ScheduleForWeekDto> findByMember(Long accountId, Long memberId) {
         Pageable topOne = PageRequest.of(1, 1);
-        Optional<ScheduleEntity> schedule = scheduleRepository.findByMMMember(accountId, memberId, topOne).stream().findFirst();
+        Optional<ScheduleEntity> schedule = scheduleRepository.findByMember(accountId, memberId, topOne).stream().findFirst();
         return getScheduleForWeekDto(schedule);
     }
 
