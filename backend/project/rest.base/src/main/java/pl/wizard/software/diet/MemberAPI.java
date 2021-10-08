@@ -56,9 +56,8 @@ public class MemberAPI {
             log.error("Authorization token expired");
             return ResponseEntity.badRequest().build();
         }
-        memberService.setAccountId(member, accountId.get());
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(memberService.save(member));
+        return ResponseEntity.status(HttpStatus.CREATED).body(memberService.save(member, accountId.get()));
     }
 
     @PutMapping("/{id}")
@@ -73,7 +72,7 @@ public class MemberAPI {
             return ResponseEntity.badRequest().build();
         }
 
-        return ResponseEntity.ok(memberService.save(member));
+        return ResponseEntity.ok(memberService.save(member, accountId.get()));
     }
 
     @DeleteMapping("/{id}")

@@ -48,15 +48,12 @@ public class MemberService {
         }
     }
 
-    public MemberEntity save(MemberEntity stock) {
-        return memberRepository.save(stock);
+    public MemberEntity save(MemberEntity member, Long accountId) {
+        member.setAccountId(accountId);
+        return memberRepository.save(member);
     }
 
     public void deleteById(Long id) {
         memberRepository.deleteById(id);
-    }
-
-    public void setAccountId(MemberEntity member, Long accountId) {
-        member.setAccountId(accountId);
     }
 }
