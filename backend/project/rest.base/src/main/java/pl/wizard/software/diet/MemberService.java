@@ -42,7 +42,7 @@ public class MemberService {
         if (!member.isPresent()) {
             return Optional.empty();
         } else {
-            Pageable topOne = PageRequest.of(1, 1);
+            Pageable topOne = PageRequest.of(0, 1);
             Optional<ScheduleEntity> scheduleEntity = scheduleRepository.findByMember(accountId, memberId, topOne).stream().findFirst();
             return Optional.of(MemberDtoMapper.mapToMemberDto(member.get(), scheduleEntity));
         }
