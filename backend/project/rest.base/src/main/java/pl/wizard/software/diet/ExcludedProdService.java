@@ -10,6 +10,7 @@ import pl.wizard.software.diet.products.ExcludedProductEntity;
 import pl.wizard.software.diet.products.ProductDao;
 import pl.wizard.software.diet.products.ProductEntity;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -43,12 +44,13 @@ public class ExcludedProdService {
     }
 
     @Transactional
-    public List<ProductEntity> create(ExcludedProductsDto excludedProduct) {
+    public List<ExcludedProductEntity> create(ExcludedProductsDto excludedProduct) {
         List<Long> actualProducts = findByMember(excludedProduct.getMemberId()).stream()
                 .map(prod -> prod.getId())
                 .collect(Collectors.toList());
         excludedProduct.getProducts().removeAll(actualProducts);
 
+        List<ExcludedProductEntity> products = new ArrayList<>();
         for (Long productId : excludedProduct.getProducts()) {
             Optional<ProductEntity> product = productRepository.findById(productId);
             if (!product.isPresent()) {
@@ -58,9 +60,9 @@ public class ExcludedProdService {
                         .memberId(excludedProduct.getMemberId())
                         .product(product.get())
                         .build();
-                excludedProductRepository.save(excludedProductEntity);
+                products.add(excludedProductEntity);
             }
         }
-        return findByMember(excludedProduct.getMemberId());
+        return excludedProductRepository.saveAll(products);
     }
 }
