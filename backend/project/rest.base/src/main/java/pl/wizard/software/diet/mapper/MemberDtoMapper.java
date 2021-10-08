@@ -8,30 +8,51 @@ import pl.wizard.software.diet.schedules.ScheduleEntity;
 import javax.persistence.Tuple;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class MemberDtoMapper {
 
     private MemberDtoMapper() {
     }
 
-    public static MemberDto mapToMemberDto(MemberEntity memberEntity, ScheduleEntity schedule) {
-        return MemberDto.builder()
-                .id(memberEntity.getId())
-                .name(memberEntity.getName())
-                .age(memberEntity.getAge())
-                .height(memberEntity.getHeight())
-                .currentWeight(memberEntity.getCurrentWeight())
-                .currentFat(memberEntity.getCurrentFat())
-                .currentMussels(memberEntity.getCurrentMussels())
-                .currentWater(memberEntity.getCurrentWater())
-                .recommendedCalories(memberEntity.getRecommendedCalories())
-                .recommendedCarbohydrates(memberEntity.getRecommendedCarbohydrates())
-                .recommendedFat(memberEntity.getRecommendedFat())
-                .recommendedProtein(memberEntity.getRecommendedProtein())
-                .recommendedRoughage(memberEntity.getRecommendedRoughage())
-                .schedule(ScheduleDtoMapper.mapToScheduleDto(schedule))
-                .accountId(memberEntity.getAccountId())
-                .build();
+    public static MemberDto mapToMemberDto(MemberEntity memberEntity, Optional<ScheduleEntity> schedule) {
+        if (schedule.isPresent()) {
+            return MemberDto.builder()
+                    .id(memberEntity.getId())
+                    .name(memberEntity.getName())
+                    .age(memberEntity.getAge())
+                    .height(memberEntity.getHeight())
+                    .currentWeight(memberEntity.getCurrentWeight())
+                    .currentFat(memberEntity.getCurrentFat())
+                    .currentMussels(memberEntity.getCurrentMussels())
+                    .currentWater(memberEntity.getCurrentWater())
+                    .recommendedCalories(memberEntity.getRecommendedCalories())
+                    .recommendedCarbohydrates(memberEntity.getRecommendedCarbohydrates())
+                    .recommendedFat(memberEntity.getRecommendedFat())
+                    .recommendedProtein(memberEntity.getRecommendedProtein())
+                    .recommendedRoughage(memberEntity.getRecommendedRoughage())
+                    .schedule(ScheduleDtoMapper.mapToScheduleDto(schedule.get()))
+                    .accountId(memberEntity.getAccountId())
+                    .build();
+        } else {
+            return MemberDto.builder()
+                    .id(memberEntity.getId())
+                    .name(memberEntity.getName())
+                    .age(memberEntity.getAge())
+                    .height(memberEntity.getHeight())
+                    .currentWeight(memberEntity.getCurrentWeight())
+                    .currentFat(memberEntity.getCurrentFat())
+                    .currentMussels(memberEntity.getCurrentMussels())
+                    .currentWater(memberEntity.getCurrentWater())
+                    .recommendedCalories(memberEntity.getRecommendedCalories())
+                    .recommendedCarbohydrates(memberEntity.getRecommendedCarbohydrates())
+                    .recommendedFat(memberEntity.getRecommendedFat())
+                    .recommendedProtein(memberEntity.getRecommendedProtein())
+                    .recommendedRoughage(memberEntity.getRecommendedRoughage())
+                    .accountId(memberEntity.getAccountId())
+                    .build();
+        }
+
     }
 
     public static List<MemberWithoutScheduleAndProdsDto> mapToMemberWithoutScheduleAndProdsDtos(List<Tuple> memberWithoutSchedule) {

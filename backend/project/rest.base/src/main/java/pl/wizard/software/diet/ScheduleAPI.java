@@ -66,7 +66,7 @@ public class ScheduleAPI {
         Optional<ScheduleForWeekDto> schedule = scheduleService.findByMember(accountId.get(), id);
         if (!schedule.isPresent()) {
             log.error("Schedule for member with Id " + id + " does not exists");
-            ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().build();
         }
 
         return ResponseEntity.ok(schedule.get());

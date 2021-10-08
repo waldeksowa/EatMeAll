@@ -20,13 +20,9 @@ public interface ScheduleDao extends JpaRepository<ScheduleEntity, Long> {
             "where m.accountId = :accountId and s.id = :scheduleId")
     Optional<ScheduleEntity> findById(@Param("accountId") Long accountId, @Param("scheduleId") Long scheduleId);
 
-//    @Query(value = "select s.* from schedules s " +
-//            "left join members m on s.member_id = m.id " +
-//            "where m.account_id = ?1 and s.member_id = ?2 " +
-//            "order by s.schedule_date DESC " +
-//            "limit 1", nativeQuery = true)
     @Query("select s from MemberEntity m " +
             "join m.schedules s " +
-            "where m.accountId = :accountId and s.memberId = :memberId ")
+            "where m.accountId = :accountId and s.memberId = :memberId " +
+            "order by s.scheduleDate desc")
     List<ScheduleEntity> findByMember(@Param("accountId") Long accountId, @Param("memberId") Long memberId, Pageable pageable);
 }

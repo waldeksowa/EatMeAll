@@ -44,11 +44,7 @@ public class MemberService {
         } else {
             Pageable topOne = PageRequest.of(1, 1);
             Optional<ScheduleEntity> scheduleEntity = scheduleRepository.findByMember(accountId, memberId, topOne).stream().findFirst();
-            if (!scheduleEntity.isPresent()) {
-                return Optional.empty();
-            } else {
-                return Optional.of(MemberDtoMapper.mapToMemberDto(member.get(), scheduleEntity.get()));
-            }
+            return Optional.of(MemberDtoMapper.mapToMemberDto(member.get(), scheduleEntity));
         }
     }
 
