@@ -4,7 +4,7 @@
       class="
         q-gutter-y-md q-col-gutter-md q-pa-md
         fit
-        column
+        row
         wrap
         justify-center
         items-start
