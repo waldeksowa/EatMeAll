@@ -2,12 +2,13 @@
   <q-page>
     <div
       class="
-        full
         q-gutter-y-md q-col-gutter-md q-pa-md
         fit
         row
         wrap
         justify-center
+        items-start
+        content-start
       "
     >
       <div class="col-4 q-ma-md row justify-center">
@@ -19,7 +20,7 @@
             class="inputWidth"
             v-model="name"
             label="Imie"
-            disable
+            :disable="isInputDisabled"
           />
           <q-input
             filled
@@ -27,7 +28,7 @@
             v-model="age"
             label="Wiek"
             type="text"
-            disable
+            :disable="isInputDisabled"
             suffix="Lat"
           />
           <q-input
@@ -36,7 +37,7 @@
             v-model="height"
             label="Wzrost"
             type="text"
-            disable
+            :disable="isInputDisabled"
             suffix="Cm"
           />
           <q-input
@@ -45,12 +46,12 @@
             v-model="currentWeight"
             label="Aktualna waga"
             type="text"
-            disable
+            :disable="isInputDisabled"
             suffix="Kg"
           />
         </div>
       </div>
-      <div class="col-6 q-ma-md wrap row q-gutter-sm">
+      <div class="col-6 q-ma-md q-gutter-sm row justify-center">
         <div class="q-gutter-md q-ma-sm">
           <h1 class="text-h5 text-center">Proporcje ciała</h1>
           <q-input
@@ -59,7 +60,7 @@
             v-model="currentFat"
             label="Tkanka tłuszczowa"
             type="text"
-            disable
+            :disable="isInputDisabled"
             suffix="Kg"
           />
           <q-input
@@ -68,7 +69,7 @@
             v-model="currentMussels"
             label="Masa mięśniowa"
             type="text"
-            disable
+            :disable="isInputDisabled"
             suffix="Kg"
           />
           <q-input
@@ -77,7 +78,7 @@
             v-model="currentWater"
             label="Ilość wody w ciele"
             type="text"
-            disable
+            :disable="isInputDisabled"
             suffix="Kg"
           />
         </div>
@@ -89,7 +90,7 @@
             v-model="recommendedCalories"
             label="Rekomnendowana ilość Kalori"
             type="text"
-            disable
+            :disable="isInputDisabled"
             suffix="Kcal"
           />
           <q-input
@@ -98,7 +99,7 @@
             v-model="recommendedFat"
             label="Rekomnendowana ilość Tłuszczów"
             type="text"
-            disable
+            :disable="isInputDisabled"
             suffix="g"
           />
 
@@ -108,7 +109,7 @@
             v-model="recommendedProtein"
             label="Rekomnendowana ilość Białek"
             type="text"
-            disable
+            :disable="isInputDisabled"
             suffix="g"
           />
           <q-input
@@ -117,15 +118,28 @@
             v-model="recommendedRoughage"
             label="Rekomnendowana ilość Błonnika"
             type="text"
-            disable
+            :disable="isInputDisabled"
             suffix="g"
           />
         </div>
       </div>
     </div>
+    <div class="row justify-center q-gutter-md q-ma-md">
+      <q-btn
+        class="bg-primary text-white"
+        size="lg"
+        @click="isInputDisabled = false"
+      >
+        Edytuj
+      </q-btn>
+      <q-btn class="bg-primary text-white" size="lg" @click="postUpdatedData()">
+        Zapisz
+      </q-btn>
+    </div>
   </q-page>
 </template>
 <script>
+import { Notify } from "quasar";
 export default {
   data() {
     return {
@@ -141,14 +155,27 @@ export default {
       recommendedFat: 200,
       recommendedProtein: 100,
       recommendedRoughage: 200,
+      isInputDisabled: true,
     };
   },
+
   methods: {
     errorMesage(e) {
       Notify.create({
         message: `⚠ ${e}`,
         classes: "full-width text-center bg-negative",
       });
+    },
+    notifySucessful(e) {
+      Notify.create({
+        message: `${e}`,
+        classes: "full-width text-center bg-positive",
+      });
+    },
+
+    postUpdatedData() {
+      this.isInputDisabled = true;
+      this.notifySucessful("Dane zostały pomyślnie zmienione");
     },
   },
 };
