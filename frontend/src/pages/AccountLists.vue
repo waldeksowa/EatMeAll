@@ -59,6 +59,7 @@ export default {
   },
   methods: {
     goToMemberSite() {
+      // popraw na konto
       this.$router.push("/kato");
     },
     addNewUser(data) {
