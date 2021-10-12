@@ -46,7 +46,7 @@ public class MealEntity extends AbstractBaseEntity {
     private double roughage;
 
     @PostLoad
-    private void init() {
+    void init() {
         for (MealProductEntity product : products) {
             double amountFactor = product.getAmount() / 100.0;
             calorific += product.getProduct().getCalorific() * amountFactor;
