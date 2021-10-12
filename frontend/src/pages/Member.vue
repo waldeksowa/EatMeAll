@@ -11,9 +11,9 @@
         content-start
       "
     >
-      <div class="col-4 q-ma-md row justify-center">
+      <div class="q-ma-md row justify-center">
         <div class="q-gutter-md">
-          <q-icon name="account_circle" class="icon-size"></q-icon>
+          <q-icon name="account_circle" class="icon-size" />
           <h1 class="text-h5 text-center">Dane Ogólne</h1>
           <q-input
             filled
@@ -50,77 +50,79 @@
             suffix="Kg"
           />
         </div>
-      </div>
-      <div class="col-6 q-ma-md q-gutter-sm row justify-center">
-        <div class="q-gutter-md q-ma-sm">
-          <h1 class="text-h5 text-center">Proporcje ciała</h1>
-          <q-input
-            filled
-            class="inputWidth"
-            v-model="currentFat"
-            label="Tkanka tłuszczowa"
-            type="text"
-            :disable="isInputDisabled"
-            suffix="Kg"
-          />
-          <q-input
-            filled
-            class="inputWidth"
-            v-model="currentMussels"
-            label="Masa mięśniowa"
-            type="text"
-            :disable="isInputDisabled"
-            suffix="Kg"
-          />
-          <q-input
-            filled
-            class="inputWidth"
-            v-model="currentWater"
-            label="Ilość wody w ciele"
-            type="text"
-            :disable="isInputDisabled"
-            suffix="Kg"
-          />
+        <div class="q-ma-md row justify-center">
+          <div class="q-gutter-md q-py-md">
+            <h1 class="text-h5 text-center">Proporcje ciała</h1>
+            <q-input
+              filled
+              class="inputWidth"
+              v-model="currentFat"
+              label="Tkanka tłuszczowa"
+              type="text"
+              :disable="isInputDisabled"
+              suffix="Kg"
+            />
+            <q-input
+              filled
+              class="inputWidth"
+              v-model="currentMussels"
+              label="Masa mięśniowa"
+              type="text"
+              :disable="isInputDisabled"
+              suffix="Kg"
+            />
+            <q-input
+              filled
+              class="inputWidth"
+              v-model="currentWater"
+              label="Ilość wody w ciele"
+              type="text"
+              :disable="isInputDisabled"
+              suffix="Kg"
+            />
+          </div>
         </div>
-        <div class="q-gutter-md q-ma-sm">
-          <h1 class="text-h5 text-center">Rekomendowane spozycie</h1>
-          <q-input
-            filled
-            class="inputWidth"
-            v-model="recommendedCalories"
-            label="Rekomnendowana ilość Kalori"
-            type="text"
-            :disable="isInputDisabled"
-            suffix="Kcal"
-          />
-          <q-input
-            filled
-            class="inputWidth"
-            v-model="recommendedFat"
-            label="Rekomnendowana ilość Tłuszczów"
-            type="text"
-            :disable="isInputDisabled"
-            suffix="g"
-          />
+        <div class="q-ma-md row justify-center">
+          <div class="q-gutter-md q-py-md">
+            <h1 class="text-h5 text-center">Rekomendacje</h1>
+            <q-input
+              filled
+              class="inputWidth"
+              v-model="recommendedCalories"
+              label="Rekomnendowana ilość Kalori"
+              type="text"
+              :disable="isInputDisabled"
+              suffix="Kcal"
+            />
+            <q-input
+              filled
+              class="inputWidth"
+              v-model="recommendedFat"
+              label="Rekomnendowana ilość Tłuszczów"
+              type="text"
+              :disable="isInputDisabled"
+              suffix="g"
+            />
 
-          <q-input
-            filled
-            class="inputWidth"
-            v-model="recommendedProtein"
-            label="Rekomnendowana ilość Białek"
-            type="text"
-            :disable="isInputDisabled"
-            suffix="g"
-          />
-          <q-input
-            filled
-            class="inputWidth"
-            v-model="recommendedRoughage"
-            label="Rekomnendowana ilość Błonnika"
-            type="text"
-            :disable="isInputDisabled"
-            suffix="g"
-          />
+            <q-input
+              filled
+              class="inputWidth"
+              v-model="recommendedProtein"
+              label="Rekomnendowana ilość Białek"
+              type="text"
+              :disable="isInputDisabled"
+              suffix="g"
+            />
+            <q-input
+              filled
+              class="inputWidth"
+              v-model="recommendedRoughage"
+              label="Rekomnendowana ilość Błonnika"
+              type="text"
+              :disable="isInputDisabled"
+              suffix="g"
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -141,6 +143,7 @@
 <script>
 import { Notify } from "quasar";
 export default {
+  props: ["userData"],
   data() {
     return {
       name: "Jan",

@@ -10,7 +10,7 @@
     "
   >
     <div v-for="(account, index) in membersAccounts" :key="`member-${index}`">
-      <div @click="goToMemberSite()">
+      <div @click="goToMemberSite()" :userData="membersAccounts">
         <q-img src="../assets/Netflix-avatar.jpg" class="user-icon" />
         <h5 class="text-center">{{ account.name }}</h5>
       </div>
@@ -58,7 +58,7 @@ export default {
       this.$router.push("/kato");
     },
     addNewUser(data) {
-      console.log(data);
+      this.membersAccounts.push(data);
     },
   },
   components: {
