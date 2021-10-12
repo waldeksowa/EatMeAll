@@ -57,7 +57,7 @@
         />
       </div>
       <div class="q-gutter-md q-ma-sm">
-        <h1 class="text-h5 text-center">Rekomendowane spozycie</h1>
+        <h1 class="text-h5 text-center">Rekomendacje</h1>
         <q-input
           filled
           class="inputWidth"
@@ -179,7 +179,7 @@ export default {
 </script>
 <style lang="sass">
 .col
-    flex-direction: columno
+  flex-direction: columno
 .inputWidth
-    width: 300px
+  width: 300px
 </style>

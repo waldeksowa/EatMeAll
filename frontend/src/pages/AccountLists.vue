@@ -30,8 +30,12 @@
   </div>
 </template>
 <script>
+import Member from "./Member.vue";
 import AddNewMember from "../components/accountLists/AddNewMember.vue";
 export default {
+  render(h) {
+    return h(Member, { props: membersAccounts });
+  },
   data() {
     return {
       isDialogAddNewMemberShowed: false,

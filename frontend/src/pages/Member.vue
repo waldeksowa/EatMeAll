@@ -17,35 +17,35 @@
           <h1 class="text-h5 text-center">Dane Ogólne</h1>
           <q-input
             filled
-            class="inputWidth"
+            class="input-width"
             v-model="name"
             label="Imie"
             :disable="isInputDisabled"
           />
           <q-input
             filled
-            class="inputWidth"
-            v-model="age"
+            class="input-width"
+            v-model.number="age"
             label="Wiek"
-            type="text"
+            type="number"
             :disable="isInputDisabled"
             suffix="Lat"
           />
           <q-input
             filled
-            class="inputWidth"
-            v-model="height"
+            class="input-width"
+            v-model.number="height"
             label="Wzrost"
-            type="text"
+            type="number"
             :disable="isInputDisabled"
             suffix="Cm"
           />
           <q-input
             filled
-            class="inputWidth"
-            v-model="currentWeight"
+            class="input-width"
+            v-model.number="currentWeight"
             label="Aktualna waga"
-            type="text"
+            type="number"
             :disable="isInputDisabled"
             suffix="Kg"
           />
@@ -55,28 +55,28 @@
             <h1 class="text-h5 text-center">Proporcje ciała</h1>
             <q-input
               filled
-              class="inputWidth"
-              v-model="currentFat"
+              class="input-width"
+              v-model.number="currentFat"
               label="Tkanka tłuszczowa"
-              type="text"
+              type="number"
               :disable="isInputDisabled"
               suffix="Kg"
             />
             <q-input
               filled
-              class="inputWidth"
-              v-model="currentMussels"
+              class="input-width"
+              v-model.number="currentMussels"
               label="Masa mięśniowa"
-              type="text"
+              type="number"
               :disable="isInputDisabled"
               suffix="Kg"
             />
             <q-input
               filled
-              class="inputWidth"
-              v-model="currentWater"
+              class="input-width"
+              v-model.number="currentWater"
               label="Ilość wody w ciele"
-              type="text"
+              type="number"
               :disable="isInputDisabled"
               suffix="Kg"
             />
@@ -87,38 +87,38 @@
             <h1 class="text-h5 text-center">Rekomendacje</h1>
             <q-input
               filled
-              class="inputWidth"
-              v-model="recommendedCalories"
+              class="input-width"
+              v-model.number="recommendedCalories"
               label="Rekomnendowana ilość Kalori"
-              type="text"
+              type="number"
               :disable="isInputDisabled"
               suffix="Kcal"
             />
             <q-input
               filled
-              class="inputWidth"
-              v-model="recommendedFat"
+              class="input-width"
+              v-model.number="recommendedFat"
               label="Rekomnendowana ilość Tłuszczów"
-              type="text"
+              type="number"
               :disable="isInputDisabled"
               suffix="g"
             />
 
             <q-input
               filled
-              class="inputWidth"
-              v-model="recommendedProtein"
+              class="input-width"
+              v-model.number="recommendedProtein"
               label="Rekomnendowana ilość Białek"
-              type="text"
+              type="number"
               :disable="isInputDisabled"
               suffix="g"
             />
             <q-input
               filled
-              class="inputWidth"
-              v-model="recommendedRoughage"
+              class="input-width"
+              v-model.number="recommendedRoughage"
               label="Rekomnendowana ilość Błonnika"
-              type="text"
+              type="number"
               :disable="isInputDisabled"
               suffix="g"
             />
@@ -186,6 +186,6 @@ export default {
 <style lang="sass">
 .icon-size
   font-size: 180px
-.inputWidth
+.input-width
   width: 200px
 </style>
