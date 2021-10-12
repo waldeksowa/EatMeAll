@@ -1,0 +1,609 @@
+{
+	"info": {
+		"_postman_id": "5f19e0d3-7a2f-47c2-87fc-2c14493dae55",
+		"name": "EatMeAtt",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "v1",
+			"item": [
+				{
+					"name": "MEALS",
+					"item": [
+						{
+							"name": "GET_ALL",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://{{SERVER_URL}}/api/v1/meals",
+									"protocol": "http",
+									"host": [
+										"{{SERVER_URL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"meals"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET_BY_ID",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://{{SERVER_URL}}/api/v1/meals/11",
+									"protocol": "http",
+									"host": [
+										"{{SERVER_URL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"meals",
+										"11"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "ADD",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"test meal\",\r\n    \"author\": \"me\",\r\n    \"description\": \"new\",\r\n    \"mealTime\": [\"BREAKFAST\",\"SECOND_BREAKFAST\"],\r\n    \"prepareTime\": 55,\r\n    \"products\": [\r\n        {\r\n            \"id\": 32,\r\n            \"amount\": 12\r\n        },\r\n        {\r\n            \"id\": 33,\r\n            \"amount\": 13\r\n        }\r\n    ],\r\n    \"steps\": [\r\n        \"first step\",\r\n        \"second step\"\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://{{SERVER_URL}}/api/v1/meals",
+									"protocol": "http",
+									"host": [
+										"{{SERVER_URL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"meals"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "REMOVE",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://{{SERVER_URL}}/api/v1/meals/1",
+									"protocol": "http",
+									"host": [
+										"{{SERVER_URL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"meals",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "UPDATE",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"test meal\",\r\n    \"author\": \"me\",\r\n    \"description\": \"new\",\r\n    \"mealTime\": [\"BREAKFAST\",\"SECOND_BREAKFAST\"],\r\n    \"prepareTime\": 55,\r\n    \"products\": [\r\n        {\r\n            \"id\": 32,\r\n            \"amount\": 12\r\n        },\r\n        {\r\n            \"id\": 33,\r\n            \"amount\": 13\r\n        }\r\n    ],\r\n    \"steps\": [\r\n        \r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://{{SERVER_URL}}/api/v1/meals/11",
+									"protocol": "http",
+									"host": [
+										"{{SERVER_URL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"meals",
+										"11"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "PRODUCTS",
+					"item": [
+						{
+							"name": "GET_ALL",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://{{SERVER_URL}}/api/v1/products",
+									"protocol": "http",
+									"host": [
+										"{{SERVER_URL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"products"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET_BY_ID",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://{{SERVER_URL}}/api/v1/products/1",
+									"protocol": "http",
+									"host": [
+										"{{SERVER_URL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"products",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "ADD",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\":\"nowy produkt\",\r\n    \"calorific\":100,\r\n    \"protein\":100.2,\r\n    \"fat\":100.3,\r\n    \"carbohydrates\":100.4,\r\n    \"roughage\":1.0,\r\n    \"productType\":\"CEREALS\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://{{SERVER_URL}}/api/v1/products",
+									"protocol": "http",
+									"host": [
+										"{{SERVER_URL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"products"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "REMOVE",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://{{SERVER_URL}}/api/v1/products/1",
+									"protocol": "http",
+									"host": [
+										"{{SERVER_URL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"products",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "UPDATE",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Bagietki francuskie updated\",\r\n    \"calorific\": 283.0,\r\n    \"protein\": 8.7,\r\n    \"fat\": 1.7,\r\n    \"carbohydrates\": 59.2,\r\n    \"roughage\": 2.0,\r\n    \"productType\": \"CEREALS\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://{{SERVER_URL}}/api/v1/products/1",
+									"protocol": "http",
+									"host": [
+										"{{SERVER_URL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"products",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "v2",
+			"item": [
+				{
+					"name": "MEMBERS",
+					"item": [
+						{
+							"name": "EXCLUDED PRODUCTS",
+							"item": [
+								{
+									"name": "GET_ALL",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"method": "GET",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "http://{{SERVER_URL}}/api/v2/excludedprods/member/22",
+											"protocol": "http",
+											"host": [
+												"{{SERVER_URL}}"
+											],
+											"path": [
+												"api",
+												"v2",
+												"excludedprods",
+												"member",
+												"22"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "ADD",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"memberId\":23,\r\n    \"products\":[1,2,3]\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "http://{{SERVER_URL}}/api/v2/excludedprods",
+											"protocol": "http",
+											"host": [
+												"{{SERVER_URL}}"
+											],
+											"path": [
+												"api",
+												"v2",
+												"excludedprods"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "UPDATE",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "http://{{SERVER_URL}}/api/v2/excludedprods/23",
+											"protocol": "http",
+											"host": [
+												"{{SERVER_URL}}"
+											],
+											"path": [
+												"api",
+												"v2",
+												"excludedprods",
+												"23"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "REMOVE",
+									"request": {
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "http://{{SERVER_URL}}/api/v2/excludedprods/22",
+											"protocol": "http",
+											"host": [
+												"{{SERVER_URL}}"
+											],
+											"path": [
+												"api",
+												"v2",
+												"excludedprods",
+												"22"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "GET_ALL",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://{{SERVER_URL}}/api/v2/members",
+									"protocol": "http",
+									"host": [
+										"{{SERVER_URL}}"
+									],
+									"path": [
+										"api",
+										"v2",
+										"members"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET_SPECIFIC",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://{{SERVER_URL}}/api/v2/members/1",
+									"protocol": "http",
+									"host": [
+										"{{SERVER_URL}}"
+									],
+									"path": [
+										"api",
+										"v2",
+										"members",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "ADD",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\":\"użytkownik\",\r\n    \"age\":31,\r\n    \"currentWeight\":80.2,\r\n    \"currentFat\":20.1,\r\n    \"currentMussels\":62.1,\r\n    \"currentWater\":53.1,\r\n    \"recommendedCalories\":2875,\r\n    \"recommendedCarbohydrates\":400,\r\n    \"recommendedFat\":75,\r\n    \"recommendedProtein\":150,\r\n    \"recommendedRoughage\":0\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://{{SERVER_URL}}/api/v2/members",
+									"protocol": "http",
+									"host": [
+										"{{SERVER_URL}}"
+									],
+									"path": [
+										"api",
+										"v2",
+										"members"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "UPDATE",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\":\"użytkownik updated\",\r\n    \"age\":31,\r\n    \"currentWeight\":80.2,\r\n    \"currentFat\":20.1,\r\n    \"currentMussels\":62.1,\r\n    \"currentWater\":53.1,\r\n    \"recommendedCalories\":2875,\r\n    \"recommendedCarbohydrates\":400,\r\n    \"recommendedFat\":75,\r\n    \"recommendedProtein\":150,\r\n    \"recommendedRoughage\":0\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://{{SERVER_URL}}/api/v2/members/23",
+									"protocol": "http",
+									"host": [
+										"{{SERVER_URL}}"
+									],
+									"path": [
+										"api",
+										"v2",
+										"members",
+										"23"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "REMOVE",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://{{SERVER_URL}}/api/v2/members/22",
+									"protocol": "http",
+									"host": [
+										"{{SERVER_URL}}"
+									],
+									"path": [
+										"api",
+										"v2",
+										"members",
+										"22"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "LOGIN",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200){\r",
+									"    pm.environment.set('AUTH_TOKEN', pm.response.json().token);\r",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\":\"admin\",\r\n    \"password\":\"password\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{SERVER_URL}}/api/v2/login",
+							"protocol": "http",
+							"host": [
+								"{{SERVER_URL}}"
+							],
+							"path": [
+								"api",
+								"v2",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{AUTH_TOKEN}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		}
+	]
+}
