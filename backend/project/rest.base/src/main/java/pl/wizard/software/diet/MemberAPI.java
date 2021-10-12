@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pl.wizard.software.diet.dto.MemberDto;
+import pl.wizard.software.diet.dto.MemberWithoutScheduleAndProdsDto;
 import pl.wizard.software.diet.members.MemberEntity;
 import pl.wizard.software.login.LoginService;
 
@@ -22,66 +24,65 @@ public class MemberAPI {
     private final LoginService loginService;
 
     @GetMapping
-    public ResponseEntity<Collection<MemberEntity>> findAll(@RequestHeader("Authorization") String token) {
-        Optional<Long> accountId = loginService.getAccountIdByTokenUUID(token.substring(7));
+    public ResponseEntity<Collection<MemberWithoutScheduleAndProdsDto>> findAll(@RequestHeader("Authorization") String token) {
+        Optional<Long> accountId = loginService.getAccountIdByTokenUUID(token);
         if (!accountId.isPresent()) {
             log.error("Authorization token expired");
             return ResponseEntity.badRequest().build();
         }
-
-        return ResponseEntity.ok(memberService.findAllForAccount(accountId.get()));
+        return ResponseEntity.ok(memberService.findAllMembers(accountId.get()));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<MemberEntity> findById(@RequestHeader("Authorization") String token, @PathVariable Long id) {
-        Optional<Long> accountId = loginService.getAccountIdByTokenUUID(token.substring(7));
+    public ResponseEntity<MemberDto> findById(@RequestHeader("Authorization") String token, @PathVariable Long id) {
+        Optional<Long> accountId = loginService.getAccountIdByTokenUUID(token);
         if (!accountId.isPresent()) {
             log.error("Authorization token expired");
             return ResponseEntity.badRequest().build();
         }
-        Optional<MemberEntity> stock = memberService.findByIdForAccount(accountId.get(), id);
-        if (!stock.isPresent()) {
+        Optional<MemberDto> member = memberService.findMemberById(accountId.get(), id);
+        if (!member.isPresent()) {
             log.error("Member with id " + id + " does not exists");
             return ResponseEntity.badRequest().build();
         }
 
-        return ResponseEntity.ok(stock.get());
+        return ResponseEntity.ok(member.get());
     }
 
     @PostMapping
     public ResponseEntity create(@RequestHeader("Authorization") String token, @Valid @RequestBody MemberEntity member) {
-        Optional<Long> accountId = loginService.getAccountIdByTokenUUID(token.substring(7));
+        Optional<Long> accountId = loginService.getAccountIdByTokenUUID(token);
         if (!accountId.isPresent()) {
             log.error("Authorization token expired");
             return ResponseEntity.badRequest().build();
         }
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(memberService.save(member));
+        return ResponseEntity.status(HttpStatus.CREATED).body(memberService.save(member, accountId.get()));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<MemberEntity> update(@RequestHeader("Authorization") String token, @PathVariable Long id, @Valid @RequestBody MemberEntity member) {
-        Optional<Long> accountId = loginService.getAccountIdByTokenUUID(token.substring(7));
+        Optional<Long> accountId = loginService.getAccountIdByTokenUUID(token);
         if (!accountId.isPresent()) {
             log.error("Authorization token expired");
             return ResponseEntity.badRequest().build();
         }
-        if (!memberService.findByIdForAccount(accountId.get(), id).isPresent()) {
+        if (!memberService.findMemberById(accountId.get(), id).isPresent()) {
             log.error("Member with id " + id + " does not exists");
             return ResponseEntity.badRequest().build();
         }
 
-        return ResponseEntity.ok(memberService.save(member));
+        return ResponseEntity.ok(memberService.save(member, accountId.get()));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity delete(@RequestHeader("Authorization") String token, @PathVariable Long id) {
-        Optional<Long> accountId = loginService.getAccountIdByTokenUUID(token.substring(7));
+        Optional<Long> accountId = loginService.getAccountIdByTokenUUID(token);
         if (!accountId.isPresent()) {
             log.error("Authorization token expired");
             return ResponseEntity.badRequest().build();
         }
-        if (!memberService.findByIdForAccount(accountId.get(), id).isPresent()) {
+        if (!memberService.findMemberById(accountId.get(), id).isPresent()) {
             log.error("Member with id " + id + " does not exists");
             return ResponseEntity.badRequest().build();
         }

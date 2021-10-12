@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import pl.wizard.software.diet.dto.CreateMealDto;
 import pl.wizard.software.diet.dto.SimpleProductDto;
 import pl.wizard.software.diet.meals.*;
-import pl.wizard.software.diet.meals.MealEntity.MealTimeEnum;
+import pl.wizard.software.diet.meals.MealTimeEnum;
 import pl.wizard.software.diet.products.ProductDao;
 import pl.wizard.software.diet.products.ProductEntity;
 

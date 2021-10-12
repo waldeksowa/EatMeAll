@@ -2,13 +2,10 @@ package pl.wizard.software.diet;
 
 import lombok.Getter;
 import pl.wizard.software.diet.dto.MealDto;
-import pl.wizard.software.diet.meals.MealEntity;
+import pl.wizard.software.diet.meals.MealTimeEnum;
 
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Getter
 public class DayDto {
@@ -18,9 +15,9 @@ public class DayDto {
     private double fat;
     private double protein;
     private double roughage;
-    private final Map<MealEntity.MealTimeEnum, MealDto> meals = new HashMap<>();
+    private final Map<MealTimeEnum, MealDto> meals = new HashMap<>();
 
-    void put(MealEntity.MealTimeEnum value, MealDto mapToMealDto) {
+    void put(MealTimeEnum value, MealDto mapToMealDto) {
         meals.put(value, mapToMealDto);
         recalculate();
     }

@@ -1,11 +1,11 @@
 package pl.wizard.software.diet.dto;
 
 import lombok.Getter;
+import pl.wizard.software.diet.meals.MealTimeEnum;
 
 import java.util.List;
 import java.util.Set;
 
-import static pl.wizard.software.diet.meals.MealEntity.MealTimeEnum;
 
 @Getter
 public class CreateMealDto {

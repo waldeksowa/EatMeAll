@@ -63,7 +63,4 @@ public class MealEntity extends AbstractBaseEntity {
         roughage = new BigDecimal(roughage).setScale(1, RoundingMode.HALF_UP).doubleValue();
     }
 
-    public enum MealTimeEnum {
-        FAKE, BREAKFAST, SECOND_BREAKFAST, LUNCH, DINNER, SUPPER
-    }
  }
