@@ -137,7 +137,36 @@
       <q-btn class="bg-primary text-white" size="lg" @click="postUpdatedData()">
         Zapisz
       </q-btn>
+      <q-btn
+        class="bg-negative text-white"
+        size="lg"
+        @click="deleteAccountDialogisShowed = !deleteAccountDialogisShowed"
+      >
+        Usuń Kąto
+      </q-btn>
     </div>
+    <q-dialog v-model="deleteAccountDialogisShowed">
+      <q-card class="q-pa-md">
+        <q-card-section>
+          <div class="text-h6">Uwaga</div>
+        </q-card-section>
+
+        <q-card-section class="q-pt-none">
+          Ta akcja spowoduje usuniecie obecnego tygodnia, czy chcesz wygenerowac
+          nowy plan ?
+        </q-card-section>
+        <q-card-section>
+          <q-btn
+            flat
+            label="Tak"
+            color="primary"
+            @click="removeAccount()"
+            v-close-popup
+          />
+          <q-btn flat label="Nie" color="primary" v-close-popup />
+        </q-card-section>
+      </q-card>
+    </q-dialog>
   </q-page>
 </template>
 <script>
@@ -146,6 +175,7 @@ export default {
   props: ["userData"],
   data() {
     return {
+      deleteAccountDialogisShowed: false,
       name: "Jan",
       age: "28",
       height: "175",
@@ -175,11 +205,11 @@ export default {
         classes: "full-width text-center bg-positive",
       });
     },
-
     postUpdatedData() {
       this.isInputDisabled = true;
       this.notifySucessful("Dane zostały pomyślnie zmienione");
     },
+    removeAccount() {},
   },
 };
 </script>

@@ -75,7 +75,7 @@ export default {
         { label: "lista", icon: "list", to: "/list" },
         { label: "dodaj", icon: "add", to: "/dodajPosilek" },
         { label: "o nas", icon: "info", to: "/info" },
-        { label: "kata", icon: "account_circle", to: "/uzytkownicy" },
+        { label: "konta", icon: "account_circle", to: "/uzytkownicy" },
       ],
     };
   },

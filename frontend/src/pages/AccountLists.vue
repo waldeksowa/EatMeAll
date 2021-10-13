@@ -1,32 +1,37 @@
 <template>
-  <div
-    class="
-      q-gutter-y-md q-col-gutter-md q-pa-md
-      fit
-      row
-      wrap
-      justify-center
-      content-center
-    "
-  >
-    <div v-for="(account, index) in membersAccounts" :key="`member-${index}`">
-      <div @click="goToMemberSite()" :userData="membersAccounts">
-        <q-img src="../assets/Netflix-avatar.jpg" class="user-icon" />
-        <h5 class="text-center">{{ account.name }}</h5>
+  <div>
+    <div
+      class="
+        q-gutter-y-md q-col-gutter-md q-pa-md
+        fit
+        row
+        wrap
+        justify-center
+        content-center
+      "
+    >
+      <div v-for="(account, index) in membersAccounts" :key="`member-${index}`">
+        <div @click="goToMemberSite()" :userData="membersAccounts">
+          <img src="../assets/Netflix-avatar.jpg" class="user-icon" />
+          <h5 class="text-center">{{ account.name }}</h5>
+        </div>
       </div>
+      <div @click="isDialogAddNewMemberShowed = !isDialogAddNewMemberShowed">
+        <q-card class="user-icon bg-primary">
+          <q-icon
+            name="add"
+            size="64px"
+            class="text-white absolute-center"
+          ></q-icon>
+        </q-card>
+      </div>
+      <q-dialog v-model="isDialogAddNewMemberShowed" persistent
+        ><AddNewMember @addNewUser="addNewUser($event)"></AddNewMember
+      ></q-dialog>
     </div>
-    <div @click="isDialogAddNewMemberShowed = !isDialogAddNewMemberShowed">
-      <q-card class="user-icon bg-primary">
-        <q-icon
-          name="add"
-          size="64px"
-          class="text-white absolute-center"
-        ></q-icon>
-      </q-card>
+    <div class="row justify-center">
+      <q-btn label="usun kato"></q-btn>
     </div>
-    <q-dialog v-model="isDialogAddNewMemberShowed" persistent
-      ><AddNewMember @addNewUser="addNewUser($event)"></AddNewMember
-    ></q-dialog>
   </div>
 </template>
 <script>
