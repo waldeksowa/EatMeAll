@@ -6,7 +6,7 @@ const state = {
     fat: FATS,
     protein: PROTEINS
   },
-  jwt: "8a9bdfe3-6bd8-4134-af96-1c36e8bba6ce",
+  jwt: "1",
 
 }
 const mutations = {
@@ -21,7 +21,8 @@ const actions = {
 }
 const getters = {
   macrosName: (state) => { return state.macrosName },
-  jwt: (state) => { return state.jwt }
+  jwt: (state) => { return state.jwt },
+  isJwtTokenDefined: (state) => { if (state.jwt) { return true } return false }
 }
 
 export default {
