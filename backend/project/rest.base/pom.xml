@@ -32,6 +32,10 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+        </dependency>
         <!-- We need to include the javax.servlet API specs, the implementation will be provided by Wildfly / JBoss-->
         <dependency>
             <groupId>javax.servlet</groupId>

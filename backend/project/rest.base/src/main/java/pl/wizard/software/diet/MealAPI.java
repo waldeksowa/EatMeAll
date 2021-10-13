@@ -9,14 +9,13 @@ import pl.wizard.software.diet.dto.CreateMealDto;
 import pl.wizard.software.diet.dto.MealDto;
 import pl.wizard.software.diet.mapper.MealDtoMapper;
 import pl.wizard.software.diet.meals.MealEntity;
+import pl.wizard.software.diet.meals.MealTimeEnum;
 import pl.wizard.software.diet.meals.SpecialAmountEnum;
 
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-
-import static pl.wizard.software.diet.meals.MealEntity.MealTimeEnum;
 
 @RestController
 @RequestMapping("/v1/meals")

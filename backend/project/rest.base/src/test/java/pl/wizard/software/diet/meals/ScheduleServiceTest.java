@@ -8,13 +8,14 @@ import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import pl.wizard.software.diet.DayDto;
 import pl.wizard.software.diet.ScheduleService;
-import pl.wizard.software.diet.meals.MealDao;
-import pl.wizard.software.diet.meals.MealEntity;
-import pl.wizard.software.diet.meals.MealProductEntity;
 import pl.wizard.software.diet.products.ProductEntity;
+import pl.wizard.software.diet.schedules.ScheduleDao;
 
 import java.time.DayOfWeek;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
@@ -26,10 +27,12 @@ public class ScheduleServiceTest {
 
     @Mock
     MealDao mealRepository;
+    @Mock
+    ScheduleDao scheduleRepository;
 
     @Before
     public void init() {
-        scheduleService = new ScheduleService(mealRepository);
+        scheduleService = new ScheduleService(mealRepository, scheduleRepository);
     }
 
     @Test
@@ -53,7 +56,7 @@ public class ScheduleServiceTest {
         meal.setId(1L);
         meal.setName("test meal");
         meal.setProducts(Set.of(firstMealProduct));
-        meal.setMealTime(Set.of(MealEntity.MealTimeEnum.BREAKFAST, MealEntity.MealTimeEnum.LUNCH, MealEntity.MealTimeEnum.DINNER, MealEntity.MealTimeEnum.SECOND_BREAKFAST, MealEntity.MealTimeEnum.SUPPER));
+        meal.setMealTime(Set.of(MealTimeEnum.BREAKFAST, MealTimeEnum.LUNCH, MealTimeEnum.DINNER, MealTimeEnum.SECOND_BREAKFAST, MealTimeEnum.SUPPER));
         meal.init();
 
         List<MealEntity> mockList = new ArrayList<>();
@@ -108,7 +111,7 @@ public class ScheduleServiceTest {
         meal.setId(1L);
         meal.setName("test meal");
         meal.setProducts(Set.of(firstMealProduct, secondMealProduct));
-        meal.setMealTime(Set.of(MealEntity.MealTimeEnum.BREAKFAST, MealEntity.MealTimeEnum.LUNCH, MealEntity.MealTimeEnum.DINNER, MealEntity.MealTimeEnum.SECOND_BREAKFAST, MealEntity.MealTimeEnum.SUPPER));
+        meal.setMealTime(Set.of(MealTimeEnum.BREAKFAST, MealTimeEnum.LUNCH, MealTimeEnum.DINNER,MealTimeEnum.SECOND_BREAKFAST, MealTimeEnum.SUPPER));
         meal.init();
 
         List<MealEntity> mockList = new ArrayList<>();
@@ -207,35 +210,35 @@ public class ScheduleServiceTest {
         meal_breakfast.setId(1L);
         meal_breakfast.setName("test meal BREAKFAST");
         meal_breakfast.setProducts(Set.of(firstMealProduct));
-        meal_breakfast.setMealTime(Set.of(MealEntity.MealTimeEnum.BREAKFAST));
+        meal_breakfast.setMealTime(Set.of(MealTimeEnum.BREAKFAST));
         meal_breakfast.init();
 
         MealEntity meal_second_breakfast = new MealEntity();
         meal_second_breakfast.setId(2L);
         meal_second_breakfast.setName("test meal SECOND_BREAKFAST");
         meal_second_breakfast.setProducts(Set.of(secondMealProduct));
-        meal_second_breakfast.setMealTime(Set.of(MealEntity.MealTimeEnum.SECOND_BREAKFAST));
+        meal_second_breakfast.setMealTime(Set.of(MealTimeEnum.SECOND_BREAKFAST));
         meal_second_breakfast.init();
 
         MealEntity meal_lunch = new MealEntity();
         meal_lunch.setId(3L);
         meal_lunch.setName("test meal LUNCH");
         meal_lunch.setProducts(Set.of(thirdMealProduct));
-        meal_lunch.setMealTime(Set.of(MealEntity.MealTimeEnum.LUNCH));
+        meal_lunch.setMealTime(Set.of(MealTimeEnum.LUNCH));
         meal_lunch.init();
 
         MealEntity meal_dinner = new MealEntity();
         meal_dinner.setId(4L);
         meal_dinner.setName("test meal DINNER");
         meal_dinner.setProducts(Set.of(fourthMealProduct));
-        meal_dinner.setMealTime(Set.of(MealEntity.MealTimeEnum.DINNER));
+        meal_dinner.setMealTime(Set.of(MealTimeEnum.DINNER));
         meal_dinner.init();
 
         MealEntity meal_supper = new MealEntity();
         meal_supper.setId(5L);
         meal_supper.setName("test meal SUPPER");
         meal_supper.setProducts(Set.of(fifthMealProduct));
-        meal_supper.setMealTime(Set.of(MealEntity.MealTimeEnum.SUPPER));
+        meal_supper.setMealTime(Set.of(MealTimeEnum.SUPPER));
         meal_supper.init();
 
         when(mealRepository.findRandomByMealTime(1, 7)).thenReturn(new ArrayList<>(List.of(meal_breakfast)));

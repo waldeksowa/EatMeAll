@@ -14,7 +14,7 @@ public class Token {
     private final LocalTime expiredTime;
 
     public Token(Long aAccountId) {
-        this(aAccountId, LocalTime.now().plusMinutes(10));
+        this(aAccountId, LocalTime.now().plusMinutes(60));
     }
 
     public Token(Long aAccountId, LocalTime aLocalTime) {

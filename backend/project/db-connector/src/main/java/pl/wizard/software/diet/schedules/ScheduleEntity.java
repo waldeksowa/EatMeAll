@@ -1,23 +1,23 @@
 package pl.wizard.software.diet.schedules;
 
-import lombok.Data;
+import lombok.*;
 import pl.wizard.software.AbstractBaseEntity;
-import pl.wizard.software.diet.meals.MealEntity;
-import pl.wizard.software.diet.meals.MealEntity.MealTimeEnum;
 
 import javax.persistence.*;
-import java.time.DayOfWeek;
+import java.util.Date;
 
 @Entity
 @Table(name = "SCHEDULES")
-@Data
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ScheduleEntity extends AbstractBaseEntity {
 
-    @Enumerated(EnumType.ORDINAL)
-    private MealTimeEnum mealTime;
-    @Enumerated(EnumType.ORDINAL)
-    private DayOfWeek mealDay;
-    @OneToOne
-    @JoinColumn(name = "meal_id")
-    private MealEntity meal;
+    private Date scheduleDate;
+    @Lob
+    @Column(columnDefinition = "BLOB")
+    private byte[] schedule;
+    private Long memberId;
 }

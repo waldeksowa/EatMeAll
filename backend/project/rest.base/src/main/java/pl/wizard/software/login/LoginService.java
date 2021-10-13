@@ -33,14 +33,15 @@ public class LoginService{
             return Optional.empty();
     }
 
-    public Optional<Long> getAccountIdByTokenUUID(String aUUID){
-        Optional<Token> token = tokens.stream()
+    public Optional<Long> getAccountIdByTokenUUID(String token){
+        String aUUID = token.substring(7);
+        Optional<Token> accountToken = tokens.stream()
                 .filter(t -> t.getToken().equals(aUUID))
                 .findFirst();
-        if (token.isPresent()) {
-            Token accountToken = token.get();
-            if (accountToken.isNonExpired(accountToken)) {
-                return Optional.of(accountToken.getAccountID());
+        if (accountToken.isPresent()) {
+            Token account = accountToken.get();
+            if (account.isNonExpired(account)) {
+                return Optional.of(account.getAccountID());
             }
             return Optional.empty();
         }

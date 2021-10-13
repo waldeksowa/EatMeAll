@@ -19,6 +19,7 @@ public class MemberEntity extends AbstractBaseEntity {
 
     private String name;
     private Integer age;
+    private Integer height;
     private Double currentWeight;
     private Double currentFat;
     private Double currentMussels;
@@ -29,10 +30,10 @@ public class MemberEntity extends AbstractBaseEntity {
     private Double recommendedProtein;
     private Double recommendedRoughage;
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "memberId")
     private Set<ScheduleEntity> schedules;
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "memberId")
     private Set<ExcludedProductEntity> excludedProducts;
     private Long accountId;
 }
