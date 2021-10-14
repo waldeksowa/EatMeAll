@@ -48,7 +48,7 @@ export default {
     ...mapGetters("store", ["jwt"]),
   },
   methods: {
-    ...mapActions("store", ["updateLoggedMemberId"]),
+    ...mapActions("store", ["updateMemberIdToShow"]),
     fetchData() {
       var myHeaders = new Headers();
       myHeaders.append("Authorization", `Bearer ${this.jwt}`);
@@ -66,7 +66,7 @@ export default {
     },
     goToMemberSite(memberIdToShow) {
       console.log("~ accountIdToShow", memberIdToShow);
-      this.updateLoggedMemberId(memberIdToShow);
+      this.updateMemberIdToShow(memberIdToShow);
       this.$router.push("/konto");
     },
     addNewUser(data) {

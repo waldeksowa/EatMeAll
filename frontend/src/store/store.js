@@ -6,29 +6,40 @@ const state = {
     fat: FATS,
     protein: PROTEINS
   },
-  jwt: "382095b6-9222-48f3-95c3-e5c5d0881499",
-  loggedMemberId: ""
-
+  jwt: "",
+  memberIdToShow: ""
 }
 const mutations = {
   updateJwt(state, payload) {
     state.jwt = payload;
   },
-  updateLoggedMemberId(state, payload) {
-    state.loggedMemberId = payload;
+  updateMemberIdToShow(state, payload) {
+    state.MemberIdToShow = payload;
   }
 }
 const actions = {
   updateJwt({ commit }, payload) {
     commit('updateJwt', payload)
   },
-  updateLoggedMemberId({ commit }, payload) {
-    commit('updateLoggedMemberId', payload)
-  }
+  updateMemberIdToShow({ commit }, payload) {
+    commit('updateMemberIdToShow', payload)
+  },
+  errorMesage(e) {
+    Notify.create({
+      message: `⚠ ${e}`,
+      classes: "full-width text-center bg-negative",
+    });
+  },
+  notifySucessful(e) {
+    Notify.create({
+      message: `${e}`,
+      classes: "full-width text-center bg-positive",
+    });
+  },
 }
 const getters = {
   macrosName: (state) => { return state.macrosName },
-  loggedMemberId: (state) => { return state.loggedMemberId },
+  memberIdToShow: (state) => { return state.memberIdToShow },
   jwt: (state) => { return state.jwt },
   isJwtTokenDefined: (state) => {
     if (state.jwt) {

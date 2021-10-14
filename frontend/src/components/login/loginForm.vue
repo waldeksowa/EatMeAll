@@ -88,7 +88,7 @@ export default {
     },
     loginUser() {
       this.postRequest();
-      // this.updateJwt();
+      this.updateJwt();
     },
     updateLogin(update) {
       this.login = update;

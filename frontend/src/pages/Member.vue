@@ -18,14 +18,14 @@
           <q-input
             filled
             class="input-width"
-            v-model="name"
+            v-model="memberData.name"
             label="Imie"
             :disable="isInputDisabled"
           />
           <q-input
             filled
             class="input-width"
-            v-model.number="age"
+            v-model.number="memberData.age"
             label="Wiek"
             type="number"
             :disable="isInputDisabled"
@@ -34,7 +34,7 @@
           <q-input
             filled
             class="input-width"
-            v-model.number="height"
+            v-model.number="memberData.height"
             label="Wzrost"
             type="number"
             :disable="isInputDisabled"
@@ -43,7 +43,7 @@
           <q-input
             filled
             class="input-width"
-            v-model.number="currentWeight"
+            v-model.number="memberData.currentWeight"
             label="Aktualna waga"
             type="number"
             :disable="isInputDisabled"
@@ -56,7 +56,7 @@
             <q-input
               filled
               class="input-width"
-              v-model.number="currentFat"
+              v-model.number="memberData.currentFat"
               label="Tkanka tłuszczowa"
               type="number"
               :disable="isInputDisabled"
@@ -65,7 +65,7 @@
             <q-input
               filled
               class="input-width"
-              v-model.number="currentMussels"
+              v-model.number="memberData.currentMussels"
               label="Masa mięśniowa"
               type="number"
               :disable="isInputDisabled"
@@ -74,7 +74,7 @@
             <q-input
               filled
               class="input-width"
-              v-model.number="currentWater"
+              v-model.number="memberData.currentWater"
               label="Ilość wody w ciele"
               type="number"
               :disable="isInputDisabled"
@@ -88,7 +88,7 @@
             <q-input
               filled
               class="input-width"
-              v-model.number="recommendedCalories"
+              v-model.number="memberData.recommendedCalories"
               label="Rekomnendowana ilość Kalori"
               type="number"
               :disable="isInputDisabled"
@@ -97,7 +97,7 @@
             <q-input
               filled
               class="input-width"
-              v-model.number="recommendedFat"
+              v-model.number="memberData.recommendedFat"
               label="Rekomnendowana ilość Tłuszczów"
               type="number"
               :disable="isInputDisabled"
@@ -107,7 +107,7 @@
             <q-input
               filled
               class="input-width"
-              v-model.number="recommendedProtein"
+              v-model.number="memberData.recommendedProtein"
               label="Rekomnendowana ilość Białek"
               type="number"
               :disable="isInputDisabled"
@@ -116,7 +116,7 @@
             <q-input
               filled
               class="input-width"
-              v-model.number="recommendedRoughage"
+              v-model.number="memberData.recommendedRoughage"
               label="Rekomnendowana ilość Błonnika"
               type="number"
               :disable="isInputDisabled"
@@ -170,29 +170,41 @@
   </q-page>
 </template>
 <script>
+import { MEMBER } from "../EndpointAddresses";
+import { mapGetters } from "vuex";
 import { Notify } from "quasar";
 export default {
   props: ["userData"],
   data() {
     return {
-      deleteAccountDialogisShowed: false,
-      name: "Jan",
-      age: "28",
-      height: "175",
-      currentWeight: 90,
-      currentFat: 10,
-      currentMussels: 10,
-      currentWater: 10,
-      recommendedCalories: 3000,
-      recommendedCarbohydrates: 400,
-      recommendedFat: 200,
-      recommendedProtein: 100,
-      recommendedRoughage: 200,
       isInputDisabled: true,
+      deleteAccountDialogisShowed: false,
+      memberData: [],
+      memberUrl: MEMBER,
     };
   },
-
+  mounted() {},
+  computed: {
+    ...mapGetters("store", ["memberIdToShow"]),
+    ...mapGetters("store", ["jwt"]),
+  },
   methods: {
+    fetchMemberData() {
+      var myHeaders = new Headers();
+      myHeaders.append("Authorization", `Bearer ${this.jwt}`);
+
+      var requestOptions = {
+        method: "GET",
+        headers: myHeaders,
+        redirect: "follow",
+      };
+      const url = `${this.memberUrl}/${this.memberIdToShow}`;
+      console.log("~ url", url);
+      fetch(url, requestOptions)
+        .then((response) => response.json())
+        .then((result) => console.log(result))
+        .catch((error) => console.log("error", error));
+    },
     errorMesage(e) {
       Notify.create({
         message: `⚠ ${e}`,
@@ -210,6 +222,9 @@ export default {
       this.notifySucessful("Dane zostały pomyślnie zmienione");
     },
     removeAccount() {},
+  },
+  mounted() {
+    this.fetchMemberData();
   },
 };
 </script>
