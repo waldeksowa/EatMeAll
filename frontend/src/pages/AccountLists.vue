@@ -11,7 +11,7 @@
       "
     >
       <div v-for="(account, index) in membersAccounts" :key="`member-${index}`">
-        <div @click="goToMemberSite()" :userData="membersAccounts">
+        <div @click="goToMemberSite(account.id)" :userData="membersAccounts">
           <img src="../assets/Netflix-avatar.jpg" class="user-icon" />
           <h5 class="text-center">{{ account.name }}</h5>
         </div>
@@ -34,6 +34,7 @@
 <script>
 import { MEMBER } from "../EndpointAddresses";
 import { mapGetters } from "vuex";
+import { mapActions } from "vuex";
 import AddNewMember from "../components/accountLists/AddNewMember.vue";
 export default {
   data() {
@@ -47,6 +48,7 @@ export default {
     ...mapGetters("store", ["jwt"]),
   },
   methods: {
+    ...mapActions("store", ["updateLoggedMemberId"]),
     fetchData() {
       var myHeaders = new Headers();
       myHeaders.append("Authorization", `Bearer ${this.jwt}`);
@@ -62,7 +64,9 @@ export default {
         .then((result) => (this.membersAccounts = result))
         .catch((error) => console.log("error", error));
     },
-    goToMemberSite() {
+    goToMemberSite(memberIdToShow) {
+      console.log("~ accountIdToShow", memberIdToShow);
+      this.updateLoggedMemberId(memberIdToShow);
       this.$router.push("/konto");
     },
     addNewUser(data) {
