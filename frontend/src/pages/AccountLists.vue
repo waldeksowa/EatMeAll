@@ -29,50 +29,69 @@
         ><AddNewMember @addNewUser="addNewUser($event)"></AddNewMember
       ></q-dialog>
     </div>
-    <div class="row justify-center">
-      <q-btn label="usun kato"></q-btn>
-    </div>
   </div>
 </template>
 <script>
-import Member from "./Member.vue";
+import { MEMBER } from "../EndpointAddresses";
+import { mapGetters } from "vuex";
 import AddNewMember from "../components/accountLists/AddNewMember.vue";
 export default {
-  render(h) {
-    return h(Member, { props: membersAccounts });
-  },
   data() {
     return {
       isDialogAddNewMemberShowed: false,
-      membersAccounts: [
-        {
-          name: "Jan",
-          age: "28",
-          height: "175",
-          currentWeight: 90,
-          currentFat: 10,
-          currentMussels: 10,
-          currentWater: 10,
-          recommendedCalories: 3000,
-          recommendedCarbohydrates: 400,
-          recommendedFat: 200,
-          recommendedProtein: 100,
-          recommendedRoughage: 200,
-        },
-      ],
+      membersAccounts: [],
+      memberUrl: MEMBER,
     };
   },
+  computed: {
+    ...mapGetters("store", ["jwt"]),
+  },
   methods: {
+    fetchData() {
+      var myHeaders = new Headers();
+      myHeaders.append("Authorization", `Bearer ${this.jwt}`);
+
+      var requestOptions = {
+        method: "GET",
+        headers: myHeaders,
+        redirect: "follow",
+      };
+
+      fetch(this.memberUrl, requestOptions)
+        .then((response) => response.json())
+        .then((result) => (this.membersAccounts = result))
+        .catch((error) => console.log("error", error));
+    },
     goToMemberSite() {
-      // popraw na konto
-      this.$router.push("/kato");
+      this.$router.push("/konto");
     },
     addNewUser(data) {
-      this.membersAccounts.push(data);
+      var myHeaders = new Headers();
+      myHeaders.append("Authorization", `Bearer ${this.jwt}`);
+      myHeaders.append("Content-Type", "application/json");
+
+      var raw = JSON.stringify(data);
+
+      var requestOptions = {
+        method: "POST",
+        headers: myHeaders,
+        body: raw,
+        redirect: "follow",
+      };
+
+      fetch(this.memberUrl, requestOptions)
+        .then((response) => response.text())
+        .then((result) => console.log(result))
+        .catch((error) => console.log("error", error));
+
+      this.fetchData();
     },
   },
   components: {
     AddNewMember,
+  },
+  mounted() {
+    this.fetchData();
   },
 };
 </script>

@@ -63,6 +63,7 @@ export default {
           headers: headersList,
         })
           .then((response) => {
+            console.log("~ response", response);
             if (response.ok) {
               return response.json();
             } else {
