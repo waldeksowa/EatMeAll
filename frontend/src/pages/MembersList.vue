@@ -12,7 +12,7 @@
     >
       <div v-for="(account, index) in membersAccounts" :key="`member-${index}`">
         <div @click="goToMemberSite(account.id)" :userData="membersAccounts">
-          <img src="../assets/Netflix-avatar.jpg" class="user-icon" />
+          <q-img src="../assets/Netflix-avatar.jpg" class="user-icon" />
           <h5 class="text-center">{{ account.name }}</h5>
         </div>
       </div>

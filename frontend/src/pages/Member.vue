@@ -12,8 +12,8 @@
       "
     >
       <div class="q-ma-md row justify-center">
-        <div class="q-gutter-md">
-          <q-icon name="account_circle" class="icon-size" />
+        <div class="q-gutter-md q-pa-md">
+          <q-img src="../assets/Netflix-avatar.jpg" />
           <h1 class="text-h5 text-center">Dane Ogólne</h1>
           <q-input
             filled
@@ -51,7 +51,7 @@
           />
         </div>
         <div class="q-ma-md row justify-center">
-          <div class="q-gutter-md q-py-md">
+          <div class="q-gutter-md q-py-md q-pa-md">
             <h1 class="text-h5 text-center">Proporcje ciała</h1>
             <q-input
               filled
@@ -81,8 +81,6 @@
               suffix="Kg"
             />
           </div>
-        </div>
-        <div class="q-ma-md row justify-center">
           <div class="q-gutter-md q-py-md">
             <h1 class="text-h5 text-center">Rekomendacje</h1>
             <q-input
@@ -134,7 +132,12 @@
       >
         Edytuj
       </q-btn>
-      <q-btn class="bg-primary text-white" size="lg" @click="postUpdatedData()">
+      <q-btn
+        class="bg-primary text-white"
+        :disable="isInputDisabled"
+        size="lg"
+        @click="postUpdatedData()"
+      >
         Zapisz
       </q-btn>
       <q-btn
@@ -198,7 +201,6 @@ export default {
         redirect: "follow",
       };
       const url = `${this.memberUrl}/${this.memberIdToShow}`;
-      console.log("~ url", url);
       fetch(url, requestOptions)
         .then((response) => response.json())
         .then((result) => (this.memberData = result))
@@ -217,10 +219,62 @@ export default {
       });
     },
     postUpdatedData() {
+      var myHeaders = new Headers();
+      myHeaders.append("Authorization", `Bearer ${this.jwt}`);
+      myHeaders.append("Content-Type", "application/json");
+
+      var raw = JSON.stringify({
+        name: this.memberData.name,
+        age: this.memberData.age,
+        currentWeight: this.memberData.currentWeight,
+        currentFat: this.memberData.currentFat,
+        currentMussels: this.memberData.currentMussels,
+        currentWater: this.memberData.currentWater,
+        recommendedCalories: this.memberData.recommendedCalories,
+        recommendedCarbohydrates: this.memberData.recommendedCarbohydrates,
+        recommendedFat: this.memberData.recommendedFat,
+        recommendedProtein: this.memberData.recommendedProtein,
+        recommendedRoughage: this.memberData.recommendedRoughage,
+      });
+
+      var requestOptions = {
+        method: "PUT",
+        headers: myHeaders,
+        body: raw,
+        redirect: "follow",
+      };
+
+      const url = `${this.memberUrl}/${this.memberIdToShow}`;
+      fetch(url, requestOptions)
+        .then((response) => response.json())
+        .then((result) => console.log(result))
+        .catch((error) => console.log("error", error));
+
       this.isInputDisabled = true;
       this.notifySucessful("Dane zostały pomyślnie zmienione");
+      this.removeAccount();
     },
-    removeAccount() {},
+    removeAccount() {
+      var myHeaders = new Headers();
+      myHeaders.append("Authorization", `Bearer ${this.jwt}`);
+
+      var requestOptions = {
+        method: "DELETE",
+        headers: myHeaders,
+        redirect: "follow",
+      };
+
+      const url = `${this.memberUrl}/${this.memberIdToShow}`;
+      fetch(url, requestOptions)
+        .then((response) => {
+          if (response.ok) {
+            this.$router.push("/uzytkownicy");
+            return response.text();
+          }
+        })
+        .then((result) => console.log(result))
+        .catch((error) => console.log("error", error));
+    },
   },
   mounted() {
     this.fetchMemberData();

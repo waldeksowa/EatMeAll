@@ -7,6 +7,7 @@ const state = {
     protein: PROTEINS
   },
   jwt: "",
+  objectJwt:'',
   memberIdToShow: ""
 }
 const mutations = {
@@ -38,6 +39,7 @@ const actions = {
   },
 }
 const getters = {
+  objectJwt: (state) => { return state.macrosName },
   macrosName: (state) => { return state.macrosName },
   memberIdToShow: (state) => { return state.memberIdToShow },
   jwt: (state) => { return state.jwt },

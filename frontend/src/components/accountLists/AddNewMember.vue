@@ -96,7 +96,7 @@
       <q-btn
         @click="addNewUser()"
         size="lg"
-        :v-close-popup="isDataValid"
+        :v-close-popup="returnNumberByBoolen()"
         class="bg-primary text-white"
         >Dodaj</q-btn
       >
@@ -128,6 +128,10 @@ export default {
     };
   },
   methods: {
+    returnNumberByBoolen() {
+      if (this.isDataValid) return 1;
+      return 0;
+    },
     errorMesage(e) {
       Notify.create({
         message: `⚠ ${e}`,

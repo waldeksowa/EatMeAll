@@ -102,18 +102,6 @@ export default {
         return ordering[a.day] - ordering[b.day];
       });
     },
-    // sortMealTimeAndMealData(aMealSchedule){
-    //   let ordering = {},
-    //       sortOrder = ['BREAKFAST','SECOND_BREAKFAST','LUNCH','SUPPER','FRIDAY','DINNER'];
-    //   for (var i=0; i<sortOrder.length; i++)
-    //       ordering[sortOrder[i]] = i;
-    //   aMealSchedule.forEach(s => {
-    //     return s.date.sort((a, b) => (ordering[a] - ordering[b]))
-    //   })
-    //   aMealSchedule.forEach(s => {
-    //     return s.meal.sort((a, b) =>(ordering[a] - ordering[b]))
-    //   })
-    // },
     showDeatilDialog(aMeal) {
       this.selectedMeal = aMeal;
       this.isDetailInfDialogShow = true;

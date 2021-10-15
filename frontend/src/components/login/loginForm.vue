@@ -71,7 +71,7 @@ export default {
             }
           })
           .then((data) => {
-            console.log("~ data", data.token);
+            console.log("~ data", data);
             this.updateJwt(data.token);
             this.redirectToForm("/plan");
           });
