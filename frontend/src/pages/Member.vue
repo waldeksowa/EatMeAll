@@ -174,7 +174,6 @@ import { MEMBER } from "../EndpointAddresses";
 import { mapGetters } from "vuex";
 import { Notify } from "quasar";
 export default {
-  props: ["userData"],
   data() {
     return {
       isInputDisabled: true,
@@ -202,7 +201,7 @@ export default {
       console.log("~ url", url);
       fetch(url, requestOptions)
         .then((response) => response.json())
-        .then((result) => console.log(result))
+        .then((result) => (this.memberData = result))
         .catch((error) => console.log("error", error));
     },
     errorMesage(e) {

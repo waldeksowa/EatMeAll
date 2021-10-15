@@ -14,7 +14,7 @@ const mutations = {
     state.jwt = payload;
   },
   updateMemberIdToShow(state, payload) {
-    state.MemberIdToShow = payload;
+    state.memberIdToShow = payload;
   }
 }
 const actions = {
