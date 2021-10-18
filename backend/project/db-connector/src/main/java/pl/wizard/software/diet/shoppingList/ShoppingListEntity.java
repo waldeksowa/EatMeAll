@@ -2,10 +2,10 @@ package pl.wizard.software.diet.shoppingList;
 
 import lombok.*;
 import pl.wizard.software.AbstractBaseEntity;
-import pl.wizard.software.diet.products.ProductEntity;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 @Table(name = "SHOPPING_LISTS")
@@ -16,11 +16,9 @@ import java.util.Date;
 @AllArgsConstructor
 public class ShoppingListEntity extends AbstractBaseEntity {
 
-    @OneToOne
-    @JoinColumn(name = "product_id")
-    private ProductEntity product;
-    private int amount;
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @JoinColumn(name = "shopping_list_id")
+    Set<ShoppingListItemEntity> items;
     private Date shoppingListDate;
-    private boolean isBuyed;
     private Long accountId;
 }
