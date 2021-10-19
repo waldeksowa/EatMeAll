@@ -5,7 +5,7 @@ import pl.wizard.software.AbstractBaseEntity;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Table(name = "SHOPPING_LISTS")
@@ -18,7 +18,7 @@ public class ShoppingListEntity extends AbstractBaseEntity {
 
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     @JoinColumn(name = "shopping_list_id")
-    Set<ShoppingListItemEntity> items;
+    List<ShoppingListItemEntity> items;
     private Date shoppingListDate;
     private Long accountId;
 }

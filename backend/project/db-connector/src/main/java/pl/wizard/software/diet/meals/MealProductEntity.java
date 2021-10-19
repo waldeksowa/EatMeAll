@@ -1,6 +1,6 @@
 package pl.wizard.software.diet.meals;
 
-import lombok.*;
+import lombok.Data;
 import pl.wizard.software.AbstractBaseEntity;
 import pl.wizard.software.diet.products.ProductEntity;
 
@@ -8,11 +8,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "MEALS_PRODUCTS")
-@Getter
-@Setter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
+@Data
 public class MealProductEntity extends AbstractBaseEntity {
 
     @ManyToOne

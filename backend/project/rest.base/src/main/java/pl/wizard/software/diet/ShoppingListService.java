@@ -3,16 +3,17 @@ package pl.wizard.software.diet;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import pl.wizard.software.diet.dto.ProductWithAmountDto;
-import pl.wizard.software.diet.dto.ScheduleForDayDto;
-import pl.wizard.software.diet.dto.ScheduleForWeekDto;
+import pl.wizard.software.diet.dto.*;
 import pl.wizard.software.diet.mapper.ProductDtoMapper;
 import pl.wizard.software.diet.meals.MealDao;
 import pl.wizard.software.diet.meals.MealEntity;
 import pl.wizard.software.diet.meals.MealProductEntity;
+import pl.wizard.software.diet.products.ProductDao;
+import pl.wizard.software.diet.products.ProductEntity;
 import pl.wizard.software.diet.products.ProductEntity.ProductTypeEnum;
 import pl.wizard.software.diet.shoppingList.ShoppingListDao;
 import pl.wizard.software.diet.shoppingList.ShoppingListEntity;
+import pl.wizard.software.diet.shoppingList.ShoppingListItemEntity;
 
 import java.time.DayOfWeek;
 import java.util.*;
@@ -26,6 +27,7 @@ public class  ShoppingListService {
     private final MealDao mealRepository;
     private final ShoppingListDao shoppingListRepository;
     private final ScheduleService scheduleService;
+    private final ProductDao productRepository;
 
     HashMap<ProductTypeEnum, List<ProductWithAmountDto>> getShoppingList(List<Long> ids) {
         HashMap<ProductTypeEnum, List<ProductWithAmountDto>> shoppingList = new HashMap<>();
@@ -43,6 +45,30 @@ public class  ShoppingListService {
         prepareShoppingList(shoppingList, uniqueProducts);
 
         return shoppingList;
+    }
+
+    public ShoppingListEntity create(ShoppingListDto shoppingListDto) {
+        List<ShoppingListItemEntity> items = new ArrayList<>();
+        for (ShoppingListItemDto item : shoppingListDto.getItems()) {
+            Optional<ProductEntity> product = productRepository.findById(item.getProduct());
+            if (!product.isPresent()) {
+                log.error("Product with id " + item.getProduct() + " does not exists");
+            } else {
+                ShoppingListItemEntity shoppingListItem = ShoppingListItemEntity.builder()
+                        .product(product.get())
+                        .amount(item.getAmount())
+                        .isBuyed(item.isBuyed())
+                        .build();
+                items.add(shoppingListItem);
+            }
+        }
+        ShoppingListEntity shoppingListEntity = ShoppingListEntity.builder()
+                .accountId(shoppingListDto.getAccountId())
+                .shoppingListDate(new Date())
+                .items(items)
+                .build();
+
+        return shoppingListRepository.save(shoppingListEntity);
     }
 
     public ShoppingListEntity save(ShoppingListEntity shoppingList) {

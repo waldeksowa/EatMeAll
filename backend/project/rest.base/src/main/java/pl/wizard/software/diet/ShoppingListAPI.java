@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.wizard.software.diet.dto.ProductWithAmountDto;
+import pl.wizard.software.diet.dto.ShoppingListDto;
 import pl.wizard.software.diet.products.ProductEntity.ProductTypeEnum;
 import pl.wizard.software.diet.shoppingList.ShoppingListEntity;
 import pl.wizard.software.login.LoginService;
@@ -55,14 +56,14 @@ public class ShoppingListAPI {
     }
 
     @PostMapping
-    public ResponseEntity create(@RequestHeader("Authorization") String token, @Valid @RequestBody ShoppingListEntity shoppingList) {
+    public ResponseEntity create(@RequestHeader("Authorization") String token, @Valid @RequestBody ShoppingListDto shoppingList) {
         Optional<Long> accountId = loginService.getAccountIdByTokenUUID(token);
         if (!accountId.isPresent()) {
             log.error("Authorization token expired");
             return ResponseEntity.badRequest().build();
         }
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(shoppingListService.save(shoppingList));
+        return ResponseEntity.status(HttpStatus.CREATED).body(shoppingListService.create(shoppingList));
     }
 
     @PutMapping("/{id}")
