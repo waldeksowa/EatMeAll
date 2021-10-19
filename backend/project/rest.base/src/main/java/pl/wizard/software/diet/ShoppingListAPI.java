@@ -57,21 +57,6 @@ public class ShoppingListAPI {
         return ResponseEntity.ok(shoppingList.get());
     }
 
-    @GetMapping("/{ids}")
-    public ResponseEntity<HashMap<ProductTypeEnum, List<ProductWithAmountDto>>> getShoppingList(@RequestHeader("Authorization") String token, @PathVariable List<Long> ids) {
-        Optional<Long> accountId = loginService.getAccountIdByTokenUUID(token);
-        if (!accountId.isPresent()) {
-            log.error("Authorization token expired");
-            return ResponseEntity.badRequest().build();
-        }
-
-        if (ids.isEmpty()) {
-            log.error("List of meals is empty");
-            ResponseEntity.badRequest().build();
-        }
-        return ResponseEntity.ok(shoppingListService.getShoppingList(ids));
-    }
-
     @PostMapping
     public ResponseEntity create(@RequestHeader("Authorization") String token, @Valid @RequestBody ShoppingListDto shoppingList) {
         Optional<Long> accountId = loginService.getAccountIdByTokenUUID(token);
