@@ -106,7 +106,7 @@ public class  ShoppingListService {
         for (MealProductEntity mealProduct : mealProducts) {
             MealProductEntity current = mealProductsMap.get(mealProduct.getProduct().getId());
             if (current == null) {
-                mealProductsMap.put(mealProduct.getProduct().getId(), mealProduct);
+                mealProductsMap.put(mealProduct.getProduct().getId(), copyOf(mealProduct));
             } else {
                 current.setAmount(current.getAmount() + mealProduct.getAmount());
             }
@@ -122,5 +122,18 @@ public class  ShoppingListService {
         for (MealProductEntity uniqueProduct : uniqueProducts) {
             shoppingList.get(uniqueProduct.getProduct().getProductType()).add(ProductDtoMapper.mapToProductWithAmountDto(uniqueProduct));
         }
+    }
+
+    private MealProductEntity copyOf(MealProductEntity mealProductEntity) {
+        MealProductEntity result = new MealProductEntity();
+        result.setId(mealProductEntity.getId());
+        result.setCreatedAt(mealProductEntity.getCreatedAt());
+        result.setUpdatedAt(mealProductEntity.getUpdatedAt());
+        result.setVersion(mealProductEntity.getVersion());
+        result.setProduct(mealProductEntity.getProduct());
+        result.setAmount(mealProductEntity.getAmount());
+        result.setSpecialAmount(mealProductEntity.getSpecialAmount());
+        result.setSpecialAmountUnit(mealProductEntity.getSpecialAmountUnit());
+        return result;
     }
 }

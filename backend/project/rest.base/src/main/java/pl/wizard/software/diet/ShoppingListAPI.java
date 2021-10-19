@@ -27,7 +27,6 @@ public class ShoppingListAPI {
 
     @GetMapping
     public ResponseEntity<HashMap<ProductTypeEnum, List<ProductWithAmountDto>>> getByMemberAndDay(
-//    public ResponseEntity<String> getCustomShoppingList(
             @RequestHeader("Authorization") String token,
             @RequestParam(required = true) List<Long> member,
             @RequestParam(required = true) List<DayOfWeek> day) {
@@ -37,7 +36,6 @@ public class ShoppingListAPI {
             log.error("Authorization token expired");
             return ResponseEntity.badRequest().build();
         }
-
         return ResponseEntity.ok(shoppingListService.getByMemberAndDay(member, day, accountId.get()));
     }
 
