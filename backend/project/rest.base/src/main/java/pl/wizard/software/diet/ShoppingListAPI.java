@@ -40,6 +40,23 @@ public class ShoppingListAPI {
         return ResponseEntity.ok(shoppingListService.getByMemberAndDay(member, day, accountId.get()));
     }
 
+    @GetMapping("/{shoppingListId}")
+    public ResponseEntity<ShoppingListEntity> getById(@RequestHeader("Authorization") String token, @PathVariable Long shoppingListId) {
+        Optional<Long> accountId = loginService.getAccountIdByTokenUUID(token);
+        if (!accountId.isPresent()) {
+            log.error("Authorization token expired");
+            return ResponseEntity.badRequest().build();
+        }
+
+        Optional<ShoppingListEntity> shoppingList = shoppingListService.findById(accountId.get(), shoppingListId);
+        if (!shoppingList.isPresent()) {
+            log.error("Shopping list with Id " + shoppingListId + " does not exists");
+            ResponseEntity.badRequest().build();
+        }
+
+        return ResponseEntity.ok(shoppingList.get());
+    }
+
     @GetMapping("/{ids}")
     public ResponseEntity<HashMap<ProductTypeEnum, List<ProductWithAmountDto>>> getShoppingList(@RequestHeader("Authorization") String token, @PathVariable List<Long> ids) {
         Optional<Long> accountId = loginService.getAccountIdByTokenUUID(token);
@@ -66,7 +83,7 @@ public class ShoppingListAPI {
         return ResponseEntity.status(HttpStatus.CREATED).body(shoppingListService.create(shoppingList));
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{shoppingListId}")
     public ResponseEntity<ShoppingListEntity> update(
             @RequestHeader("Authorization") String token,
             @PathVariable Long shoppingListId,
@@ -85,7 +102,7 @@ public class ShoppingListAPI {
         return ResponseEntity.ok(shoppingListService.save(shoppingList));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{shoppingListId}")
     public ResponseEntity delete(@RequestHeader("Authorization") String token, @PathVariable Long shoppingListId) {
         Optional<Long> accountId = loginService.getAccountIdByTokenUUID(token);
         if (!accountId.isPresent()) {
