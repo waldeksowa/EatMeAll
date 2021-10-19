@@ -221,6 +221,23 @@ CREATE TABLE public.schedules
 ALTER TABLE public.schedules OWNER to eatmeall;
 
 
+CREATE TABLE public.shopping_lists (
+    id bigint NOT NULL,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone,
+    version integer NOT NULL,
+    shopping_list_date date,
+    account_id bigint,
+    CONSTRAINT shopping_lists_pkey PRIMARY KEY (id),
+    CONSTRAINT fk_shopping_lists_account_id FOREIGN KEY (account_id)
+        REFERENCES public.accounts (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+);
+
+ALTER TABLE public.shopping_lists OWNER to eatmeall;
+
+
 CREATE TABLE public.shopping_list_items (
     id bigint NOT NULL,
     created_at timestamp without time zone,
@@ -242,23 +259,6 @@ CREATE TABLE public.shopping_list_items (
 );
 
 ALTER TABLE public.shopping_list_items OWNER to eatmeall;
-
-
-CREATE TABLE public.shopping_lists (
-    id bigint NOT NULL,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
-    version integer NOT NULL,
-    shopping_list_date date,
-    account_id bigint,
-    CONSTRAINT shopping_lists_pkey PRIMARY KEY (id),
-    CONSTRAINT fk_shopping_lists_account_id FOREIGN KEY (account_id)
-        REFERENCES public.accounts (id) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION
-);
-
-ALTER TABLE public.shopping_lists OWNER to eatmeall;
 
 
 INSERT INTO public.products(
