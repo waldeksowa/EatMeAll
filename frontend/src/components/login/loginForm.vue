@@ -70,7 +70,6 @@ export default {
             }
           })
           .then((data) => {
-            console.log("~ data", data.token);
             this.updateJwt(data.token);
             this.redirectToForm("/plan");
           });
@@ -87,7 +86,7 @@ export default {
     },
     loginUser() {
       this.postRequest();
-      // this.updateJwt();
+      this.updateJwt();
     },
     updateLogin(update) {
       this.login = update;
