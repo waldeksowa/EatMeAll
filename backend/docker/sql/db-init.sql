@@ -245,6 +245,8 @@ CREATE TABLE public.shopping_list_items (
     version integer NOT NULL,
     product_id bigint,
     amount integer,
+    special_amount integer,
+    special_amount_unit integer,
     is_buyed boolean,
     shopping_list_id bigint,
     CONSTRAINT shopping_list_items_pkey PRIMARY KEY (id),
