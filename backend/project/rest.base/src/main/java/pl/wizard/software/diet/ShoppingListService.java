@@ -14,6 +14,7 @@ import pl.wizard.software.diet.products.ProductEntity.ProductTypeEnum;
 import pl.wizard.software.diet.shoppingList.ShoppingListDao;
 import pl.wizard.software.diet.shoppingList.ShoppingListEntity;
 import pl.wizard.software.diet.shoppingList.ShoppingListItemEntity;
+import pl.wizard.software.login.AccountDao;
 
 import java.time.DayOfWeek;
 import java.util.*;
@@ -28,6 +29,7 @@ public class  ShoppingListService {
     private final ShoppingListDao shoppingListRepository;
     private final ScheduleService scheduleService;
     private final ProductDao productRepository;
+    private final AccountDao accountRepository;
 
     HashMap<ProductTypeEnum, List<ProductWithAmountDto>> getShoppingList(List<Long> ids) {
         HashMap<ProductTypeEnum, List<ProductWithAmountDto>> shoppingList = new HashMap<>();
@@ -64,7 +66,7 @@ public class  ShoppingListService {
             }
         }
         ShoppingListEntity shoppingListEntity = ShoppingListEntity.builder()
-                .accountId(shoppingListDto.getAccountId())
+                .account(accountRepository.findById(shoppingListDto.getAccountId()).get())
                 .shoppingListDate(new Date())
                 .items(items)
                 .build();
@@ -76,8 +78,8 @@ public class  ShoppingListService {
         return shoppingListRepository.save(shoppingList);
     }
 
-    public Optional<ShoppingListEntity> findById(Long accountId, Long shoppingListId) {
-        return shoppingListRepository.findById(accountId, shoppingListId);
+    public Optional<ShoppingListEntity> findById(Long shoppingListId) {
+        return shoppingListRepository.findById(shoppingListId);
     }
 
     public void deleteById(Long shoppingListId) {

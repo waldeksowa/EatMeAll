@@ -14,6 +14,7 @@ import pl.wizard.software.diet.products.ProductDao;
 import pl.wizard.software.diet.products.ProductEntity;
 import pl.wizard.software.diet.schedules.ScheduleDao;
 import pl.wizard.software.diet.shoppingList.ShoppingListDao;
+import pl.wizard.software.login.AccountDao;
 
 import java.util.HashMap;
 import java.util.List;
@@ -37,10 +38,12 @@ public class ShoppingListServiceTest {
     ScheduleDao scheduleRepository;
     @Mock
     ProductDao productRepository;
+    @Mock
+    AccountDao accountRepository;
 
     @Before
     public void init() {
-        shoppingListService = new ShoppingListService(mealRepository, shoppingListRepository, new ScheduleService(mealRepository, scheduleRepository), productRepository);
+        shoppingListService = new ShoppingListService(mealRepository, shoppingListRepository, new ScheduleService(mealRepository, scheduleRepository), productRepository, accountRepository);
     }
 
     @Test

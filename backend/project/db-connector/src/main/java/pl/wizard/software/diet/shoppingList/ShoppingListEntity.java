@@ -2,6 +2,7 @@ package pl.wizard.software.diet.shoppingList;
 
 import lombok.*;
 import pl.wizard.software.AbstractBaseEntity;
+import pl.wizard.software.login.AccountEntity;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -20,5 +21,7 @@ public class ShoppingListEntity extends AbstractBaseEntity {
     @JoinColumn(name = "shopping_list_id")
     List<ShoppingListItemEntity> items;
     private Date shoppingListDate;
-    private Long accountId;
+    @OneToOne
+    @JoinColumn(name = "account_id")
+    private AccountEntity account;
 }

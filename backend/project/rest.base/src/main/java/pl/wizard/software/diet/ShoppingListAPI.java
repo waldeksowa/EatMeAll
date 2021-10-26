@@ -48,7 +48,7 @@ public class ShoppingListAPI {
             return ResponseEntity.badRequest().build();
         }
 
-        Optional<ShoppingListEntity> shoppingList = shoppingListService.findById(accountId.get(), shoppingListId);
+        Optional<ShoppingListEntity> shoppingList = shoppingListService.findById(shoppingListId);
         if (!shoppingList.isPresent()) {
             log.error("Shopping list with Id " + shoppingListId + " does not exists");
             ResponseEntity.badRequest().build();
@@ -79,7 +79,7 @@ public class ShoppingListAPI {
             log.error("Authorization token expired");
             return ResponseEntity.badRequest().build();
         }
-        if (!shoppingListService.findById(accountId.get(), shoppingListId).isPresent()) {
+        if (!shoppingListService.findById(shoppingListId).isPresent()) {
             log.error("Shopping list with id " + shoppingListId + " does not exists");
             return ResponseEntity.badRequest().build();
         }
@@ -94,7 +94,7 @@ public class ShoppingListAPI {
             log.error("Authorization token expired");
             return ResponseEntity.badRequest().build();
         }
-        if (!shoppingListService.findById(accountId.get(), shoppingListId).isPresent()) {
+        if (!shoppingListService.findById(shoppingListId).isPresent()) {
             log.error("Shopping list with id " + shoppingListId + " does not exists");
             return ResponseEntity.badRequest().build();
         }
