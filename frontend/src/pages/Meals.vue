@@ -11,6 +11,16 @@
         <q-btn class="bg-white" label="Kalendarz"></q-btn>
       </div>
     </div>
+    <div class="row q-gutter-md">
+      <div
+        @click="goToMemberSite(account.id)"
+        :userData="membersAccounts"
+        v-for="(account, index) in membersAccounts"
+        :key="`member-${index}`"
+      >
+        <q-img src="../assets/Netflix-avatar.jpg" class="tumbnail q-pa-md" />
+      </div>
+    </div>
     <mealTable
       @showDeatilDialog="showDeatilDialog($event)"
       :mealsSchedule="mealsSchedule"
@@ -20,25 +30,28 @@
     </q-dialog>
     <q-dialog v-model="isScheduleShow">
       <createScheduleDialog
-        @fetchScheduledata="fetchScheduledata()"
+        @fetchScheduleData="fetchScheduleData()"
       ></createScheduleDialog>
     </q-dialog>
   </q-page>
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+import { MEMBER } from "../EndpointAddresses";
 import { Notify } from "quasar";
-import { SCHEDULE } from "../EndpointAddresses";
+import { RANDOMSCHEDULE } from "../EndpointAddresses";
 export default {
   name: "PageIndex",
   data() {
     return {
       isDetailInfDialogShow: false,
       isScheduleShow: false,
+      showMealDialog: false,
       selectedMeal: Object,
       mealsSchedule: [],
-      showMealDialog: false,
       dataSelectedDialog: {},
+      membersAccounts: [],
     };
   },
   watch: {
@@ -49,26 +62,56 @@ export default {
       deep: true,
     },
   },
+  computed: {
+    ...mapGetters("store", ["jwt"]),
+  },
   mounted() {
+    this.fetchMembersAccountData();
+    this.fetchScheduleData();
     this.parseLocalStorageValues();
   },
   methods: {
-    async fetchScheduledata() {
+    fetchMembersAccountData() {
+      var myHeaders = new Headers();
+      myHeaders.append("Authorization", `Bearer ${this.jwt}`);
+
+      var requestOptions = {
+        method: "GET",
+        headers: myHeaders,
+        redirect: "follow",
+      };
+      fetch(MEMBER, requestOptions)
+        .then((response) => response.json())
+        .then((result) => (this.membersAccounts = result))
+        .catch((error) => console.log("error", error));
+    },
+    fetchScheduleData() {
       this.removeLocalStorage();
-      try {
-        let responce = await fetch(SCHEDULE);
 
-        if (!responce.ok) {
+      var myHeaders = new Headers();
+      myHeaders.append("Authorization", `Bearer ${this.jwt}`);
+
+      var requestOptions = {
+        method: "GET",
+        headers: myHeaders,
+        redirect: "follow",
+      };
+      fetch(RANDOMSCHEDULE, requestOptions)
+        .then((response) => {
+          console.log("~ response", response);
+          if (!response.ok) {
+            this.errorMesage("Ups... Cos poszlo nie tak");
+          }
+          return response.json();
+        })
+        .then((result) => {
+          console.log("~ result", result);
+          this.prepareScheduleaData(result);
+        })
+        .catch((e) => {
           this.errorMesage("Ups... Cos poszlo nie tak");
-          console.log(responce.status);
-        }
-
-        let result = await responce.json();
-        this.prepareScheduleaData(result);
-      } catch (e) {
-        this.errorMesage("Ups... Cos poszlo nie tak");
-        console.log(e);
-      }
+          console.log(e);
+        });
     },
     prepareScheduleaData(aResult) {
       let arr = [];
@@ -129,7 +172,7 @@ export default {
       if (localStorage.mealsSchedule) {
         this.isScheduleShow = !this.isScheduleShow;
       } else {
-        this.fetchScheduledata();
+        this.fetchScheduleData();
       }
     },
     errorMesage(e) {
@@ -154,4 +197,7 @@ export default {
 
 div:first-letter
   text-transform: uppercase
+
+.tumbnail
+  width: 25px
 </style>
