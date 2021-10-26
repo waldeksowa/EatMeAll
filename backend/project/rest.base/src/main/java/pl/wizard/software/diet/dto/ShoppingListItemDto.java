@@ -11,5 +11,6 @@ import lombok.*;
 public class ShoppingListItemDto {
     private Long product;
     private int amount;
+    private int specialAmount;
     private boolean isBuyed;
 }
