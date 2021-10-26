@@ -5,13 +5,13 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Getter
 @Setter
 public class ScheduleForDayDto implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date date;
+    private LocalDate date;
     private Long breakfast;
     private Long secondBreakfast;
     private Long lunch;

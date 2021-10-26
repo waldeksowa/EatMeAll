@@ -94,20 +94,13 @@ public class  ShoppingListService {
                 log.error("Schedule for member with id = " + memberId + " does not exists");
             } else {
                 for (ScheduleForDayDto mealsForDay : schedule.get().getSchedule()) {
-                    if (days.contains(mapToDayOfWeek(mealsForDay.getDate()))) {
+                    if (days.contains(DayOfWeek.from(mealsForDay.getDate()))) {
                         mealIds.addAll(getMealIds(mealsForDay));
                     }
                 }
             }
         }
         return getShoppingList(mealIds);
-    }
-
-    private DayOfWeek mapToDayOfWeek(Date date) {
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(date);
-        int day = (cal.get(Calendar.DAY_OF_WEEK) + 6) % 7;
-        return (day == 0) ? DayOfWeek.SUNDAY : DayOfWeek.of(day);
     }
 
     private List<Long> getMealIds(ScheduleForDayDto mealsForDay) {

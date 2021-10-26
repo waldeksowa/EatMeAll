@@ -17,6 +17,7 @@ import pl.wizard.software.diet.schedules.ScheduleDao;
 import pl.wizard.software.diet.schedules.ScheduleEntity;
 
 import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -49,7 +50,7 @@ public class ScheduleService {
     }
 
     public ScheduleForWeekDto createSchedule(CreateScheduleDto schedule) {
-        Date scheduleDate = schedule.getSchedule().stream()
+        LocalDate scheduleDate = schedule.getSchedule().stream()
                 .map(s -> s.getDate())
                 .sorted()
                 .findFirst()
