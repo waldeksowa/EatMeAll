@@ -57,6 +57,7 @@ public class  ShoppingListService {
                 ShoppingListItemEntity shoppingListItem = ShoppingListItemEntity.builder()
                         .product(product.get())
                         .amount(item.getAmount())
+                        .specialAmount(item.getSpecialAmount())
                         .isBuyed(item.isBuyed())
                         .build();
                 items.add(shoppingListItem);
