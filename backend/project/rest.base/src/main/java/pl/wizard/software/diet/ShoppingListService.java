@@ -2,6 +2,8 @@ package pl.wizard.software.diet;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import pl.wizard.software.diet.dto.*;
 import pl.wizard.software.diet.mapper.ProductDtoMapper;
@@ -49,6 +51,11 @@ public class  ShoppingListService {
         prepareShoppingList(shoppingList, uniqueProducts);
 
         return shoppingList;
+    }
+
+    public Optional<ShoppingListEntity> getCurrent(Long accountId) {
+        Pageable topOne = PageRequest.of(0, 1);
+        return shoppingListRepository.findCurrent(accountId, topOne).stream().findFirst();
     }
 
     public ShoppingListEntity create(CreateShoppingListDto createShoppingListDto) {

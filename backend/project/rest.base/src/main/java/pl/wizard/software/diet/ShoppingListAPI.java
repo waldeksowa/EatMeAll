@@ -42,6 +42,23 @@ public class ShoppingListAPI {
         return ResponseEntity.ok(shoppingListService.getByMemberAndDay(member, day, accountId.get()));
     }
 
+    @GetMapping("/current")
+    public ResponseEntity<ShoppingListDto> getCurrent(@RequestHeader("Authorization") String token) {
+        Optional<Long> accountId = loginService.getAccountIdByTokenUUID(token);
+        if (!accountId.isPresent()) {
+            log.error("Authorization token expired");
+            return ResponseEntity.badRequest().build();
+        }
+
+        Optional<ShoppingListEntity> shoppingList = shoppingListService.getCurrent(accountId.get());
+        if (!shoppingList.isPresent()) {
+            log.error("Current shopping list does not exists");
+            return ResponseEntity.badRequest().build();
+        }
+
+        return ResponseEntity.ok(ShoppingListDtoMapper.mapToShoppingListDto(shoppingList.get()));
+    }
+
     @GetMapping("/{shoppingListId}")
     public ResponseEntity<ShoppingListDto> getById(@RequestHeader("Authorization") String token, @PathVariable Long shoppingListId) {
         Optional<Long> accountId = loginService.getAccountIdByTokenUUID(token);
