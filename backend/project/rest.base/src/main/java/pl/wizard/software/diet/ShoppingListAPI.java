@@ -5,8 +5,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pl.wizard.software.diet.dto.CreateShoppingListDto;
 import pl.wizard.software.diet.dto.ProductWithAmountDto;
 import pl.wizard.software.diet.dto.ShoppingListDto;
+import pl.wizard.software.diet.mapper.ShoppingListDtoMapper;
 import pl.wizard.software.diet.products.ProductEntity.ProductTypeEnum;
 import pl.wizard.software.diet.shoppingList.ShoppingListEntity;
 import pl.wizard.software.login.LoginService;
@@ -41,50 +43,51 @@ public class ShoppingListAPI {
     }
 
     @GetMapping("/{shoppingListId}")
-    public ResponseEntity<ShoppingListEntity> getById(@RequestHeader("Authorization") String token, @PathVariable Long shoppingListId) {
+    public ResponseEntity<ShoppingListDto> getById(@RequestHeader("Authorization") String token, @PathVariable Long shoppingListId) {
         Optional<Long> accountId = loginService.getAccountIdByTokenUUID(token);
         if (!accountId.isPresent()) {
             log.error("Authorization token expired");
             return ResponseEntity.badRequest().build();
         }
 
-        Optional<ShoppingListEntity> shoppingList = shoppingListService.findById(shoppingListId);
+        Optional<ShoppingListEntity> shoppingList = shoppingListService.findById(shoppingListId, accountId.get());
         if (!shoppingList.isPresent()) {
             log.error("Shopping list with Id " + shoppingListId + " does not exists");
             ResponseEntity.badRequest().build();
         }
 
-        return ResponseEntity.ok(shoppingList.get());
+        return ResponseEntity.ok(ShoppingListDtoMapper.mapToShoppingListDto(shoppingList.get()));
     }
 
     @PostMapping
-    public ResponseEntity create(@RequestHeader("Authorization") String token, @Valid @RequestBody ShoppingListDto shoppingList) {
+    public ResponseEntity create(@RequestHeader("Authorization") String token, @Valid @RequestBody CreateShoppingListDto shoppingList) {
         Optional<Long> accountId = loginService.getAccountIdByTokenUUID(token);
         if (!accountId.isPresent()) {
             log.error("Authorization token expired");
             return ResponseEntity.badRequest().build();
         }
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(shoppingListService.create(shoppingList));
+        return ResponseEntity.status(HttpStatus.CREATED).body(ShoppingListDtoMapper.mapToShoppingListDto(shoppingListService.create(shoppingList)));
     }
 
     @PutMapping("/{shoppingListId}")
-    public ResponseEntity<ShoppingListEntity> update(
+    public ResponseEntity<ShoppingListDto> update(
             @RequestHeader("Authorization") String token,
             @PathVariable Long shoppingListId,
-            @Valid @RequestBody ShoppingListEntity shoppingList) {
+            @Valid @RequestBody ShoppingListDto shoppingList) {
 
         Optional<Long> accountId = loginService.getAccountIdByTokenUUID(token);
         if (!accountId.isPresent()) {
             log.error("Authorization token expired");
             return ResponseEntity.badRequest().build();
         }
-        if (!shoppingListService.findById(shoppingListId).isPresent()) {
+        Optional<ShoppingListEntity> shoppingListEntity = shoppingListService.findById(shoppingListId, accountId.get());
+        if (!shoppingListEntity.isPresent()) {
             log.error("Shopping list with id " + shoppingListId + " does not exists");
             return ResponseEntity.badRequest().build();
         }
 
-        return ResponseEntity.ok(shoppingListService.save(shoppingList));
+        return ResponseEntity.ok(ShoppingListDtoMapper.mapToShoppingListDto(shoppingListService.update(shoppingList)));
     }
 
     @DeleteMapping("/{shoppingListId}")
@@ -94,7 +97,7 @@ public class ShoppingListAPI {
             log.error("Authorization token expired");
             return ResponseEntity.badRequest().build();
         }
-        if (!shoppingListService.findById(shoppingListId).isPresent()) {
+        if (!shoppingListService.findById(shoppingListId, accountId.get()).isPresent()) {
             log.error("Shopping list with id " + shoppingListId + " does not exists");
             return ResponseEntity.badRequest().build();
         }

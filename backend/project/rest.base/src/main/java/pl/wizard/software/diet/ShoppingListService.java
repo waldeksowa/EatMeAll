@@ -13,6 +13,7 @@ import pl.wizard.software.diet.products.ProductEntity;
 import pl.wizard.software.diet.products.ProductEntity.ProductTypeEnum;
 import pl.wizard.software.diet.shoppingList.ShoppingListDao;
 import pl.wizard.software.diet.shoppingList.ShoppingListEntity;
+import pl.wizard.software.diet.shoppingList.ShoppingListItemDao;
 import pl.wizard.software.diet.shoppingList.ShoppingListItemEntity;
 import pl.wizard.software.login.AccountDao;
 
@@ -27,6 +28,7 @@ public class  ShoppingListService {
 
     private final MealDao mealRepository;
     private final ShoppingListDao shoppingListRepository;
+    private final ShoppingListItemDao shoppingListItemRepository;
     private final ScheduleService scheduleService;
     private final ProductDao productRepository;
     private final AccountDao accountRepository;
@@ -49,12 +51,12 @@ public class  ShoppingListService {
         return shoppingList;
     }
 
-    public ShoppingListEntity create(ShoppingListDto shoppingListDto) {
+    public ShoppingListEntity create(CreateShoppingListDto createShoppingListDto) {
         List<ShoppingListItemEntity> items = new ArrayList<>();
-        for (ShoppingListItemDto item : shoppingListDto.getItems()) {
-            Optional<ProductEntity> product = productRepository.findById(item.getProduct());
+        for (CreateShoppingListItemDto item : createShoppingListDto.getItems()) {
+            Optional<ProductEntity> product = productRepository.findById(item.getProductId());
             if (!product.isPresent()) {
-                log.error("Product with id " + item.getProduct() + " does not exists");
+                log.error("Product with id " + item.getProductId() + " does not exists");
             } else {
                 ShoppingListItemEntity shoppingListItem = ShoppingListItemEntity.builder()
                         .product(product.get())
@@ -66,10 +68,38 @@ public class  ShoppingListService {
             }
         }
         ShoppingListEntity shoppingListEntity = ShoppingListEntity.builder()
-                .account(accountRepository.findById(shoppingListDto.getAccountId()).get())
+                .account(accountRepository.findById(createShoppingListDto.getAccountId()).get())
                 .shoppingListDate(new Date())
                 .items(items)
                 .build();
+
+        return shoppingListRepository.save(shoppingListEntity);
+    }
+
+    public ShoppingListEntity update(ShoppingListDto shoppingList) {
+        List<ShoppingListItemEntity> items = new ArrayList<>();
+        for (ShoppingListItemDto item : shoppingList.getItems()) {
+            Optional<ProductEntity> product = productRepository.findById(item.getProductId());
+            if (!product.isPresent()) {
+                log.error("Product with id " + item.getProductId() + " does not exists");
+            } else {
+                Optional<ShoppingListItemEntity> shoppingListItemEntity = shoppingListItemRepository.findById(item.getId());
+                if (!shoppingListItemEntity.isPresent()) {
+                    log.error("ShoppingListItem with id " + item.getId() + " does not exists");
+                } else {
+                    ShoppingListItemEntity shoppingListItem = shoppingListItemEntity.get();
+                    shoppingListItem.setProduct(product.get());
+                    shoppingListItem.setAmount(item.getAmount());
+                    shoppingListItem.setSpecialAmount(item.getSpecialAmount());
+                    shoppingListItem.setBuyed(item.isBuyed());
+                    items.add(shoppingListItem);
+                }
+            }
+        }
+        ShoppingListEntity shoppingListEntity = findById(shoppingList.getId(), shoppingList.getAccountId()).get();
+        shoppingListEntity.setShoppingListDate(shoppingList.getShoppingListDate());
+        shoppingListEntity.setAccount(accountRepository.findById(shoppingList.getAccountId()).get());
+        shoppingListEntity.setItems(items);
 
         return shoppingListRepository.save(shoppingListEntity);
     }
@@ -78,8 +108,8 @@ public class  ShoppingListService {
         return shoppingListRepository.save(shoppingList);
     }
 
-    public Optional<ShoppingListEntity> findById(Long shoppingListId) {
-        return shoppingListRepository.findById(shoppingListId);
+    public Optional<ShoppingListEntity> findById(Long shoppingListId, Long accountId) {
+        return shoppingListRepository.findByIdAndAccount(shoppingListId, accountId);
     }
 
     public void deleteById(Long shoppingListId) {

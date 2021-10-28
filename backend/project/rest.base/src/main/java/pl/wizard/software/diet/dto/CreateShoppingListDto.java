@@ -10,12 +10,8 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ShoppingListDto {
-    private Long id;
-    private Date createdAt;
-    private Date updatedAt;
-    private int version;
+public class CreateShoppingListDto {
     private Long accountId;
     private Date shoppingListDate;
-    private List<ShoppingListItemDto> items;
+    private List<CreateShoppingListItemDto> items;
 }
