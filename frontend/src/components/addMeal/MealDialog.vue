@@ -56,7 +56,7 @@
           </div>
           <div v-for="(p, k) in returnProductsBySelectedType()" :key="k">
             <q-card
-              class="my-card full-width"
+              class="full-width"
               flat
               bordered
               v-if="showProductsToFind(p)"

@@ -6,7 +6,7 @@
         <q-btn
           class="bg-white"
           label="Wygeneruj Obecny tydzień"
-          @click="fetchScheduleData()"
+          @click="isScheduleShow = !isScheduleShow"
         ></q-btn>
         <q-btn class="bg-white" label="Kalendarz"></q-btn>
       </div>
@@ -17,15 +17,18 @@
         :userData="membersAccounts"
         v-for="(account, index) in membersAccounts"
         :key="`member-${index}`"
-        class="bg-accent q-pa-md"
+        class="bg-accent"
       >
         <center>
           <q-img src="../assets/Netflix-avatar.jpg" class="tumbnail q-pa-md" />
         </center>
-        <p class="member-name text-center q-py-xs">{{ account.name }}</p>
+        <p class="member-name text-center q-pa-sm">{{ account.name }}</p>
       </div>
     </div>
-    <mealTable @showDeatilDialog="showDeatilDialog($event)" />
+    <mealTable
+      @showDeatilDialog="showDeatilDialog($event)"
+      :mealsSchedule="mealsSchedule"
+    />
     <q-dialog v-model="isDetailInfDialogShow">
       <moreInfoDialog :selectedMeal="selectedMeal"></moreInfoDialog>
     </q-dialog>
@@ -41,7 +44,7 @@
 import { mapGetters } from "vuex";
 import { MEMBER } from "../EndpointAddresses";
 import { Notify } from "quasar";
-
+import { RANDOMSCHEDULE } from "../EndpointAddresses";
 export default {
   name: "PageIndex",
   data() {
@@ -50,7 +53,8 @@ export default {
       isScheduleShow: false,
       showMealDialog: false,
       selectedMeal: Object,
-
+      mealsSchedule: [],
+      dataSelectedDialog: {},
       membersAccounts: [],
     };
   },
@@ -59,6 +63,7 @@ export default {
   },
   mounted() {
     this.fetchMembersAccountData();
+    this.fetchScheduleData();
   },
   methods: {
     fetchMembersAccountData() {
@@ -75,7 +80,47 @@ export default {
         .then((result) => (this.membersAccounts = result))
         .catch((error) => console.log("error", error));
     },
+    fetchScheduleData() {
+      var myHeaders = new Headers();
+      myHeaders.append("Authorization", `Bearer ${this.jwt}`);
 
+      var requestOptions = {
+        method: "GET",
+        headers: myHeaders,
+        redirect: "follow",
+      };
+      fetch(RANDOMSCHEDULE, requestOptions)
+        .then((response) => {
+          console.log("~ response", response);
+          if (!response.ok) {
+            this.errorMesage("Ups... Cos poszlo nie tak");
+          }
+          return response.json();
+        })
+        .then((result) => {
+          console.log("~ result", result);
+          this.prepareScheduleaData(result);
+        })
+        .catch((e) => {
+          this.errorMesage("Ups... Cos poszlo nie tak");
+          console.log(e);
+        });
+    },
+    prepareScheduleaData(aResult) {
+      let arr = [];
+      for (const [weekDay, mealObject] of Object.entries(aResult)) {
+        arr.push({
+          day: weekDay,
+          mealMacros: mealObject,
+          mealTime: "Sniadanie",
+        });
+      }
+
+      this.sortMealDay(arr);
+      // this.sortMealTimeAndMealData(arr)
+
+      this.mealsSchedule = arr;
+    },
     sortMealDay(Aaray) {
       let ordering = {}, // map for efficient lookup of sortIndex
         sortOrder = [

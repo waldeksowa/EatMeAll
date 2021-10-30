@@ -1,119 +1,60 @@
 <template>
   <div class="row justify-center q-py-md no-wrap mobile-column col-12">
-    <div
-      class="col-grow col-shrink q-gutter-sm"
-      v-for="(s, j) in mealsSchedule"
-      :key="j"
-    >
-      <div class="text-center text-h5">
-        {{ returnCorrectDayLabel(s.day) }}
-      </div>
-      <div class="q-gutter-sm">
-        <div class="" v-for="(d, i) in s.meal" :key="i">
-          <div class="text-center text-body1"></div>
-          <q-card class="my-card-min">
-            <q-card-section>
-              <div class="text-center">
-                {{ returnMealTimeLabel(s.date[i]) }}
-              </div>
-            </q-card-section>
-            <q-img
-              :src="returnImgByMealTime(s.date[i])"
-              class="card-img"
-              @click="showDeatilDialog(d)"
+    <div class="q-gutter-md row">
+      <div
+        class="col-grow col-shrink"
+        v-for="(mealForDayInWeek, j) in mealsSchedule"
+        :key="`mealForDayInWeek-${j}`"
+      >
+        <div>
+          <div class="text-center text-h5">
+            {{ returnCorrectDayLabel(mealForDayInWeek.day) }}
+          </div>
+          <div class="q-gutter-md">
+            <div
+              v-for="(mealData, i) in mealForDayInWeek.mealMacros.meals"
+              :key="`mealData-${i}`"
             >
-              <div
-                class="
-                  absolute-full
-                  text-subtitle1 text-bold
-                  flex flex-center
-                  text-center
-                "
-              >
-                <q-tooltip>
-                  <div class="text-body2">{{ d.name }}</div>
-                </q-tooltip>
-
-                <div class="long-word">
-                  {{ d.name }}
-                </div>
-              </div>
-            </q-img>
-
-            <q-expansion-item
-              expand-separator
-              icon="restaurant"
-              label="Wartości"
-            >
-              <div class="text-center">
-                <div>Kalorie: {{ s.meal[i].calorific }}Kcal</div>
-                <div>Tłuszcze: {{ s.meal[i].fat }}(g)</div>
-                <div>Weglodowany: {{ s.meal[i].carbohydrates }}(g)</div>
-                <div>Proteiny: {{ s.meal[i].protein }}(g)</div>
-                <div>Blonnik: {{ s.meal[i].roughage }}(g)</div>
-              </div>
-            </q-expansion-item>
-          </q-card>
+              <q-card>
+                <div class="text-center">{{ mealForDayInWeek.mealTime }}</div>
+                <div class="text-center">Nazwa: {{ mealData.name }}</div>
+                <q-expansion-item
+                  expand-separator
+                  label="Wartości"
+                  class="expandable"
+                >
+                  <div class="text-center">
+                    Czas przygotowania: {{ mealData.prepareTime }}
+                  </div>
+                  <div class="text-center">
+                    Kalorie: {{ mealData.calorific }}
+                  </div>
+                  <div class="text-center">
+                    Węglowodany:
+                    {{ mealData.carbohydrates }}
+                  </div>
+                  <div class="text-center">Tłuszcze: {{ mealData.fat }}</div>
+                  <div class="text-center">
+                    Białko:
+                    {{ mealData.protein }}
+                  </div>
+                  <div class="text-center">
+                    Błonnik:
+                    {{ mealData.roughage }}
+                  </div>
+                </q-expansion-item>
+              </q-card>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </template>
 <script>
-import { mapGetters } from "vuex";
-import { RANDOMSCHEDULE } from "../../EndpointAddresses";
 export default {
-  data() {
-    return {
-      mealsSchedule: [],
-    };
-  },
-  computed: {
-    ...mapGetters("store", ["jwt"]),
-  },
+  props: { mealsSchedule: Array },
   methods: {
-    fetchScheduleData() {
-      var myHeaders = new Headers();
-      myHeaders.append("Authorization", `Bearer ${this.jwt}`);
-
-      var requestOptions = {
-        method: "GET",
-        headers: myHeaders,
-        redirect: "follow",
-      };
-      fetch(RANDOMSCHEDULE, requestOptions)
-        .then((response) => {
-          console.log("~ response", response);
-          if (!response.ok) {
-            this.errorMesage("Ups... Cos poszlo nie tak");
-          }
-          return response.json();
-        })
-        .then((result) => {
-          console.log("~ result", result);
-          this.prepareScheduleaData(result);
-        })
-        .catch((e) => {
-          this.errorMesage("Ups... Cos poszlo nie tak");
-          console.log(e);
-        });
-    },
-
-    prepareScheduleaData(aResult) {
-      let arr = [];
-      for (const [weekDay, mealObject] of Object.entries(aResult)) {
-        arr.push({
-          day: weekDay,
-          date: Object.keys(mealObject),
-          meal: Object.values(mealObject),
-        });
-      }
-
-      // this.sortMealDay(arr);
-      // this.sortMealTimeAndMealData(arr)
-
-      this.mealsSchedule = arr;
-    },
     returnCorrectDayLabel(aMealDay) {
       let dayTimeValues = [
         { label: "Poniedziałek", value: "MONDAY" },
@@ -160,12 +101,11 @@ export default {
       this.$emit("showDeatilDialog", aMeal);
     },
   },
-  mounted() {
-    this.fetchScheduleData();
-  },
 };
 </script>
 <style lang="sass">
+.expandable
+  width: 150px
 .card-img
   height: 10vh
   @media (max-width:1100px)
