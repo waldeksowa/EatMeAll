@@ -8,7 +8,8 @@
   "scripts": {
     "lint": "eslint --ext .js,.vue ./",
     "test": "echo \"No test specified\" && exit 0",
-    "build": "quasar build"
+    "build": "quasar build",
+    "remove": "rm -fr node_modules"
   },
   "dependencies": {
     "@quasar/extras": "^1.0.0",
@@ -23,7 +24,8 @@
     "eslint": "^7.21.0",
     "eslint-config-prettier": "^8.1.0",
     "eslint-plugin-vue": "^7.7.0",
-    "eslint-webpack-plugin": "^2.4.0"
+    "eslint-webpack-plugin": "^2.4.0",
+    "vuex-persistedstate": "^4.1.0"
   },
   "browserslist": [
     "last 10 Chrome versions",

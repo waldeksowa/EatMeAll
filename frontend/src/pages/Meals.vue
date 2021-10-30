@@ -11,14 +11,18 @@
         <q-btn class="bg-white" label="Kalendarz"></q-btn>
       </div>
     </div>
-    <div class="row q-gutter-md">
+    <div class="row justify-end">
       <div
         @click="goToMemberSite(account.id)"
         :userData="membersAccounts"
         v-for="(account, index) in membersAccounts"
         :key="`member-${index}`"
+        class="bg-accent q-pa-md"
       >
-        <q-img src="../assets/Netflix-avatar.jpg" class="tumbnail q-pa-md" />
+        <center>
+          <q-img src="../assets/Netflix-avatar.jpg" class="tumbnail q-pa-md" />
+        </center>
+        <p class="member-name text-center q-py-xs">{{ account.name }}</p>
       </div>
     </div>
     <mealTable
@@ -50,17 +54,8 @@ export default {
       showMealDialog: false,
       selectedMeal: Object,
       mealsSchedule: [],
-      dataSelectedDialog: {},
       membersAccounts: [],
     };
-  },
-  watch: {
-    mealsSchedule: {
-      handler(aSchedule) {
-        localStorage.mealsSchedule = JSON.stringify(aSchedule);
-      },
-      deep: true,
-    },
   },
   computed: {
     ...mapGetters("store", ["jwt"]),
@@ -68,7 +63,6 @@ export default {
   mounted() {
     this.fetchMembersAccountData();
     this.fetchScheduleData();
-    this.parseLocalStorageValues();
   },
   methods: {
     fetchMembersAccountData() {
@@ -86,8 +80,6 @@ export default {
         .catch((error) => console.log("error", error));
     },
     fetchScheduleData() {
-      this.removeLocalStorage();
-
       var myHeaders = new Headers();
       myHeaders.append("Authorization", `Bearer ${this.jwt}`);
 
@@ -145,35 +137,9 @@ export default {
         return ordering[a.day] - ordering[b.day];
       });
     },
-    // sortMealTimeAndMealData(aMealSchedule){
-    //   let ordering = {},
-    //       sortOrder = ['BREAKFAST','SECOND_BREAKFAST','LUNCH','SUPPER','FRIDAY','DINNER'];
-    //   for (var i=0; i<sortOrder.length; i++)
-    //       ordering[sortOrder[i]] = i;
-    //   aMealSchedule.forEach(s => {
-    //     return s.date.sort((a, b) => (ordering[a] - ordering[b]))
-    //   })
-    //   aMealSchedule.forEach(s => {
-    //     return s.meal.sort((a, b) =>(ordering[a] - ordering[b]))
-    //   })
-    // },
     showDeatilDialog(aMeal) {
       this.selectedMeal = aMeal;
       this.isDetailInfDialogShow = true;
-    },
-    parseLocalStorageValues() {
-      if (localStorage.mealsSchedule)
-        this.mealsSchedule = JSON.parse(localStorage.mealsSchedule);
-    },
-    removeLocalStorage() {
-      localStorage.removeItem("mealsSchedule");
-    },
-    createScheduleForWeek() {
-      if (localStorage.mealsSchedule) {
-        this.isScheduleShow = !this.isScheduleShow;
-      } else {
-        this.fetchScheduleData();
-      }
     },
     errorMesage(e) {
       Notify.create({
@@ -197,7 +163,14 @@ export default {
 
 div:first-letter
   text-transform: uppercase
-
+.member-name:first-letter
+  text-transform: uppercase
 .tumbnail
-  width: 25px
+  width: 40px
+  border-radius: 100px
+  &:hover
+    transition-property: background-color font-size transform color
+    transition-timing-function: ease-in-out
+    transition-duration: 3s
+    border-radius: 0px
 </style>
