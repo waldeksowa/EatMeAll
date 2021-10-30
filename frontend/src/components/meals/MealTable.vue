@@ -1,8 +1,5 @@
 <template>
-  <div
-    v-if="areMealsWasFeached()"
-    class="row justify-center q-py-md no-wrap mobile-column col-12"
-  >
+  <div class="row justify-center q-py-md no-wrap mobile-column col-12">
     <div
       class="col-grow col-shrink q-gutter-sm"
       v-for="(s, j) in mealsSchedule"
@@ -63,14 +60,59 @@
   </div>
 </template>
 <script>
+import { mapGetters } from "vuex";
+import { RANDOMSCHEDULE } from "../../EndpointAddresses";
 export default {
-  props: { mealsSchedule: Array },
+  data() {
+    return {
+      mealsSchedule: [],
+    };
+  },
+  computed: {
+    ...mapGetters("store", ["jwt"]),
+  },
   methods: {
-    areMealsWasFeached() {
-      if (this.mealsSchedule.length === 0) {
-        return false;
+    fetchScheduleData() {
+      var myHeaders = new Headers();
+      myHeaders.append("Authorization", `Bearer ${this.jwt}`);
+
+      var requestOptions = {
+        method: "GET",
+        headers: myHeaders,
+        redirect: "follow",
+      };
+      fetch(RANDOMSCHEDULE, requestOptions)
+        .then((response) => {
+          console.log("~ response", response);
+          if (!response.ok) {
+            this.errorMesage("Ups... Cos poszlo nie tak");
+          }
+          return response.json();
+        })
+        .then((result) => {
+          console.log("~ result", result);
+          this.prepareScheduleaData(result);
+        })
+        .catch((e) => {
+          this.errorMesage("Ups... Cos poszlo nie tak");
+          console.log(e);
+        });
+    },
+
+    prepareScheduleaData(aResult) {
+      let arr = [];
+      for (const [weekDay, mealObject] of Object.entries(aResult)) {
+        arr.push({
+          day: weekDay,
+          date: Object.keys(mealObject),
+          meal: Object.values(mealObject),
+        });
       }
-      return true;
+
+      // this.sortMealDay(arr);
+      // this.sortMealTimeAndMealData(arr)
+
+      this.mealsSchedule = arr;
     },
     returnCorrectDayLabel(aMealDay) {
       let dayTimeValues = [
@@ -117,6 +159,9 @@ export default {
     showDeatilDialog(aMeal) {
       this.$emit("showDeatilDialog", aMeal);
     },
+  },
+  mounted() {
+    this.fetchScheduleData();
   },
 };
 </script>
