@@ -1,4 +1,5 @@
 import { KILOCALORIES, CARBOHYDRATES, FATS, PROTEINS } from '../translate/common/macrosName.js'
+import { Notify } from "quasar";
 const state = {
   macrosName: {
     calorific: KILOCALORIES,
@@ -31,13 +32,13 @@ const actions = {
   updateMemberIdToShow({ commit }, payload) {
     commit('updateMemberIdToShow', payload)
   },
-  errorMesage(e) {
+  errorMesage({ commit }, e) {
     Notify.create({
       message: `⚠ ${e}`,
       classes: "full-width text-center bg-negative",
     });
   },
-  notifySucessful(e) {
+  notifySucessful({ commit }, e) {
     Notify.create({
       message: `${e}`,
       classes: "full-width text-center bg-positive",

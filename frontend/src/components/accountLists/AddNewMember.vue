@@ -107,8 +107,7 @@
   </q-card>
 </template>
 <script>
-import { Notify } from "quasar";
-
+import { mapActions } from "vuex";
 export default {
   data() {
     return {
@@ -128,23 +127,12 @@ export default {
     };
   },
   methods: {
+    ...mapActions("store", ["errorMesage", "notifySucessful"]),
     returnNumberByBoolen() {
       if (this.isDataValid) {
         return 1;
       }
       return 0;
-    },
-    errorMesage(e) {
-      Notify.create({
-        message: `⚠ ${e}`,
-        classes: "full-width text-center bg-negative",
-      });
-    },
-    notifySucessful(e) {
-      Notify.create({
-        message: `${e}`,
-        classes: "full-width text-center bg-positive",
-      });
     },
     addNewUser() {
       if (

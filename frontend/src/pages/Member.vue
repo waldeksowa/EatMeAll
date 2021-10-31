@@ -174,7 +174,7 @@
 </template>
 <script>
 import { MEMBER } from "../EndpointAddresses";
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 import { Notify } from "quasar";
 export default {
   data() {
@@ -187,10 +187,10 @@ export default {
   },
   mounted() {},
   computed: {
-    ...mapGetters("store", ["memberIdToShow"]),
-    ...mapGetters("store", ["jwt"]),
+    ...mapGetters("store", ["memberIdToShow", "jwt"]),
   },
   methods: {
+    ...mapActions("store", ["errorMesage", "notifySucessful"]),
     fetchMemberData() {
       var myHeaders = new Headers();
       myHeaders.append("Authorization", `Bearer ${this.jwt}`);
@@ -205,18 +205,6 @@ export default {
         .then((response) => response.json())
         .then((result) => (this.memberData = result))
         .catch((error) => console.log("error", error));
-    },
-    errorMesage(e) {
-      Notify.create({
-        message: `⚠ ${e}`,
-        classes: "full-width text-center bg-negative",
-      });
-    },
-    notifySucessful(e) {
-      Notify.create({
-        message: `${e}`,
-        classes: "full-width text-center bg-positive",
-      });
     },
     postUpdatedData() {
       var myHeaders = new Headers();

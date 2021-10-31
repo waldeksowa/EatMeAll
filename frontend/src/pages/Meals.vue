@@ -16,16 +16,16 @@
         :userData="membersAccounts"
         v-for="(account, index) in membersAccounts"
         :key="`member-${index}`"
-        class="bg-accent"
+        :class="
+          memberIdToShowSchedule === account.id ? 'bg-accent' : 'bg-white'
+        "
+        @click="showUserSchedule(account.id)"
       >
-        <div @click="showUserSchedule(account.id)">
+        <div class="q-my-sm">
           <center>
-            <q-img
-              src="../assets/Netflix-avatar.jpg"
-              class="tumbnail q-pa-md"
-            />
+            <q-img src="../assets/Netflix-avatar.jpg" class="tumbnail" />
           </center>
-          <p class="member-name text-center q-pa-sm">{{ account.name }}</p>
+          <p class="member-name text-center q-ma-sm">{{ account.name }}</p>
         </div>
       </div>
     </div>
@@ -70,7 +70,7 @@ export default {
     this.fetchMemberSheduleData();
   },
   methods: {
-    ...mapActions("store", ["updateMemberIdToShowSchedule"]),
+    ...mapActions("store", ["updateMemberIdToShowSchedule", "errorMesage"]),
     fetchMembersAccountData() {
       var myHeaders = new Headers();
       myHeaders.append("Authorization", `Bearer ${this.jwt}`);
@@ -99,7 +99,7 @@ export default {
         redirect: "follow",
       };
       const url = `${SCHEDULE}/${this.memberIdToShowSchedule}`;
-      fetch(RANDOMSCHEDULE, requestOptions)
+      fetch(url, requestOptions)
         .then((response) => {
           console.log("~ response", response);
           if (!response.ok) {
@@ -150,12 +150,6 @@ export default {
     showDeatilDialog(aMeal) {
       this.selectedMeal = aMeal;
       this.isDetailInfDialogShow = true;
-    },
-    errorMesage(e) {
-      Notify.create({
-        message: `⚠ ${e}`,
-        classes: "full-width text-center bg-negative",
-      });
     },
   },
   components: {
