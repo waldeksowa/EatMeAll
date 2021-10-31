@@ -13,7 +13,6 @@
     </div>
     <div class="row justify-end">
       <div
-        :userData="membersAccounts"
         v-for="(account, index) in membersAccounts"
         :key="`member-${index}`"
         :class="
@@ -25,10 +24,10 @@
         <div class="q-my-sm">
           <center>
             <q-img src="../assets/Netflix-avatar.jpg" class="tumbnail" />
+            <p class="big-first-letter text-center q-ma-sm long-word">
+              {{ account.name }}
+            </p>
           </center>
-          <p class="big-first-letter text-center q-ma-sm long-word">
-            {{ account.name }}
-          </p>
         </div>
       </div>
     </div>
