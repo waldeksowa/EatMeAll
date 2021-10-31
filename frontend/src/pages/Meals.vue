@@ -19,13 +19,16 @@
         :class="
           memberIdToShowSchedule === account.id ? 'bg-accent' : 'bg-white'
         "
+        class="member-width"
         @click="showUserSchedule(account.id)"
       >
         <div class="q-my-sm">
           <center>
             <q-img src="../assets/Netflix-avatar.jpg" class="tumbnail" />
           </center>
-          <p class="member-name text-center q-ma-sm">{{ account.name }}</p>
+          <p class="big-first-letter text-center q-ma-sm long-word">
+            {{ account.name }}
+          </p>
         </div>
       </div>
     </div>
@@ -47,7 +50,6 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 import { MEMBER } from "../EndpointAddresses";
-import { Notify } from "quasar";
 import { RANDOMSCHEDULE, SCHEDULE } from "../EndpointAddresses";
 export default {
   name: "PageIndex",
@@ -164,11 +166,8 @@ export default {
 .dialog
   width: 90vw
   height: 90vh
-
-div:first-letter
-  text-transform: uppercase
-.member-name:first-letter
-  text-transform: uppercase
+.member-width
+  width: 90px
 .tumbnail
   width: 40px
   border-radius: 100px

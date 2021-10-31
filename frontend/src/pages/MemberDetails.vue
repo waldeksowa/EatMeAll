@@ -155,8 +155,8 @@
         </q-card-section>
 
         <q-card-section class="q-pt-none">
-          Ta akcja spowoduje usuniecie obecnego tygodnia, czy chcesz wygenerowac
-          nowy plan ?
+          Ta akcja spowoduje usuniecie na stałe kąta tego użytkownika, czy
+          jesteś tego pewny?
         </q-card-section>
         <q-card-section>
           <q-btn
@@ -175,14 +175,12 @@
 <script>
 import { MEMBER } from "../EndpointAddresses";
 import { mapGetters, mapActions } from "vuex";
-import { Notify } from "quasar";
 export default {
   data() {
     return {
       isInputDisabled: true,
       deleteAccountDialogisShowed: false,
       memberData: [],
-      memberUrl: MEMBER,
     };
   },
   mounted() {},
@@ -200,7 +198,7 @@ export default {
         headers: myHeaders,
         redirect: "follow",
       };
-      const url = `${this.memberUrl}/${this.memberIdToShowAccountDetail}`;
+      const url = `${MEMBER}/${this.memberIdToShowAccountDetail}`;
       fetch(url, requestOptions)
         .then((response) => response.json())
         .then((result) => (this.memberData = result))
@@ -214,6 +212,7 @@ export default {
       var raw = JSON.stringify({
         name: this.memberData.name,
         age: this.memberData.age,
+        height: this.memberData.height,
         currentWeight: this.memberData.currentWeight,
         currentFat: this.memberData.currentFat,
         currentMussels: this.memberData.currentMussels,
@@ -232,7 +231,7 @@ export default {
         redirect: "follow",
       };
 
-      const url = `${this.memberUrl}/${this.memberIdToShowAccountDetail}`;
+      const url = `${MEMBER}/${this.memberIdToShowAccountDetail}`;
       fetch(url, requestOptions)
         .then((response) => response.json())
         .then((result) => console.log(result))
@@ -252,7 +251,7 @@ export default {
         redirect: "follow",
       };
 
-      const url = `${this.memberUrl}/${this.memberIdToShowAccountDetail}`;
+      const url = `${MEMBER}/${this.memberIdToShowAccountDetail}`;
       fetch(url, requestOptions)
         .then((response) => {
           if (response.ok) {

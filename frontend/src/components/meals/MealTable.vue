@@ -123,12 +123,6 @@ export default {
   height: 100%
   @media (max-width:1100px)
     width: 90vw
-
-.long-word
-  overflow: hidden
-  white-space: nowrap
-  text-overflow: ellipsis
-
 .mobile-column
   @media (max-width:1100px)
     flex-direction: column

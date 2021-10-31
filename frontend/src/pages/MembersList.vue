@@ -11,9 +11,17 @@
       "
     >
       <div v-for="(account, index) in membersAccounts" :key="`member-${index}`">
-        <div @click="goToMemberSite(account.id)" :userData="membersAccounts">
-          <q-img src="../assets/Netflix-avatar.jpg" class="user-icon" />
-          <h5 class="text-center">{{ account.name }}</h5>
+        <div
+          @click="goToMemberSite(account.id)"
+          :userData="membersAccounts"
+          class="member-container"
+        >
+          <center>
+            <q-img src="../assets/Netflix-avatar.jpg" class="user-icon" />
+          </center>
+          <h5 class="text-center long-word big-first-letter">
+            {{ account.name }}
+          </h5>
         </div>
       </div>
       <div @click="isDialogAddNewMemberShowed = !isDialogAddNewMemberShowed">
@@ -98,6 +106,8 @@ export default {
 };
 </script>
 <style lang="sass">
+.member-container
+  width: 200px
 .big-faces
   font-size: 12rem
 .user-icon
