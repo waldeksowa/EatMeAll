@@ -187,7 +187,7 @@ export default {
   },
   mounted() {},
   computed: {
-    ...mapGetters("store", ["memberIdToShow", "jwt"]),
+    ...mapGetters("store", ["memberIdToShowAccountDetail", "jwt"]),
   },
   methods: {
     ...mapActions("store", ["errorMesage", "notifySucessful"]),
@@ -200,7 +200,7 @@ export default {
         headers: myHeaders,
         redirect: "follow",
       };
-      const url = `${this.memberUrl}/${this.memberIdToShow}`;
+      const url = `${this.memberUrl}/${this.memberIdToShowAccountDetail}`;
       fetch(url, requestOptions)
         .then((response) => response.json())
         .then((result) => (this.memberData = result))
@@ -232,7 +232,7 @@ export default {
         redirect: "follow",
       };
 
-      const url = `${this.memberUrl}/${this.memberIdToShow}`;
+      const url = `${this.memberUrl}/${this.memberIdToShowAccountDetail}`;
       fetch(url, requestOptions)
         .then((response) => response.json())
         .then((result) => console.log(result))
@@ -252,7 +252,7 @@ export default {
         redirect: "follow",
       };
 
-      const url = `${this.memberUrl}/${this.memberIdToShow}`;
+      const url = `${this.memberUrl}/${this.memberIdToShowAccountDetail}`;
       fetch(url, requestOptions)
         .then((response) => {
           if (response.ok) {

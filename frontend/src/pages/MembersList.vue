@@ -63,8 +63,8 @@ export default {
         .then((result) => (this.membersAccounts = result))
         .catch((error) => console.log("error", error));
     },
-    goToMemberSite(memberIdToShow) {
-      this.updateMemberIdToShow(memberIdToShow);
+    goToMemberSite(aMemberIdToShowAccountDetail) {
+      this.updateMemberIdToShow(aMemberIdToShowAccountDetail);
       this.$router.push("/konto");
     },
     addNewUser(data) {

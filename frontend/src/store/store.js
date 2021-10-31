@@ -9,7 +9,7 @@ const state = {
   },
   memberIdToShowSchedule: '',
   jwt: "",
-  memberIdToShow: ""
+  memberIdToShowAccountDetail: ""
 }
 const mutations = {
   updateJwt(state, payload) {
@@ -19,7 +19,7 @@ const mutations = {
     state.memberIdToShowSchedule = payload;
   },
   updateMemberIdToShow(state, payload) {
-    state.memberIdToShow = payload;
+    state.memberIdToShowAccountDetail = payload;
   }
 }
 const actions = {
@@ -48,7 +48,7 @@ const actions = {
 const getters = {
   objectJwt: (state) => { return state.macrosName },
   macrosName: (state) => { return state.macrosName },
-  memberIdToShow: (state) => { return state.memberIdToShow },
+  memberIdToShowAccountDetail: (state) => { return state.memberIdToShowAccountDetail },
   jwt: (state) => { return state.jwt },
   memberIdToShowSchedule: (state) => { return state.memberIdToShowSchedule },
   isJwtTokenDefined: (state) => {
