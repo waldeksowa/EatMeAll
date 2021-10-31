@@ -7,43 +7,50 @@
         :key="`mealForDayInWeek-${j}`"
       >
         <div>
-          <div class="text-center text-h5">
+          <p class="text-center text-h5">
             {{ returnCorrectDayLabel(mealForDayInWeek.day) }}
-          </div>
+          </p>
           <div class="q-gutter-md">
             <div
-              v-for="(mealData, i) in mealForDayInWeek.mealMacros.meals"
-              :key="`mealData-${i}`"
+              v-for="(mealData, mealTime) in mealForDayInWeek.mealMacros.meals"
+              :key="`mealData-${mealTime}`"
             >
-              <q-card>
-                <div class="text-center">{{ mealForDayInWeek.mealTime }}</div>
-                <div class="text-center">Nazwa: {{ mealData.name }}</div>
-                <q-expansion-item
-                  expand-separator
-                  label="Wartości"
-                  class="expandable"
-                >
+              <div class="mobile-column">
+                <q-card class="const-width">
                   <div class="text-center">
-                    Czas przygotowania: {{ mealData.prepareTime }}
+                    <p>
+                      {{ returnMealTimeLabel(mealTime) }}
+                    </p>
+                    <p>Nazwa: {{ mealData.name }}</p>
                   </div>
-                  <div class="text-center">
-                    Kalorie: {{ mealData.calorific }}
-                  </div>
-                  <div class="text-center">
-                    Węglowodany:
-                    {{ mealData.carbohydrates }}
-                  </div>
-                  <div class="text-center">Tłuszcze: {{ mealData.fat }}</div>
-                  <div class="text-center">
-                    Białko:
-                    {{ mealData.protein }}
-                  </div>
-                  <div class="text-center">
-                    Błonnik:
-                    {{ mealData.roughage }}
-                  </div>
-                </q-expansion-item>
-              </q-card>
+                  <q-img
+                    :src="returnImgByMealTime(mealTime)"
+                    class="card-img"
+                  />
+
+                  <q-expansion-item
+                    expand-separator
+                    label="Wartości"
+                    class="const-width text-center"
+                  >
+                    <p>Czas przygotowania: {{ mealData.prepareTime }}</p>
+                    <p>Kalorie: {{ mealData.calorific }}</p>
+                    <p>
+                      Węglowodany:
+                      {{ mealData.carbohydrates }}
+                    </p>
+                    <p>Tłuszcze: {{ mealData.fat }}</p>
+                    <p>
+                      Białko:
+                      {{ mealData.protein }}
+                    </p>
+                    <p>
+                      Błonnik:
+                      {{ mealData.roughage }}
+                    </p>
+                  </q-expansion-item>
+                </q-card>
+              </div>
             </div>
           </div>
         </div>
@@ -104,9 +111,10 @@ export default {
 };
 </script>
 <style lang="sass">
-.expandable
+.const-width
   width: 150px
 .card-img
+  width: 100%
   height: 10vh
   @media (max-width:1100px)
     height: 10vh

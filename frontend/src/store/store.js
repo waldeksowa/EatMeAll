@@ -6,13 +6,16 @@ const state = {
     fat: FATS,
     protein: PROTEINS
   },
-  mealsActiveUserSchedule: '',
+  memberIdToShowSchedule: '',
   jwt: "",
   memberIdToShow: ""
 }
 const mutations = {
   updateJwt(state, payload) {
     state.jwt = payload;
+  },
+  updateMemberIdToShowSchedule(state, payload) {
+    state.memberIdToShowSchedule = payload;
   },
   updateMemberIdToShow(state, payload) {
     state.memberIdToShow = payload;
@@ -21,6 +24,9 @@ const mutations = {
 const actions = {
   updateJwt({ commit }, payload) {
     commit('updateJwt', payload)
+  },
+  updateMemberIdToShowSchedule({ commit }, payload) {
+    commit('updateMemberIdToShowSchedule', payload)
   },
   updateMemberIdToShow({ commit }, payload) {
     commit('updateMemberIdToShow', payload)
@@ -43,6 +49,7 @@ const getters = {
   macrosName: (state) => { return state.macrosName },
   memberIdToShow: (state) => { return state.memberIdToShow },
   jwt: (state) => { return state.jwt },
+  memberIdToShowSchedule: (state) => { return state.memberIdToShowSchedule },
   isJwtTokenDefined: (state) => {
     if (state.jwt) {
       return true

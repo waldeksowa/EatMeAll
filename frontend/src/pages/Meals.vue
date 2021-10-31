@@ -13,16 +13,20 @@
     </div>
     <div class="row justify-end">
       <div
-        @click="goToMemberSite(account.id)"
         :userData="membersAccounts"
         v-for="(account, index) in membersAccounts"
         :key="`member-${index}`"
         class="bg-accent"
       >
-        <center>
-          <q-img src="../assets/Netflix-avatar.jpg" class="tumbnail q-pa-md" />
-        </center>
-        <p class="member-name text-center q-pa-sm">{{ account.name }}</p>
+        <div @click="showUserSchedule(account.id)">
+          <center>
+            <q-img
+              src="../assets/Netflix-avatar.jpg"
+              class="tumbnail q-pa-md"
+            />
+          </center>
+          <p class="member-name text-center q-pa-sm">{{ account.name }}</p>
+        </div>
       </div>
     </div>
     <mealTable
@@ -34,17 +38,17 @@
     </q-dialog>
     <q-dialog v-model="isScheduleShow">
       <createScheduleDialog
-        @fetchScheduleData="fetchScheduleData()"
+        @fetchMemberSheduleData="fetchMemberSheduleData()"
       ></createScheduleDialog>
     </q-dialog>
   </q-page>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 import { MEMBER } from "../EndpointAddresses";
 import { Notify } from "quasar";
-import { RANDOMSCHEDULE } from "../EndpointAddresses";
+import { RANDOMSCHEDULE, SCHEDULE } from "../EndpointAddresses";
 export default {
   name: "PageIndex",
   data() {
@@ -59,13 +63,14 @@ export default {
     };
   },
   computed: {
-    ...mapGetters("store", ["jwt"]),
+    ...mapGetters("store", ["jwt", "memberIdToShowSchedule"]),
   },
   mounted() {
     this.fetchMembersAccountData();
-    this.fetchScheduleData();
+    this.fetchMemberSheduleData();
   },
   methods: {
+    ...mapActions("store", ["updateMemberIdToShowSchedule"]),
     fetchMembersAccountData() {
       var myHeaders = new Headers();
       myHeaders.append("Authorization", `Bearer ${this.jwt}`);
@@ -80,7 +85,11 @@ export default {
         .then((result) => (this.membersAccounts = result))
         .catch((error) => console.log("error", error));
     },
-    fetchScheduleData() {
+    showUserSchedule(aMemberId) {
+      this.updateMemberIdToShowSchedule(aMemberId);
+      this.fetchMemberSheduleData();
+    },
+    fetchMemberSheduleData() {
       var myHeaders = new Headers();
       myHeaders.append("Authorization", `Bearer ${this.jwt}`);
 
@@ -89,6 +98,7 @@ export default {
         headers: myHeaders,
         redirect: "follow",
       };
+      const url = `${SCHEDULE}/${this.memberIdToShowSchedule}`;
       fetch(RANDOMSCHEDULE, requestOptions)
         .then((response) => {
           console.log("~ response", response);
@@ -107,22 +117,20 @@ export default {
         });
     },
     prepareScheduleaData(aResult) {
+      console.log("~ aResult", aResult);
       let arr = [];
       for (const [weekDay, mealObject] of Object.entries(aResult)) {
         arr.push({
           day: weekDay,
           mealMacros: mealObject,
-          mealTime: "Sniadanie",
         });
       }
-
       this.sortMealDay(arr);
-      // this.sortMealTimeAndMealData(arr)
 
       this.mealsSchedule = arr;
     },
     sortMealDay(Aaray) {
-      let ordering = {}, // map for efficient lookup of sortIndex
+      let ordering = {},
         sortOrder = [
           "MONDAY",
           "TUESDAY",
@@ -134,9 +142,10 @@ export default {
         ];
       for (var i = 0; i < sortOrder.length; i++) ordering[sortOrder[i]] = i;
 
-      Aaray.sort(function (a, b) {
+      Aaray.sort((a, b) => {
         return ordering[a.day] - ordering[b.day];
       });
+      console.log("~ Aaray", Aaray);
     },
     showDeatilDialog(aMeal) {
       this.selectedMeal = aMeal;
