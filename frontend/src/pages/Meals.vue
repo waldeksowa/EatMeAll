@@ -99,8 +99,9 @@ export default {
         headers: myHeaders,
         redirect: "follow",
       };
+      // Jesli chcesz zobaczyc zapytanie dla schedula dla konkretnego membera podmien te zmienna w fetchu na url
       const url = `${SCHEDULE}/${this.memberIdToShowSchedule}`;
-      fetch(url, requestOptions)
+      fetch(RANDOMSCHEDULE, requestOptions)
         .then((response) => {
           console.log("~ response", response);
           if (!response.ok) {
