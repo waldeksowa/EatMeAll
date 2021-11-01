@@ -259,6 +259,132 @@
 							"response": []
 						}
 					]
+				},
+				{
+					"name": "HOME_PRODUCTS",
+					"item": [
+						{
+							"name": "GET_ALL",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://{{SERVER_URL}}/api/v1/home_products",
+									"protocol": "http",
+									"host": [
+										"{{SERVER_URL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"home_products"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET_BY_ID",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://{{SERVER_URL}}/api/v1/home_products/1",
+									"protocol": "http",
+									"host": [
+										"{{SERVER_URL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"home_products",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "ADD",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\":\"nowy produkt\",\r\n    \"homeProductType\":\"ELECTRONICS\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://{{SERVER_URL}}/api/v1/home_products",
+									"protocol": "http",
+									"host": [
+										"{{SERVER_URL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"home_products"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "REMOVE",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://{{SERVER_URL}}/api/v1/home_products/1",
+									"protocol": "http",
+									"host": [
+										"{{SERVER_URL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"home_products",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "UPDATE",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": 2,\r\n    \"name\": \"nowy produkt3\",\r\n    \"homeProductType\": \"ELECTRONICS\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://{{SERVER_URL}}/api/v1/home_products/1",
+									"protocol": "http",
+									"host": [
+										"{{SERVER_URL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"home_products",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
 				}
 			]
 		},

@@ -71,6 +71,18 @@ CREATE TABLE public.products (
 
 ALTER TABLE public.products OWNER TO eatmeall;
 
+CREATE TABLE public.home_products (
+    id bigint NOT NULL,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone,
+    version integer NOT NULL,
+    name character varying(255),
+    home_product_type integer,
+    CONSTRAINT home_products_pkey PRIMARY KEY (id)
+);
+
+ALTER TABLE public.home_products OWNER TO eatmeall;
+
 
 CREATE SEQUENCE public.steps_position_seq
     INCREMENT 1
