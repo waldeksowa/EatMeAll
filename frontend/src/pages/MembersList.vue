@@ -100,7 +100,7 @@ export default {
           this.errorMesage("Ups... coś poszło nie tak");
         });
 
-      this.fetchData();
+      this.$router.go(0);
     },
   },
   components: {
