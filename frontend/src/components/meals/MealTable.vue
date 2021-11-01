@@ -3,17 +3,17 @@
     <div class="q-gutter-md row">
       <div
         class="col-grow col-shrink"
-        v-for="(mealForDayInWeek, j) in mealsSchedule"
+        v-for="(mealData, mealDay, j) in mealsSchedule"
         :key="`mealForDayInWeek-${j}`"
       >
         <div>
           <p class="text-center text-h5">
-            {{ returnCorrectDayLabel(mealForDayInWeek.day) }}
+            {{ returnCorrectDayLabel(mealDay) }}
           </p>
           <div class="q-gutter-md">
             <div
-              v-for="(mealData, mealTime) in mealForDayInWeek.mealMacros.meals"
-              :key="`mealData-${mealTime}`"
+              v-for="(macrosValues, mealTime, i) in mealData.meals"
+              :key="`mealData-${i}`"
             >
               <div class="mobile-column">
                 <q-card class="const-width">
@@ -21,32 +21,31 @@
                     <p>
                       {{ returnMealTimeLabel(mealTime) }}
                     </p>
-                    <p>Nazwa: {{ mealData.name }}</p>
+                    <p>Nazwa: {{ macrosValues.name }}</p>
                   </div>
                   <q-img
                     :src="returnImgByMealTime(mealTime)"
                     class="card-img"
                   />
-
                   <q-expansion-item
                     expand-separator
                     label="Wartości"
                     class="const-width text-center"
                   >
-                    <p>Czas przygotowania: {{ mealData.prepareTime }}</p>
-                    <p>Kalorie: {{ mealData.calorific }}</p>
+                    <p>Czas przygotowania: {{ macrosValues.prepareTime }}</p>
+                    <p>Kalorie: {{ macrosValues.calorific }}</p>
                     <p>
                       Węglowodany:
-                      {{ mealData.carbohydrates }}
+                      {{ macrosValues.carbohydrates }}
                     </p>
-                    <p>Tłuszcze: {{ mealData.fat }}</p>
+                    <p>Tłuszcze: {{ macrosValues.fat }}</p>
                     <p>
                       Białko:
-                      {{ mealData.protein }}
+                      {{ macrosValues.protein }}
                     </p>
                     <p>
                       Błonnik:
-                      {{ mealData.roughage }}
+                      {{ macrosValues.roughage }}
                     </p>
                   </q-expansion-item>
                 </q-card>
@@ -60,7 +59,7 @@
 </template>
 <script>
 export default {
-  props: { mealsSchedule: Array },
+  props: ["mealsSchedule"],
   methods: {
     returnCorrectDayLabel(aMealDay) {
       let dayTimeValues = [

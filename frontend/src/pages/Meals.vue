@@ -102,7 +102,6 @@ export default {
         headers: myHeaders,
         redirect: "follow",
       };
-      // Jesli chcesz zobaczyc zapytanie dla schedula dla konkretnego membera podmien te zmienna w fetchu na url
       const url = `${SCHEDULE}/${this.memberIdToShowSchedule}`;
       fetch(RANDOMSCHEDULE, requestOptions)
         .then((response) => {
@@ -120,17 +119,20 @@ export default {
         });
     },
     prepareScheduleaData(aResult) {
-      let arr = [];
-      // arr.push(aResult);
-      for (const [weekDay, mealObject] of Object.entries(aResult)) {
-        arr.push({
-          day: weekDay,
-          mealMacros: mealObject,
-        });
-      }
-      this.sortMealDay(arr);
+      console.log("~ aResult", aResult);
+      this.mealsSchedule = aResult;
+      // let arr = [];
+      // // arr.push(aResult);
+      // for (const [weekDay, mealObject] of Object.entries(aResult)) {
+      //   arr.push({
+      //     day: weekDay,
+      //     mealMacros: mealObject,
+      //   });
+      // }
+      // this.sortMealDay(arr);
 
-      this.mealsSchedule = arr;
+      // this.mealsSchedule = arr;
+      // console.log("~ arr", arr);
     },
     sortMealDay(Aaray) {
       let ordering = {},
