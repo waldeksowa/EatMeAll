@@ -55,7 +55,7 @@ export default {
     ...mapGetters("store", ["jwt"]),
   },
   methods: {
-    ...mapActions("store", ["updateMemberIdToShow"]),
+    ...mapActions("store", ["updateMemberIdToShow", "errorMesage"]),
     fetchData() {
       var myHeaders = new Headers();
       myHeaders.append("Authorization", `Bearer ${this.jwt}`);
@@ -69,7 +69,10 @@ export default {
       fetch(MEMBER, requestOptions)
         .then((response) => response.json())
         .then((result) => (this.membersAccounts = result))
-        .catch((error) => console.log("error", error));
+        .catch((error) => {
+          console.log(error);
+          this.errorMesage("Ups... coś poszło nie tak");
+        });
     },
     goToMemberSite(aMemberIdToShowAccountDetail) {
       this.updateMemberIdToShow(aMemberIdToShowAccountDetail);
@@ -92,7 +95,10 @@ export default {
       fetch(MEMBER, requestOptions)
         .then((response) => response.json())
         .then((result) => result)
-        .catch((error) => console.log("error", error));
+        .catch((error) => {
+          console.log(error);
+          this.errorMesage("Ups... coś poszło nie tak");
+        });
 
       this.fetchData();
     },

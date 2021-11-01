@@ -98,7 +98,7 @@
 import { MEAL_ADD_PRODUCTS } from "../../translate/addMeal/sectionHeaders.js";
 import { mapGetters } from "vuex";
 import { ALL_PRODUCTS } from "../../EndpointAddresses.js";
-import axios from "axios";
+import { mapActions } from "vuex";
 export default {
   props: ["props"],
   data() {
@@ -128,15 +128,15 @@ export default {
     this.fetchProducts();
   },
   methods: {
+    ...mapActions("store", ["notifyError"]),
     fetchProducts() {
-      try {
-        fetch(`${this.productsUrl}`)
-          .then((response) => response.json())
-          .then((data) => (this.products = data));
-      } catch (e) {
-        this.notifyError("Ups... cos poszlo nie tak");
-        console.log(e);
-      }
+      fetch(`${this.productsUrl}`)
+        .then((response) => response.json())
+        .then((data) => (this.products = data))
+        .catch((error) => {
+          this.notifyError("Ups... cos poszlo nie tak");
+          console.log(error);
+        });
     },
     returnSortLabel() {
       let sortedlabels = [];

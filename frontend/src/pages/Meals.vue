@@ -84,7 +84,10 @@ export default {
       fetch(MEMBER, requestOptions)
         .then((response) => response.json())
         .then((result) => (this.membersAccounts = result))
-        .catch((error) => console.log("error", error));
+        .catch((error) => {
+          this.errorMesage("Ups... Cos poszlo nie tak");
+          console.log(error);
+        });
     },
     showUserSchedule(aMemberId) {
       this.updateMemberIdToShowSchedule(aMemberId);
@@ -103,24 +106,22 @@ export default {
       const url = `${SCHEDULE}/${this.memberIdToShowSchedule}`;
       fetch(RANDOMSCHEDULE, requestOptions)
         .then((response) => {
-          console.log("~ response", response);
           if (!response.ok) {
             this.errorMesage("Ups... Cos poszlo nie tak");
           }
           return response.json();
         })
         .then((result) => {
-          console.log("~ result", result);
           this.prepareScheduleaData(result);
         })
-        .catch((e) => {
+        .catch((error) => {
           this.errorMesage("Ups... Cos poszlo nie tak");
-          console.log(e);
+          console.log(error);
         });
     },
     prepareScheduleaData(aResult) {
-      console.log("~ aResult", aResult);
       let arr = [];
+      // arr.push(aResult);
       for (const [weekDay, mealObject] of Object.entries(aResult)) {
         arr.push({
           day: weekDay,
@@ -147,7 +148,6 @@ export default {
       Aaray.sort((a, b) => {
         return ordering[a.day] - ordering[b.day];
       });
-      console.log("~ Aaray", Aaray);
     },
     showDeatilDialog(aMeal) {
       this.selectedMeal = aMeal;

@@ -202,7 +202,10 @@ export default {
       fetch(url, requestOptions)
         .then((response) => response.json())
         .then((result) => (this.memberData = result))
-        .catch((error) => console.log("error", error));
+        .catch((error) => {
+          console.log(error);
+          this.errorMesage("Ups... coś poszło nie tak");
+        });
     },
     postUpdatedData() {
       var myHeaders = new Headers();
@@ -234,8 +237,11 @@ export default {
       const url = `${MEMBER}/${this.memberIdToShowAccountDetail}`;
       fetch(url, requestOptions)
         .then((response) => response.json())
-        .then((result) => console.log(result))
-        .catch((error) => console.log("error", error));
+        .then((result) => result)
+        .catch((error) => {
+          console.log(error);
+          this.errorMesage("Ups... coś poszło nie tak");
+        });
 
       this.isInputDisabled = true;
       this.notifySucessful("Dane zostały pomyślnie zmienione");
@@ -259,8 +265,11 @@ export default {
             return response.text();
           }
         })
-        .then((result) => console.log(result))
-        .catch((error) => console.log("error", error));
+        .then((result) => result)
+        .catch((error) => {
+          console.log(error);
+          this.errorMesage("Ups... coś poszło nie tak");
+        });
     },
   },
   mounted() {
