@@ -3,8 +3,11 @@ package pl.wizard.software.diet.schedules;
 import lombok.*;
 import pl.wizard.software.AbstractBaseEntity;
 
-import javax.persistence.*;
-import java.util.Date;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Lob;
+import javax.persistence.Table;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "SCHEDULES")
@@ -15,7 +18,7 @@ import java.util.Date;
 @AllArgsConstructor
 public class ScheduleEntity extends AbstractBaseEntity {
 
-    private Date scheduleDate;
+    private LocalDate scheduleDate;
     @Lob
     @Column(columnDefinition = "BLOB")
     private byte[] schedule;

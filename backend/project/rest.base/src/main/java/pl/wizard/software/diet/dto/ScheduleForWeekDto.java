@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -19,7 +20,7 @@ public class ScheduleForWeekDto {
     private Date updatedAt;
     private int version;
     @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date scheduleDate;
+    private LocalDate scheduleDate;
     private List<ScheduleForDayDto> schedule;
     private Long memberId;
 }

@@ -10,7 +10,12 @@ import pl.wizard.software.diet.dto.ProductWithAmountDto;
 import pl.wizard.software.diet.meals.MealDao;
 import pl.wizard.software.diet.meals.MealEntity;
 import pl.wizard.software.diet.meals.MealProductEntity;
+import pl.wizard.software.diet.products.ProductDao;
 import pl.wizard.software.diet.products.ProductEntity;
+import pl.wizard.software.diet.schedules.ScheduleDao;
+import pl.wizard.software.diet.shoppingList.ShoppingListDao;
+import pl.wizard.software.diet.shoppingList.ShoppingListItemDao;
+import pl.wizard.software.login.AccountDao;
 
 import java.util.HashMap;
 import java.util.List;
@@ -28,10 +33,20 @@ public class ShoppingListServiceTest {
 
     @Mock
     MealDao mealRepository;
+    @Mock
+    ShoppingListDao shoppingListRepository;
+    @Mock
+    ScheduleDao scheduleRepository;
+    @Mock
+    ProductDao productRepository;
+    @Mock
+    AccountDao accountRepository;
+    @Mock
+    ShoppingListItemDao shoppingListItemRepository;
 
     @Before
     public void init() {
-        shoppingListService = new ShoppingListService(mealRepository);
+        shoppingListService = new ShoppingListService(mealRepository, shoppingListRepository, shoppingListItemRepository, new ScheduleService(mealRepository, scheduleRepository), productRepository, accountRepository);
     }
 
     @Test
