@@ -9,6 +9,7 @@
           @click="isScheduleShow = !isScheduleShow"
         ></q-btn>
         <q-btn class="bg-white" label="Kalendarz"></q-btn>
+        <q-btn class="bg-white" label="Zapisz"></q-btn>
       </div>
     </div>
     <div class="row justify-end">
@@ -50,6 +51,7 @@
 import { mapGetters, mapActions } from "vuex";
 import { MEMBER } from "../EndpointAddresses";
 import { RANDOMSCHEDULE, SCHEDULE } from "../EndpointAddresses";
+import { date } from "quasar";
 export default {
   name: "PageIndex",
   data() {
@@ -93,6 +95,64 @@ export default {
       this.updateMemberIdToShowSchedule(aMemberId);
       this.fetchMemberSheduleData();
     },
+    returnMealsId(res) {
+      let meals = [];
+      for (const [key, val] of Object.entries(res)) {
+        meals.push({
+          mealTime: Object.keys(val.meals),
+          mealValues: Object.values(val.meals),
+        });
+      }
+      console.log("~ meals", meals);
+      this.createParsedSchedule(meals);
+    },
+    createParsedSchedule(meals) {
+      let postSchedule = [];
+      const timeStamp = Date.now();
+      const formattedString = date.formatDate(timeStamp, "YYYY-MM-DD");
+      meals.forEach((day) => {
+        let lunch = day.mealTime.indexOf("LUNCH");
+        let supper = day.mealTime.indexOf("SUPPER");
+        let second_breakfast = day.mealTime.indexOf("SECOND_BREAKFAST");
+        let brakfast = day.mealTime.indexOf("BREAKFAST");
+        let dinner = day.mealTime.indexOf("DINNER");
+        postSchedule.push({
+          date: formattedString,
+          ...(lunch >= 0 ? { lunch: day.mealValues[lunch].id } : {}),
+          ...(supper >= 0 ? { supper: day.mealValues[supper].id } : {}),
+          ...(second_breakfast >= 0
+            ? { second_breakfast: day.mealValues[second_breakfast].id }
+            : {}),
+          ...(brakfast >= 0 ? { brakfast: day.mealValues[brakfast].id } : {}),
+          ...(dinner >= 0 ? { dinner: day.mealValues[dinner].id } : {}),
+        });
+      });
+      console.log("~ postSchedule", postSchedule);
+      return postSchedule;
+    },
+    postMemberScheduleToServer() {
+      var myHeaders = new Headers();
+      myHeaders.append("Authorization", `Bearer ${this.jwt}`);
+      myHeaders.append("Content-Type", "application/json");
+
+      scheduleToPost = this.createParsedSchedule();
+      var raw = JSON.stringify({
+        schedule: scheduleToPost,
+        memberId: this.memberIdToShowSchedule,
+      });
+
+      var requestOptions = {
+        method: "POST",
+        headers: myHeaders,
+        body: raw,
+        redirect: "follow",
+      };
+
+      fetch("http://localhost:8080/api/v2/schedules/", requestOptions)
+        .then((response) => response.json())
+        .then((result) => console.log(result))
+        .catch((error) => console.log("error", error));
+    },
     fetchMemberSheduleData() {
       var myHeaders = new Headers();
       myHeaders.append("Authorization", `Bearer ${this.jwt}`);
@@ -111,45 +171,13 @@ export default {
           return response.json();
         })
         .then((result) => {
-          this.prepareScheduleaData(result);
+          this.mealsSchedule = result;
+          this.returnMealsId(result);
         })
         .catch((error) => {
           this.errorMesage("Ups... Cos poszlo nie tak");
           console.log(error);
         });
-    },
-    prepareScheduleaData(aResult) {
-      console.log("~ aResult", aResult);
-      this.mealsSchedule = aResult;
-      // let arr = [];
-      // // arr.push(aResult);
-      // for (const [weekDay, mealObject] of Object.entries(aResult)) {
-      //   arr.push({
-      //     day: weekDay,
-      //     mealMacros: mealObject,
-      //   });
-      // }
-      // this.sortMealDay(arr);
-
-      // this.mealsSchedule = arr;
-      // console.log("~ arr", arr);
-    },
-    sortMealDay(Aaray) {
-      let ordering = {},
-        sortOrder = [
-          "MONDAY",
-          "TUESDAY",
-          "WEDNESDAY",
-          "THURSDAY",
-          "FRIDAY",
-          "SATURDAY",
-          "SUNDAY",
-        ];
-      for (var i = 0; i < sortOrder.length; i++) ordering[sortOrder[i]] = i;
-
-      Aaray.sort((a, b) => {
-        return ordering[a.day] - ordering[b.day];
-      });
     },
     showDeatilDialog(aMeal) {
       this.selectedMeal = aMeal;

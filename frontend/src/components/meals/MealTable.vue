@@ -87,6 +87,7 @@ export default {
         if (aMealTime === value) return label;
       }
     },
+    
     returnImgByMealTime(aMealTime) {
       switch (aMealTime) {
         case "BREAKFAST":
