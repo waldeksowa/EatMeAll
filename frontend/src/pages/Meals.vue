@@ -9,7 +9,11 @@
           @click="isScheduleShow = !isScheduleShow"
         ></q-btn>
         <q-btn class="bg-white" label="Kalendarz"></q-btn>
-        <q-btn class="bg-white" label="Zapisz"></q-btn>
+        <q-btn
+          class="bg-white"
+          label="Zapisz"
+          @click="postMemberScheduleToServer()"
+        ></q-btn>
       </div>
     </div>
     <div class="row justify-end">
@@ -50,7 +54,11 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 import { MEMBER } from "../EndpointAddresses";
-import { RANDOMSCHEDULE, SCHEDULE } from "../EndpointAddresses";
+import {
+  RANDOMSCHEDULE,
+  SCHEDULE,
+  MEMBER_SCHEDULE,
+} from "../EndpointAddresses";
 import { date } from "quasar";
 export default {
   name: "PageIndex",
@@ -95,36 +103,38 @@ export default {
       this.updateMemberIdToShowSchedule(aMemberId);
       this.fetchMemberSheduleData();
     },
-    returnMealsId(res) {
+    returnMealsId() {
       let meals = [];
-      for (const [key, val] of Object.entries(res)) {
+      for (const [key, val] of Object.entries(this.mealsSchedule)) {
         meals.push({
           mealTime: Object.keys(val.meals),
           mealValues: Object.values(val.meals),
         });
       }
-      console.log("~ meals", meals);
-      this.createParsedSchedule(meals);
+      return meals;
     },
-    createParsedSchedule(meals) {
+    createParsedSchedule() {
+      let meals = this.returnMealsId();
       let postSchedule = [];
       const timeStamp = Date.now();
       const formattedString = date.formatDate(timeStamp, "YYYY-MM-DD");
       meals.forEach((day) => {
+        let breakfast = day.mealTime.indexOf("BREAKFAST");
+        let secondBreakfast = day.mealTime.indexOf("SECOND_BREAKFAST");
         let lunch = day.mealTime.indexOf("LUNCH");
-        let supper = day.mealTime.indexOf("SUPPER");
-        let second_breakfast = day.mealTime.indexOf("SECOND_BREAKFAST");
-        let brakfast = day.mealTime.indexOf("BREAKFAST");
         let dinner = day.mealTime.indexOf("DINNER");
+        let supper = day.mealTime.indexOf("SUPPER");
         postSchedule.push({
           date: formattedString,
-          ...(lunch >= 0 ? { lunch: day.mealValues[lunch].id } : {}),
-          ...(supper >= 0 ? { supper: day.mealValues[supper].id } : {}),
-          ...(second_breakfast >= 0
-            ? { second_breakfast: day.mealValues[second_breakfast].id }
+          ...(breakfast >= 0
+            ? { breakfast: day.mealValues[breakfast].id }
             : {}),
-          ...(brakfast >= 0 ? { brakfast: day.mealValues[brakfast].id } : {}),
+          ...(secondBreakfast >= 0
+            ? { secondBreakfast: day.mealValues[secondBreakfast].id }
+            : {}),
+          ...(lunch >= 0 ? { lunch: day.mealValues[lunch].id } : {}),
           ...(dinner >= 0 ? { dinner: day.mealValues[dinner].id } : {}),
+          ...(supper >= 0 ? { supper: day.mealValues[supper].id } : {}),
         });
       });
       console.log("~ postSchedule", postSchedule);
@@ -135,7 +145,7 @@ export default {
       myHeaders.append("Authorization", `Bearer ${this.jwt}`);
       myHeaders.append("Content-Type", "application/json");
 
-      scheduleToPost = this.createParsedSchedule();
+      let scheduleToPost = this.createParsedSchedule();
       var raw = JSON.stringify({
         schedule: scheduleToPost,
         memberId: this.memberIdToShowSchedule,
@@ -148,7 +158,7 @@ export default {
         redirect: "follow",
       };
 
-      fetch("http://localhost:8080/api/v2/schedules/", requestOptions)
+      fetch(SCHEDULE, requestOptions)
         .then((response) => response.json())
         .then((result) => console.log(result))
         .catch((error) => console.log("error", error));
@@ -162,7 +172,7 @@ export default {
         headers: myHeaders,
         redirect: "follow",
       };
-      const url = `${SCHEDULE}/${this.memberIdToShowSchedule}`;
+      const url = `${MEMBER_SCHEDULE}${this.memberIdToShowSchedule}`;
       fetch(RANDOMSCHEDULE, requestOptions)
         .then((response) => {
           if (!response.ok) {
@@ -171,8 +181,8 @@ export default {
           return response.json();
         })
         .then((result) => {
+          console.log("~ result", result);
           this.mealsSchedule = result;
-          this.returnMealsId(result);
         })
         .catch((error) => {
           this.errorMesage("Ups... Cos poszlo nie tak");
