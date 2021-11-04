@@ -32,7 +32,7 @@ public class ScheduleService {
     private final ScheduleDao scheduleRepository;
 
     public Map<DayOfWeek, DayDto> getScheduleByMealTime() {
-        Map<DayOfWeek, DayDto> schedule = new HashMap<>();
+        Map<DayOfWeek, DayDto> schedule = new LinkedHashMap<>();
         for (DayOfWeek day : DayOfWeek.values()) {
             schedule.put(day, new DayDto());
         }

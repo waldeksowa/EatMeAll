@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import static java.time.DayOfWeek.*;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
@@ -69,11 +70,11 @@ public class ScheduleServiceTest {
         Map<DayOfWeek, DayDto> result = scheduleService.getScheduleByMealTime();
 
         //then
-        assertEquals(500,result.get(DayOfWeek.MONDAY).getCalorific(),0);
-        assertEquals(450,result.get(DayOfWeek.MONDAY).getCarbohydrates(),0);
-        assertEquals(400,result.get(DayOfWeek.MONDAY).getFat(),0);
-        assertEquals(350,result.get(DayOfWeek.MONDAY).getProtein(),0);
-        assertEquals(5,result.get(DayOfWeek.MONDAY).getRoughage(),0);
+        assertEquals(500,result.get(MONDAY).getCalorific(),0);
+        assertEquals(450,result.get(MONDAY).getCarbohydrates(),0);
+        assertEquals(400,result.get(MONDAY).getFat(),0);
+        assertEquals(350,result.get(MONDAY).getProtein(),0);
+        assertEquals(5,result.get(MONDAY).getRoughage(),0);
     }
 
     @Test
@@ -124,11 +125,11 @@ public class ScheduleServiceTest {
         Map<DayOfWeek, DayDto> result = scheduleService.getScheduleByMealTime();
 
         //then
-        assertEquals(1005,result.get(DayOfWeek.MONDAY).getCalorific(),0);
-        assertEquals(905,result.get(DayOfWeek.MONDAY).getCarbohydrates(),0);
-        assertEquals(805,result.get(DayOfWeek.MONDAY).getFat(),0);
-        assertEquals(705,result.get(DayOfWeek.MONDAY).getProtein(),0);
-        assertEquals(15,result.get(DayOfWeek.MONDAY).getRoughage(),0);
+        assertEquals(1005,result.get(MONDAY).getCalorific(),0);
+        assertEquals(905,result.get(MONDAY).getCarbohydrates(),0);
+        assertEquals(805,result.get(MONDAY).getFat(),0);
+        assertEquals(705,result.get(MONDAY).getProtein(),0);
+        assertEquals(15,result.get(MONDAY).getRoughage(),0);
 
     }
 
@@ -251,11 +252,55 @@ public class ScheduleServiceTest {
         Map<DayOfWeek, DayDto> result = scheduleService.getScheduleByMealTime();
 
         //then
-        assertEquals(510,result.get(DayOfWeek.MONDAY).getCalorific(),0);
-        assertEquals(460,result.get(DayOfWeek.MONDAY).getCarbohydrates(),0);
-        assertEquals(410,result.get(DayOfWeek.MONDAY).getFat(),0);
-        assertEquals(360,result.get(DayOfWeek.MONDAY).getProtein(),0);
-        assertEquals(15,result.get(DayOfWeek.MONDAY).getRoughage(),0);
+        assertEquals(510,result.get(MONDAY).getCalorific(),0);
+        assertEquals(460,result.get(MONDAY).getCarbohydrates(),0);
+        assertEquals(410,result.get(MONDAY).getFat(),0);
+        assertEquals(360,result.get(MONDAY).getProtein(),0);
+        assertEquals(15,result.get(MONDAY).getRoughage(),0);
+
+    }
+
+    @Test
+    public void shouldReturnMapOrderedByDayOfWeek() {
+        //given
+        List<DayOfWeek> days = List.of(MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY);
+
+        ProductEntity firstProduct = new ProductEntity();
+        firstProduct.setId(1L);
+        firstProduct.setName("first product");
+        firstProduct.setCalorific(100.0);
+        firstProduct.setCarbohydrates(90.0);
+        firstProduct.setFat(80.0);
+        firstProduct.setProtein(70.0);
+        firstProduct.setRoughage(1.0);
+
+        MealProductEntity firstMealProduct = new MealProductEntity();
+        firstMealProduct.setId(1L);
+        firstMealProduct.setAmount(100);
+        firstMealProduct.setProduct(firstProduct);
+
+        MealEntity meal = new MealEntity();
+        meal.setId(1L);
+        meal.setName("test meal");
+        meal.setProducts(Set.of(firstMealProduct));
+        meal.setMealTime(Set.of(MealTimeEnum.BREAKFAST, MealTimeEnum.LUNCH, MealTimeEnum.DINNER, MealTimeEnum.SECOND_BREAKFAST, MealTimeEnum.SUPPER));
+        meal.init();
+
+        List<MealEntity> mockList = new ArrayList<>();
+        for (int i = 0; i < 7; i++) {
+            mockList.add(meal);
+        }
+        when(mealRepository.findRandomByMealTime(Mockito.anyInt(),Mockito.anyInt())).thenReturn(mockList);
+
+        //when
+        Map<DayOfWeek, DayDto> result = scheduleService.getScheduleByMealTime();
+
+        //then
+        int i = 0;
+        for (DayOfWeek dayOfWeek : result.keySet()) {
+            assertEquals(days.get(i), dayOfWeek);
+            i++;
+        }
 
     }
 }
