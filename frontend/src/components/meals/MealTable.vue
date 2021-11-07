@@ -1,54 +1,70 @@
 <template>
-  <div class="row justify-center q-py-md no-wrap mobile-column col-12">
-    <div class="q-gutter-md row">
-      <div
-        class="col-grow col-shrink"
-        v-for="(mealData, mealDay, j) in mealsSchedule"
-        :key="`mealForDayInWeek-${j}`"
-      >
-        <div>
-          <p class="text-center text-h5">
-            {{ returnCorrectDayLabel(mealDay) }}
-          </p>
-          <div class="q-gutter-md">
-            <div
-              v-for="(macrosValues, mealTime, i) in mealData.meals"
-              :key="`mealData-${i}`"
-            >
-              <div class="mobile-column">
-                <q-card class="const-width">
-                  <div class="text-center">
-                    <p>
-                      {{ returnMealTimeLabel(mealTime) }}
-                    </p>
-                    <p>Nazwa: {{ macrosValues.name }}</p>
-                  </div>
-                  <q-img
-                    :src="returnImgByMealTime(mealTime)"
-                    class="card-img"
-                  />
-                  <q-expansion-item
-                    expand-separator
-                    label="Wartości"
-                    class="const-width text-center"
-                  >
-                    <p>Czas przygotowania: {{ macrosValues.prepareTime }}</p>
-                    <p>Kalorie: {{ macrosValues.calorific }}</p>
-                    <p>
-                      Węglowodany:
-                      {{ macrosValues.carbohydrates }}
-                    </p>
-                    <p>Tłuszcze: {{ macrosValues.fat }}</p>
-                    <p>
-                      Białko:
-                      {{ macrosValues.protein }}
-                    </p>
-                    <p>
-                      Błonnik:
-                      {{ macrosValues.roughage }}
-                    </p>
-                  </q-expansion-item>
-                </q-card>
+  <div>
+    <!-- <div class="q-gutter-md row">
+      <div class="row q-pa-lg justify-center q-gutter-sm">
+        <q-btn class="bg-white" label="Generuj Posiłki"></q-btn>
+        <q-btn
+          class="bg-white"
+          label="Wygeneruj Obecny tydzień"
+          @click="isScheduleShow = !isScheduleShow"
+        ></q-btn>
+        <q-btn class="bg-white" label="Kalendarz"></q-btn>
+        <q-btn
+          class="bg-white"
+          label="Zapisz"
+          @click="postMemberScheduleToServer()"
+        ></q-btn>
+      </div>
+    </div> -->
+    <div class="row justify-center q-py-md no-wrap mobile-column col-12">
+      <div class="full-width bg-primary">
+        <div
+          class="col-grow col-shrink"
+          v-for="(mealData, i) in mealsSchedule"
+          :key="`mealForDayInWeek-${i}`"
+        >
+          <div>
+            <p class="text-center text-h5">
+              <!-- {{ returnCorrectDayLabel(mealDay) }} -->
+              {{ mealData.date }}
+            </p>
+            <div class="q-gutter-md">
+              <div v-for="(meal, j) in mealData.meals" :key="`mealData-${j}`">
+                <div class="mobile-column">
+                  <q-card class="const-width">
+                    <div class="text-center">
+                      <p>
+                        {{ returnMealTimeLabel(mealTime) }}
+                      </p>
+                      <p>Nazwa: {{ macrosValues.name }}</p>
+                    </div>
+                    <q-img
+                      :src="returnImgByMealTime(mealTime)"
+                      class="card-img"
+                    />
+                    <q-expansion-item
+                      expand-separator
+                      label="Wartości"
+                      class="const-width text-center"
+                    >
+                      <p>Czas przygotowania: {{ macrosValues.prepareTime }}</p>
+                      <p>Kalorie: {{ macrosValues.calorific }}</p>
+                      <p>
+                        Węglowodany:
+                        {{ macrosValues.carbohydrates }}
+                      </p>
+                      <p>Tłuszcze: {{ macrosValues.fat }}</p>
+                      <p>
+                        Białko:
+                        {{ macrosValues.protein }}
+                      </p>
+                      <p>
+                        Błonnik:
+                        {{ macrosValues.roughage }}
+                      </p>
+                    </q-expansion-item>
+                  </q-card>
+                </div>
               </div>
             </div>
           </div>
@@ -87,7 +103,7 @@ export default {
         if (aMealTime === value) return label;
       }
     },
-    
+   
     returnImgByMealTime(aMealTime) {
       switch (aMealTime) {
         case "BREAKFAST":

@@ -58,6 +58,7 @@ import {
   RANDOMSCHEDULE,
   SCHEDULE,
   MEMBER_SCHEDULE,
+  MEALS,
 } from "../EndpointAddresses";
 import { date } from "quasar";
 export default {
@@ -164,30 +165,168 @@ export default {
         .catch((error) => console.log("error", error));
     },
     fetchMemberSheduleData() {
-      var myHeaders = new Headers();
-      myHeaders.append("Authorization", `Bearer ${this.jwt}`);
+      // var myHeaders = new Headers();
+      // myHeaders.append("Authorization", `Bearer ${this.jwt}`);
 
+      // var requestOptions = {
+      //   method: "GET",
+      //   headers: myHeaders,
+      //   redirect: "follow",
+      // };
+      // const url = `${MEMBER_SCHEDULE}${this.memberIdToShowSchedule}`;
+      // fetch(RANDOMSCHEDULE, requestOptions)
+      //   .then((response) => {
+      //     if (!response.ok) {
+      //       this.errorMesage("Ups... Cos poszlo nie tak");
+      //     }
+      //     return response.json();
+      //   })
+      //   .then((result) => {
+      //     console.log("~ random", result);
+      //     this.mealsSchedule = result;
+      //   })
+      //   .catch((error) => {
+      //     this.errorMesage("Ups... Cos poszlo nie tak");
+      //     console.log(error);
+      //   });
+
+      let a = {
+        createdAt: "2021-11-06T11:03:15.917+0000",
+        updatedAt: "2021-11-06T11:03:15.917+0000",
+        version: 0,
+        scheduleDate: "2021-09-24",
+        schedule: [
+          {
+            date: "2021-09-24",
+            breakfast: 1,
+            secondBreakfast: 1,
+            lunch: 1,
+            dinner: 1,
+            supper: 1,
+            prepareTime: 55,
+            calorific: 33.4,
+            protein: 1.1,
+            fat: 0.2,
+            carbohydrates: 7.1,
+            roughage: 0.4,
+          },
+          {
+            date: "2021-09-25",
+            breakfast: 1,
+            secondBreakfast: 1,
+            lunch: 1,
+            dinner: 1,
+            supper: 1,
+            prepareTime: 55,
+            calorific: 33.4,
+            protein: 1.1,
+            fat: 0.2,
+            carbohydrates: 7.1,
+            roughage: 0.4,
+          },
+          {
+            date: "2021-09-26",
+            breakfast: 1,
+            secondBreakfast: 1,
+            lunch: 1,
+            dinner: 1,
+            supper: 1,
+            prepareTime: 55,
+            calorific: 33.4,
+            protein: 1.1,
+            fat: 0.2,
+            carbohydrates: 7.1,
+            roughage: 0.4,
+          },
+          {
+            date: "2021-09-27",
+            breakfast: 1,
+            secondBreakfast: 1,
+            lunch: 1,
+            dinner: 1,
+            supper: 1,
+            prepareTime: 55,
+            calorific: 33.4,
+            protein: 1.1,
+            fat: 0.2,
+            carbohydrates: 7.1,
+            roughage: 0.4,
+          },
+          {
+            date: "2021-09-28",
+            breakfast: 1,
+            secondBreakfast: 1,
+            lunch: 1,
+            dinner: 1,
+            supper: 1,
+            prepareTime: 55,
+            calorific: 33.4,
+            protein: 1.1,
+            fat: 0.2,
+            carbohydrates: 7.1,
+            roughage: 0.4,
+          },
+          {
+            date: "2021-09-29",
+            breakfast: 1,
+            secondBreakfast: 1,
+            lunch: 1,
+            dinner: 1,
+            supper: 1,
+            prepareTime: 55,
+            calorific: 33.4,
+            protein: 1.1,
+            fat: 0.2,
+            carbohydrates: 7.1,
+            roughage: 0.4,
+          },
+          {
+            date: "2021-09-30",
+            breakfast: 1,
+            secondBreakfast: 1,
+            lunch: 1,
+            dinner: 1,
+            supper: 1,
+            prepareTime: 55,
+            calorific: 33.4,
+            protein: 1.1,
+            fat: 0.2,
+            carbohydrates: 7.1,
+            roughage: 0.4,
+          },
+        ],
+        memberId: 1,
+        id: 49,
+      };
+      this.parseMemberScheduleData(a);
+    },
+    parseMemberScheduleData(aSchedule) {
+      let arr = [];
+
+      aSchedule.schedule.forEach((data) => {
+        arr.push({
+          data: data.date,
+          meals: {
+            breakfast: this.fetchMealDetails(data.breakfast),
+            secondBreakfast: this.fetchMealDetails(data.secondBreakfast),
+            dinner: this.fetchMealDetails(data.dinner),
+            lunch: this.fetchMealDetails(data.lunch),
+            supper: this.fetchMealDetails(data.supper),
+          },
+        });
+      });
+
+      this.mealsSchedule = arr;
+    },
+    async fetchMealDetails(aId) {
       var requestOptions = {
         method: "GET",
-        headers: myHeaders,
         redirect: "follow",
       };
-      const url = `${MEMBER_SCHEDULE}${this.memberIdToShowSchedule}`;
-      fetch(RANDOMSCHEDULE, requestOptions)
-        .then((response) => {
-          if (!response.ok) {
-            this.errorMesage("Ups... Cos poszlo nie tak");
-          }
-          return response.json();
-        })
-        .then((result) => {
-          console.log("~ result", result);
-          this.mealsSchedule = result;
-        })
-        .catch((error) => {
-          this.errorMesage("Ups... Cos poszlo nie tak");
-          console.log(error);
-        });
+
+      let responce = await fetch(`${MEALS}${aId}`, requestOptions);
+      let result = await responce.json();
+      return result;
     },
     showDeatilDialog(aMeal) {
       this.selectedMeal = aMeal;
