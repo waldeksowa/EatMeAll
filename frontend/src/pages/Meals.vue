@@ -1,21 +1,5 @@
 <template>
   <q-page>
-    <div class="full-width bg-primary" style="min-height: 20vh; height: 150px">
-      <div class="row q-pa-lg justify-end q-gutter-sm">
-        <q-btn class="bg-white" label="Generuj Posiłki"></q-btn>
-        <q-btn
-          class="bg-white"
-          label="Wygeneruj Obecny tydzień"
-          @click="isScheduleShow = !isScheduleShow"
-        ></q-btn>
-        <q-btn class="bg-white" label="Kalendarz"></q-btn>
-        <q-btn
-          class="bg-white"
-          label="Zapisz"
-          @click="postMemberScheduleToServer()"
-        ></q-btn>
-      </div>
-    </div>
     <div class="row justify-end">
       <div
         v-for="(account, index) in membersAccounts"
@@ -38,7 +22,9 @@
     </div>
     <mealTable
       @showDeatilDialog="showDeatilDialog($event)"
+      @openDialog="openDialog"
       :mealsSchedule="mealsSchedule"
+      :isScheduleShow="isScheduleShow"
     />
     <q-dialog v-model="isDetailInfDialogShow">
       <moreInfoDialog :selectedMeal="selectedMeal"></moreInfoDialog>
@@ -100,6 +86,9 @@ export default {
           console.log(error);
         });
     },
+    openDialog() {
+      this.isScheduleShow = true;
+    },
     showUserSchedule(aMemberId) {
       this.updateMemberIdToShowSchedule(aMemberId);
       this.fetchMemberSheduleData();
@@ -140,29 +129,6 @@ export default {
       });
       console.log("~ postSchedule", postSchedule);
       return postSchedule;
-    },
-    postMemberScheduleToServer() {
-      var myHeaders = new Headers();
-      myHeaders.append("Authorization", `Bearer ${this.jwt}`);
-      myHeaders.append("Content-Type", "application/json");
-
-      let scheduleToPost = this.createParsedSchedule();
-      var raw = JSON.stringify({
-        schedule: scheduleToPost,
-        memberId: this.memberIdToShowSchedule,
-      });
-
-      var requestOptions = {
-        method: "POST",
-        headers: myHeaders,
-        body: raw,
-        redirect: "follow",
-      };
-
-      fetch(SCHEDULE, requestOptions)
-        .then((response) => response.json())
-        .then((result) => console.log(result))
-        .catch((error) => console.log("error", error));
     },
     fetchMemberSheduleData() {
       // var myHeaders = new Headers();

@@ -1,21 +1,20 @@
 <template>
   <q-page>
-    <!-- <div class="q-gutter-md row">
-      <div class="row q-pa-lg justify-center q-gutter-sm">
-        <q-btn class="bg-white" label="Generuj Posiłki"></q-btn>
-        <q-btn
-          class="bg-white"
-          label="Wygeneruj Obecny tydzień"
-          @click="isScheduleShow = !isScheduleShow"
-        ></q-btn>
-        <q-btn class="bg-white" label="Kalendarz"></q-btn>
-        <q-btn
-          class="bg-white"
-          label="Zapisz"
-          @click="postMemberScheduleToServer()"
-        ></q-btn>
-      </div>
-    </div> -->
+    <div class="row justify-center q-gutter-sm q-ma-md">
+      <q-btn class="bg-primary text-white" label="Generuj Posiłki"></q-btn>
+      <q-btn
+        class="bg-primary text-white"
+        label="Wygeneruj Obecny tydzień"
+        @click="openDialog()"
+      ></q-btn>
+      <q-btn class="bg-primary text-white" label="Kalendarz"></q-btn>
+      <q-btn
+        class="bg-primary text-white"
+        label="Zapisz"
+        @click="postMemberScheduleToServer()"
+      ></q-btn>
+    </div>
+
     <div class="row justify-center q-py-md no-wrap mobile-column col-12">
       <div
         class="col-grow col-shrink"
@@ -68,13 +67,35 @@
 <script>
 import { date } from "quasar";
 export default {
-  props: ["mealsSchedule"],
+  props: ["mealsSchedule", "isScheduleShow"],
   methods: {
-    mounted() {
-      console.log("a", this.mealsSchedule);
+    openDialog() {
+      this.$emit("openDialog");
+    },
+    postMemberScheduleToServer() {
+      var myHeaders = new Headers();
+      myHeaders.append("Authorization", `Bearer ${this.jwt}`);
+      myHeaders.append("Content-Type", "application/json");
+
+      let scheduleToPost = this.createParsedSchedule();
+      var raw = JSON.stringify({
+        schedule: scheduleToPost,
+        memberId: this.memberIdToShowSchedule,
+      });
+
+      var requestOptions = {
+        method: "POST",
+        headers: myHeaders,
+        body: raw,
+        redirect: "follow",
+      };
+
+      fetch(SCHEDULE, requestOptions)
+        .then((response) => response.json())
+        .then((result) => console.log(result))
+        .catch((error) => console.log("error", error));
     },
     returnCorrectDayLabel(aMealDay) {
-      console.log("~ aMealDay", aMealDay);
       let dayTimeValues = [
         { label: "Poniedziałek", value: 1 },
         { label: "Wtorek", value: 2 },
