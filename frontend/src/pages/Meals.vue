@@ -93,43 +93,8 @@ export default {
       this.updateMemberIdToShowSchedule(aMemberId);
       this.fetchMemberSheduleData();
     },
-    returnMealsId() {
-      let meals = [];
-      for (const [key, val] of Object.entries(this.mealsSchedule)) {
-        meals.push({
-          mealTime: Object.keys(val.meals),
-          mealValues: Object.values(val.meals),
-        });
-      }
-      return meals;
-    },
-    createParsedSchedule() {
-      let meals = this.returnMealsId();
-      let postSchedule = [];
-      const timeStamp = Date.now();
-      const formattedString = date.formatDate(timeStamp, "YYYY-MM-DD");
-      meals.forEach((day) => {
-        let breakfast = day.mealTime.indexOf("BREAKFAST");
-        let secondBreakfast = day.mealTime.indexOf("SECOND_BREAKFAST");
-        let lunch = day.mealTime.indexOf("LUNCH");
-        let dinner = day.mealTime.indexOf("DINNER");
-        let supper = day.mealTime.indexOf("SUPPER");
-        postSchedule.push({
-          date: formattedString,
-          ...(breakfast >= 0
-            ? { breakfast: day.mealValues[breakfast].id }
-            : {}),
-          ...(secondBreakfast >= 0
-            ? { secondBreakfast: day.mealValues[secondBreakfast].id }
-            : {}),
-          ...(lunch >= 0 ? { lunch: day.mealValues[lunch].id } : {}),
-          ...(dinner >= 0 ? { dinner: day.mealValues[dinner].id } : {}),
-          ...(supper >= 0 ? { supper: day.mealValues[supper].id } : {}),
-        });
-      });
-      console.log("~ postSchedule", postSchedule);
-      return postSchedule;
-    },
+
+
     fetchMemberSheduleData() {
       // var myHeaders = new Headers();
       // myHeaders.append("Authorization", `Bearer ${this.jwt}`);
@@ -329,9 +294,4 @@ export default {
 .tumbnail
   width: 40px
   border-radius: 100px
-  &:hover
-    transition-property: background-color font-size transform color
-    transition-timing-function: ease-in-out
-    transition-duration: 3s
-    border-radius: 0px
 </style>

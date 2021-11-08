@@ -65,6 +65,7 @@
   </q-page>
 </template>
 <script>
+import { SCHEDULE } from "../../EndpointAddresses";
 import { date } from "quasar";
 export default {
   props: ["mealsSchedule", "isScheduleShow"],
@@ -94,6 +95,43 @@ export default {
         .then((response) => response.json())
         .then((result) => console.log(result))
         .catch((error) => console.log("error", error));
+    },
+    returnMealsId() {
+      let meals = [];
+      for (const [key, val] of Object.entries(this.mealsSchedule)) {
+        meals.push({
+          mealTime: Object.keys(val.meals),
+          mealValues: Object.values(val.meals),
+        });
+      }
+      return meals;
+    },
+    createParsedSchedule() {
+      let meals = this.returnMealsId();
+      let postSchedule = [];
+      const timeStamp = Date.now();
+      const formattedString = date.formatDate(timeStamp, "YYYY-MM-DD");
+      meals.forEach((day) => {
+        let breakfast = day.mealTime.indexOf("breakfast");
+        let secondBreakfast = day.mealTime.indexOf("secondbreakfast");
+        let lunch = day.mealTime.indexOf("lunch");
+        let dinner = day.mealTime.indexOf("dinner");
+        let supper = day.mealTime.indexOf("supper");
+        postSchedule.push({
+          date: formattedString,
+          ...(breakfast >= 0
+            ? { breakfast: day.mealValues[breakfast].id }
+            : {}),
+          ...(secondBreakfast >= 0
+            ? { secondBreakfast: day.mealValues[secondBreakfast].id }
+            : {}),
+          ...(lunch >= 0 ? { lunch: day.mealValues[lunch].id } : {}),
+          ...(dinner >= 0 ? { dinner: day.mealValues[dinner].id } : {}),
+          ...(supper >= 0 ? { supper: day.mealValues[supper].id } : {}),
+        });
+      });
+      console.log("~ postSchedule", postSchedule);
+      return postSchedule;
     },
     returnCorrectDayLabel(aMealDay) {
       let dayTimeValues = [
