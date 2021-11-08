@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <q-page>
     <!-- <div class="q-gutter-md row">
       <div class="row q-pa-lg justify-center q-gutter-sm">
         <q-btn class="bg-white" label="Generuj Posiłki"></q-btn>
@@ -17,104 +17,100 @@
       </div>
     </div> -->
     <div class="row justify-center q-py-md no-wrap mobile-column col-12">
-      <div class="full-width bg-primary">
-        <div
-          class="col-grow col-shrink"
-          v-for="(mealData, i) in mealsSchedule"
-          :key="`mealForDayInWeek-${i}`"
-        >
-          <div>
-            <p class="text-center text-h5">
-              <!-- {{ returnCorrectDayLabel(mealDay) }} -->
-              {{ mealData.date }}
-            </p>
-            <div class="q-gutter-md">
-              <div v-for="(meal, j) in mealData.meals" :key="`mealData-${j}`">
-                <div class="mobile-column">
-                  <q-card class="const-width">
-                    <div class="text-center">
-                      <p>
-                        {{ returnMealTimeLabel(mealTime) }}
-                      </p>
-                      <p>Nazwa: {{ macrosValues.name }}</p>
-                    </div>
-                    <q-img
-                      :src="returnImgByMealTime(mealTime)"
-                      class="card-img"
-                    />
-                    <q-expansion-item
-                      expand-separator
-                      label="Wartości"
-                      class="const-width text-center"
-                    >
-                      <p>Czas przygotowania: {{ macrosValues.prepareTime }}</p>
-                      <p>Kalorie: {{ macrosValues.calorific }}</p>
-                      <p>
-                        Węglowodany:
-                        {{ macrosValues.carbohydrates }}
-                      </p>
-                      <p>Tłuszcze: {{ macrosValues.fat }}</p>
-                      <p>
-                        Białko:
-                        {{ macrosValues.protein }}
-                      </p>
-                      <p>
-                        Błonnik:
-                        {{ macrosValues.roughage }}
-                      </p>
-                    </q-expansion-item>
-                  </q-card>
+      <div
+        class="col-grow col-shrink"
+        v-for="(mealData, i) in mealsSchedule"
+        :key="`mealForDayInWeek-${i}`"
+      >
+        <div>
+          <p class="text-center text-h5">
+            {{ returnCorrectDayLabel(mealData.date) }}
+          </p>
+          <div v-for="(meal, key, j) in mealData.meals" :key="`mealData-${j}`">
+            <div class="mobile-column">
+              <q-card class="const-width q-ma-sm">
+                <div class="text-center">
+                  <p>
+                    {{ returnMealTimeLabel(key) }}
+                  </p>
+                  <p>Nazwa: {{ meal.name }}</p>
                 </div>
-              </div>
+                <q-img :src="returnImgByMealTime(key)" class="card-img" />
+                <q-expansion-item
+                  expand-separator
+                  label="Wartości"
+                  class="const-width text-center"
+                >
+                  <p>Czas przygotowania: {{ meal.prepareTime }}</p>
+                  <p>Kalorie: {{ meal.calorific }}</p>
+                  <p>
+                    Węglowodany:
+                    {{ meal.carbohydrates }}
+                  </p>
+                  <p>Tłuszcze: {{ meal.fat }}</p>
+                  <p>
+                    Białko:
+                    {{ meal.protein }}
+                  </p>
+                  <p>
+                    Błonnik:
+                    {{ meal.roughage }}
+                  </p>
+                </q-expansion-item>
+              </q-card>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
+  </q-page>
 </template>
 <script>
+import { date } from "quasar";
 export default {
   props: ["mealsSchedule"],
   methods: {
+    mounted() {
+      console.log("a", this.mealsSchedule);
+    },
     returnCorrectDayLabel(aMealDay) {
+      console.log("~ aMealDay", aMealDay);
       let dayTimeValues = [
-        { label: "Poniedziałek", value: "MONDAY" },
-        { label: "Wtorek", value: "TUESDAY" },
-        { label: "Środa", value: "WEDNESDAY" },
-        { label: "Czwartek", value: "THURSDAY" },
-        { label: "Piatek", value: "FRIDAY" },
-        { label: "Sobota", value: "SATURDAY" },
-        { label: "Niedziela", value: "SUNDAY" },
+        { label: "Poniedziałek", value: 1 },
+        { label: "Wtorek", value: 2 },
+        { label: "Środa", value: 3 },
+        { label: "Czwartek", value: 4 },
+        { label: "Piatek", value: 5 },
+        { label: "Sobota", value: 6 },
+        { label: "Niedziela", value: 7 },
       ];
       for (const { value, label } of dayTimeValues) {
-        if (aMealDay === value) return label;
+        if (date.getDayOfWeek(aMealDay) === value) return label;
       }
     },
     returnMealTimeLabel(aMealTime) {
       let mealTimeValues = [
-        { label: "Śniadanie", value: "BREAKFAST" },
-        { label: "2 Śniadanie", value: "SECOND_BREAKFAST" },
-        { label: "Obiad", value: "LUNCH" },
-        { label: "Kolacja", value: "SUPPER" },
-        { label: "Podwieczorek", value: "DINNER" },
+        { label: "Śniadanie", value: "breakfast" },
+        { label: "2 Śniadanie", value: "secondbreakfast" },
+        { label: "Obiad", value: "lunch" },
+        { label: "Kolacja", value: "supper" },
+        { label: "Podwieczorek", value: "dinner" },
       ];
       for (const { value, label } of mealTimeValues) {
         if (aMealTime === value) return label;
       }
     },
-   
     returnImgByMealTime(aMealTime) {
       switch (aMealTime) {
-        case "BREAKFAST":
+        case "breakfast":
           return "https://images.unsplash.com/photo-1525351484163-7529414344d8?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80";
-        case "SECOND_BREAKFAST":
+        case "secondbreakfast":
           return "https://images.unsplash.com/photo-1497888329096-51c27beff665?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1351&q=80";
-        case "LUNCH":
+        case "lunch":
           return "https://images.unsplash.com/photo-1563897539633-7374c276c212?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=943&q=80";
-        case "DINNER":
+        case "dinner":
           return "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80";
-        case "SUPPER":
+        case "supper":
           return "https://images.unsplash.com/photo-1598515213345-d710d121c709?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80";
         default:
           return "https://images.unsplash.com/photo-1575282247585-d56c93eb0d8b?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1489&q=80";

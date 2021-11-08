@@ -77,7 +77,7 @@ export default {
   computed: {
     ...mapGetters("store", ["jwt", "memberIdToShowSchedule"]),
   },
-  mounted() {
+  created() {
     this.fetchMembersAccountData();
     this.fetchMemberSheduleData();
   },
@@ -300,33 +300,46 @@ export default {
       };
       this.parseMemberScheduleData(a);
     },
-    parseMemberScheduleData(aSchedule) {
+    async parseMemberScheduleData(aSchedule) {
       let arr = [];
 
-      aSchedule.schedule.forEach((data) => {
+      for (let i = 0; i < aSchedule.schedule.length; i++) {
         arr.push({
-          data: data.date,
+          date: aSchedule.schedule[i].date,
           meals: {
-            breakfast: this.fetchMealDetails(data.breakfast),
-            secondBreakfast: this.fetchMealDetails(data.secondBreakfast),
-            dinner: this.fetchMealDetails(data.dinner),
-            lunch: this.fetchMealDetails(data.lunch),
-            supper: this.fetchMealDetails(data.supper),
+            breakfast: await this.fetchMealDetails(
+              aSchedule.schedule[i].breakfast
+            ),
+            secondbreakfast: await this.fetchMealDetails(
+              aSchedule.schedule[i].secondBreakfast
+            ),
+            dinner: await this.fetchMealDetails(aSchedule.schedule[i].dinner),
+            lunch: await this.fetchMealDetails(aSchedule.schedule[i].lunch),
+            supper: await this.fetchMealDetails(aSchedule.schedule[i].supper),
+          },
+          mealsId: {
+            breakfast: aSchedule.schedule[i].breakfast,
+            secondbreakfast: aSchedule.schedule[i].secondBreakfast,
+            dinner: aSchedule.schedule[i].dinner,
+            lunch: aSchedule.schedule[i].lunch,
+            supper: aSchedule.schedule[i].supper,
           },
         });
-      });
-
+      }
       this.mealsSchedule = arr;
     },
     async fetchMealDetails(aId) {
-      var requestOptions = {
+      let requestOptions = {
         method: "GET",
         redirect: "follow",
       };
-
-      let responce = await fetch(`${MEALS}${aId}`, requestOptions);
-      let result = await responce.json();
-      return result;
+      try {
+        let responce = await fetch(`${MEALS}${aId}`, requestOptions);
+        let result = await responce.json();
+        return result;
+      } catch (err) {
+        console.log(err);
+      }
     },
     showDeatilDialog(aMeal) {
       this.selectedMeal = aMeal;
