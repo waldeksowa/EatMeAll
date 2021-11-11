@@ -274,6 +274,28 @@ CREATE TABLE public.shopping_list_items (
 
 ALTER TABLE public.shopping_list_items OWNER to eatmeall;
 
+CREATE TABLE public.exercises (
+    id bigint NOT NULL,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone,
+    version integer NOT NULL,
+    name character varying(255),
+    CONSTRAINT exercises_pkey PRIMARY KEY (id)
+);
+
+ALTER TABLE public.exercises OWNER to eatmeall;
+
+CREATE TABLE public.muscle_part (
+    exercise_entity_id bigint NOT NULL,
+    muscle_part integer,
+    CONSTRAINT fk_muscle_part_exercise_id FOREIGN KEY (exercise_entity_id)
+        REFERENCES public.exercises (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+);
+
+ALTER TABLE public.muscle_part OWNER to eatmeall;
+
 
 INSERT INTO public.products(
 	id, created_at, updated_at, version, calorific, carbohydrates, fat, name, protein, roughage, product_type)
