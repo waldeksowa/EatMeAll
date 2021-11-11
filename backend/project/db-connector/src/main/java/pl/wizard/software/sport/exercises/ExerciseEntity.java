@@ -7,6 +7,7 @@ import lombok.Setter;
 import pl.wizard.software.AbstractBaseEntity;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "EXERCISES")
@@ -20,7 +21,7 @@ public class ExerciseEntity extends AbstractBaseEntity {
     @ElementCollection(targetClass = MusclePart.class)
     @CollectionTable(name="muscle_part")
     @Enumerated(EnumType.ORDINAL)
-    private MusclePart musclePart;
+    private Set<MusclePart> musclePart;
 
     public enum MusclePart {
         SHOULDERS("barki"), CHEST("klatka piersiowa"), BACK("plecy"), BICEPS("biceps"),
