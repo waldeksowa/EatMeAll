@@ -274,6 +274,7 @@ CREATE TABLE public.shopping_list_items (
 
 ALTER TABLE public.shopping_list_items OWNER to eatmeall;
 
+
 CREATE TABLE public.exercises (
     id bigint NOT NULL,
     created_at timestamp without time zone,
@@ -285,6 +286,7 @@ CREATE TABLE public.exercises (
 
 ALTER TABLE public.exercises OWNER to eatmeall;
 
+
 CREATE TABLE public.muscle_part (
     exercise_entity_id bigint NOT NULL,
     muscle_part integer,
@@ -295,6 +297,24 @@ CREATE TABLE public.muscle_part (
 );
 
 ALTER TABLE public.muscle_part OWNER to eatmeall;
+
+
+CREATE TABLE public.training_exercises (
+    id bigint NOT NULL,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone,
+    version integer NOT NULL,
+    exercise_id bigint,
+    exercise_type integer,
+    amount integer,
+    CONSTRAINT training_exercises_pkey PRIMARY KEY (id),
+    CONSTRAINT fk_training_exercises_exercise_id FOREIGN KEY (exercise_id)
+        REFERENCES public.exercises (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+);
+
+ALTER TABLE public.training_exercises OWNER to eatmeall;
 
 
 INSERT INTO public.products(
