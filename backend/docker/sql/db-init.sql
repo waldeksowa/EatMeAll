@@ -299,17 +299,37 @@ CREATE TABLE public.muscle_part (
 ALTER TABLE public.muscle_part OWNER to eatmeall;
 
 
+CREATE TABLE public.trainings (
+    id bigint NOT NULL,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone,
+    version integer NOT NULL,
+    name character varying(255) NOT NULL,
+    training_type integer,
+    result integer,
+    training_rating integer,
+    CONSTRAINT trainings_pkey PRIMARY KEY (id)
+);
+
+ALTER TABLE public.trainings OWNER to eatmeall;
+
+
 CREATE TABLE public.training_exercises (
     id bigint NOT NULL,
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
     version integer NOT NULL,
     exercise_id bigint,
+    training_id bigint,
     exercise_type integer,
     amount integer,
     CONSTRAINT training_exercises_pkey PRIMARY KEY (id),
     CONSTRAINT fk_training_exercises_exercise_id FOREIGN KEY (exercise_id)
         REFERENCES public.exercises (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT fk_training_exercises_training_id FOREIGN KEY (training_id)
+        REFERENCES public.trainings (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 );
