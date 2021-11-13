@@ -337,6 +337,45 @@ CREATE TABLE public.training_exercises (
 ALTER TABLE public.training_exercises OWNER to eatmeall;
 
 
+CREATE TABLE public.training_plans (
+    id bigint NOT NULL,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone,
+    version integer NOT NULL,
+    training_plan_date date,
+    account_id bigint,
+    CONSTRAINT training_plans_pkey PRIMARY KEY (id),
+    CONSTRAINT fk_training_plans_account_id FOREIGN KEY (account_id)
+        REFERENCES public.accounts (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+);
+
+ALTER TABLE public.training_plans OWNER to eatmeall;
+
+
+CREATE TABLE public.training_plan_items (
+    id bigint NOT NULL,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone,
+    version integer NOT NULL,
+    training_date date,
+    training_plan_id bigint,
+    training_id bigint,
+    CONSTRAINT training_plan_items_pkey PRIMARY KEY (id),
+    CONSTRAINT fk_training_plan_items_training_plan_id FOREIGN KEY (training_plan_id)
+        REFERENCES public.training_plans (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT fk_training_plan_items_training_id FOREIGN KEY (training_id)
+        REFERENCES public.trainings (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+);
+
+ALTER TABLE public.training_plan_items OWNER to eatmeall;
+
+
 INSERT INTO public.products(
 	id, created_at, updated_at, version, calorific, carbohydrates, fat, name, protein, roughage, product_type)
  VALUES (	1	, current_timestamp, current_timestamp,0,	283.00	,	59.20	,	1.70	,'Bagietki francuskie'	,	8.70	,	2.00	,	1	),
