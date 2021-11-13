@@ -1,6 +1,6 @@
-package pl.wizard.software.diet.mapper;
+package pl.wizard.software.mapper;
 
-import pl.wizard.software.diet.dto.MealDto;
+import pl.wizard.software.dto.MealDto;
 import pl.wizard.software.diet.meals.MealEntity;
 
 import java.util.List;

@@ -1,4 +1,4 @@
-package pl.wizard.software.diet.dto;
+package pl.wizard.software.dto;
 
 import lombok.Builder;
 import lombok.Getter;

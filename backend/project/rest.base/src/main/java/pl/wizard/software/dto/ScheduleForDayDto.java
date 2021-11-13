@@ -1,4 +1,4 @@
-package pl.wizard.software.diet.dto;
+package pl.wizard.software.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;

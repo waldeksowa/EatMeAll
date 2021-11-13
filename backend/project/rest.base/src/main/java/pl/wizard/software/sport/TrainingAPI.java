@@ -6,16 +6,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.wizard.software.login.LoginService;
-import pl.wizard.software.sport.dto.CreateTrainingDto;
-import pl.wizard.software.sport.dto.TrainingDto;
+import pl.wizard.software.dto.CreateTrainingDto;
+import pl.wizard.software.dto.TrainingDto;
 import pl.wizard.software.sport.trainings.TrainingEntity;
 
 import javax.validation.Valid;
 import java.util.Collection;
 import java.util.Optional;
 
-import static pl.wizard.software.sport.mapper.TrainingDtoMapper.mapToTrainingDto;
-import static pl.wizard.software.sport.mapper.TrainingDtoMapper.mapToTrainingDtos;
+import static pl.wizard.software.mapper.TrainingDtoMapper.mapToTrainingDto;
+import static pl.wizard.software.mapper.TrainingDtoMapper.mapToTrainingDtos;
 
 @RestController
 @RequestMapping("/v2/trainings")

@@ -1,7 +1,7 @@
-package pl.wizard.software.diet.mapper;
+package pl.wizard.software.mapper;
 
-import pl.wizard.software.diet.dto.ShoppingListDto;
-import pl.wizard.software.diet.dto.ShoppingListItemDto;
+import pl.wizard.software.dto.ShoppingListDto;
+import pl.wizard.software.dto.ShoppingListItemDto;
 import pl.wizard.software.diet.shoppingList.ShoppingListEntity;
 import pl.wizard.software.diet.shoppingList.ShoppingListItemEntity;
 

@@ -5,8 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.wizard.software.diet.dto.MemberDto;
-import pl.wizard.software.diet.dto.MemberWithoutScheduleAndProdsDto;
+import pl.wizard.software.dto.MemberDto;
+import pl.wizard.software.dto.MemberWithoutScheduleAndProdsDto;
 import pl.wizard.software.diet.members.MemberEntity;
 import pl.wizard.software.login.LoginService;
 

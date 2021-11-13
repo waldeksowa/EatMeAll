@@ -5,8 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.wizard.software.diet.dto.CreateScheduleDto;
-import pl.wizard.software.diet.dto.ScheduleForWeekDto;
+import pl.wizard.software.dto.CreateScheduleDto;
+import pl.wizard.software.dto.ScheduleForWeekDto;
 import pl.wizard.software.login.LoginService;
 
 import javax.validation.Valid;

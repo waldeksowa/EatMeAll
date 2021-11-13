@@ -1,8 +1,8 @@
-package pl.wizard.software.diet.mapper;
+package pl.wizard.software.mapper;
 
 import lombok.extern.slf4j.Slf4j;
-import pl.wizard.software.diet.dto.ScheduleForDayDto;
-import pl.wizard.software.diet.dto.ScheduleForWeekDto;
+import pl.wizard.software.dto.ScheduleForDayDto;
+import pl.wizard.software.dto.ScheduleForWeekDto;
 import pl.wizard.software.diet.schedules.ScheduleEntity;
 
 import java.io.*;

@@ -1,4 +1,4 @@
-package pl.wizard.software.sport.dto;
+package pl.wizard.software.dto;
 
 import lombok.Getter;
 

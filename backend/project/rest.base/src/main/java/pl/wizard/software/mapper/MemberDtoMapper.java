@@ -1,7 +1,7 @@
-package pl.wizard.software.diet.mapper;
+package pl.wizard.software.mapper;
 
-import pl.wizard.software.diet.dto.MemberDto;
-import pl.wizard.software.diet.dto.MemberWithoutScheduleAndProdsDto;
+import pl.wizard.software.dto.MemberDto;
+import pl.wizard.software.dto.MemberWithoutScheduleAndProdsDto;
 import pl.wizard.software.diet.members.MemberEntity;
 import pl.wizard.software.diet.schedules.ScheduleEntity;
 

@@ -1,6 +1,6 @@
-package pl.wizard.software.diet.mapper;
+package pl.wizard.software.mapper;
 
-import pl.wizard.software.diet.dto.ProductWithAmountDto;
+import pl.wizard.software.dto.ProductWithAmountDto;
 import pl.wizard.software.diet.meals.MealProductEntity;
 
 public class ProductDtoMapper {

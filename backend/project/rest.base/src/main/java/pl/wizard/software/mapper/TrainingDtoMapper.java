@@ -1,7 +1,7 @@
-package pl.wizard.software.sport.mapper;
+package pl.wizard.software.mapper;
 
-import pl.wizard.software.sport.dto.TrainingDto;
-import pl.wizard.software.sport.dto.TrainingExerciseDto;
+import pl.wizard.software.dto.TrainingDto;
+import pl.wizard.software.dto.TrainingExerciseDto;
 import pl.wizard.software.sport.trainings.TrainingEntity;
 import pl.wizard.software.sport.trainings.TrainingExerciseEntity;
 
