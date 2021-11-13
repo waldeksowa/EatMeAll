@@ -1,12 +1,13 @@
 package pl.wizard.software.sport.dto;
 
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
 import static pl.wizard.software.sport.trainings.TrainingExerciseEntity.ExerciseType;
 
 @Getter
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class TrainingExerciseDto {
 
     private Long trainingExerciseId;

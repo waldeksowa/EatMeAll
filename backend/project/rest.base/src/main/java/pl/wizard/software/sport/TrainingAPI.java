@@ -76,11 +76,11 @@ public class TrainingAPI {
         }
 
         if (!trainingService.findById(id).isPresent()) {
-            log.error("Exercise with id = " + id + "does not exists");
+            log.error("Training with id = " + id + "does not exists");
             return ResponseEntity.badRequest().build();
         }
 
-        return ResponseEntity.ok(mapToTrainingDto(trainingService.update(training)));
+        return ResponseEntity.ok(mapToTrainingDto(trainingService.update(training, id)));
     }
 
     @DeleteMapping("/{id}")
