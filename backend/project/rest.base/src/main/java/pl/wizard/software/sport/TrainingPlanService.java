@@ -3,8 +3,16 @@ package pl.wizard.software.sport;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import pl.wizard.software.sport.trainings.TrainingPlanDao;
-import pl.wizard.software.sport.trainings.TrainingPlanItemDao;
+import pl.wizard.software.diet.members.MemberDao;
+import pl.wizard.software.diet.members.MemberEntity;
+import pl.wizard.software.dto.CreateTrainingItemDto;
+import pl.wizard.software.dto.CreateTrainingPlanDto;
+import pl.wizard.software.sport.trainings.*;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -13,5 +21,47 @@ public class TrainingPlanService {
 
     private final TrainingPlanDao trainingPlanRepository;
     private final TrainingPlanItemDao trainingPlanItemRepository;
+    private final TrainingDao trainingRepository;
+    private final MemberDao memberRepository;
 
+
+    public TrainingPlanEntity save(TrainingPlanEntity trainingPlanEntity) {
+        return trainingPlanRepository.save(trainingPlanEntity);
+    }
+
+    public TrainingPlanEntity save(CreateTrainingPlanDto createTrainingPlanDto) {
+        LocalDate firstTrainingDate = createTrainingPlanDto.getTrainings().get(0).getTrainingDate();
+        Long numberOfDifferentMonth = createTrainingPlanDto.getTrainings().stream()
+                .map(createTraining -> createTraining.getTrainingDate().getMonth())
+                .distinct()
+                .count();
+        if (numberOfDifferentMonth > 1) {
+            throw new IllegalArgumentException("All trainings should belong to the same month");
+        }
+
+        List<TrainingPlanItemEntity> trainingPlanItemEntities = new ArrayList<>();
+        for (CreateTrainingItemDto training : createTrainingPlanDto.getTrainings()) {
+            Optional<TrainingEntity> trainingEntity = trainingRepository.findById(training.getTrainingId());
+            if (!trainingEntity.isPresent()) {
+                log.error("Training with id " + training.getTrainingId() + "does not exists");
+            } else {
+                TrainingPlanItemEntity trainingPlanItemEntity = TrainingPlanItemEntity.builder()
+                        .training(trainingEntity.get())
+                        .trainingDate(training.getTrainingDate())
+                        .build();
+                trainingPlanItemEntities.add(trainingPlanItemEntity);
+            }
+
+        }
+
+        MemberEntity memberEntity = memberRepository.findById(createTrainingPlanDto.getMemberId())
+                .orElseThrow(() -> new IllegalArgumentException("Member with id " + createTrainingPlanDto.getMemberId() + "does not exists"));
+        TrainingPlanEntity trainingPlanEntity = TrainingPlanEntity.builder()
+                .trainingPlanDate(firstTrainingDate.withDayOfMonth(1))
+                .member(memberEntity)
+                .trainings(trainingPlanItemEntities)
+                .build();
+
+        return save(trainingPlanEntity);
+    }
 }

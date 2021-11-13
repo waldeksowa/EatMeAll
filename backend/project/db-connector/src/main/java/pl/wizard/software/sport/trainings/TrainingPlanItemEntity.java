@@ -1,9 +1,6 @@
 package pl.wizard.software.sport.trainings;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import pl.wizard.software.AbstractBaseEntity;
 
 import javax.persistence.Entity;
@@ -16,6 +13,7 @@ import java.time.LocalDate;
 @Table(name = "TRAINING_PLAN_ITEMS")
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class TrainingPlanItemEntity extends AbstractBaseEntity {
