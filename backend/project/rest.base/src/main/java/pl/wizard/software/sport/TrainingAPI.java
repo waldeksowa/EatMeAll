@@ -7,11 +7,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.wizard.software.login.LoginService;
 import pl.wizard.software.sport.dto.CreateTrainingDto;
+import pl.wizard.software.sport.dto.TrainingDto;
 import pl.wizard.software.sport.trainings.TrainingEntity;
 
 import javax.validation.Valid;
 import java.util.Collection;
 import java.util.Optional;
+
+import static pl.wizard.software.sport.mapper.TrainingDtoMapper.mapToTrainingDto;
+import static pl.wizard.software.sport.mapper.TrainingDtoMapper.mapToTrainingDtos;
 
 @RestController
 @RequestMapping("/v2/trainings")
@@ -23,18 +27,18 @@ public class TrainingAPI {
     private final LoginService loginService;
 
     @GetMapping
-    public ResponseEntity<Collection<TrainingEntity>> findAll(@RequestHeader("Authorization") String token) {
+    public ResponseEntity<Collection<TrainingDto>> findAll(@RequestHeader("Authorization") String token) {
         Optional<Long> accountId = loginService.getAccountIdByTokenUUID(token);
         if (!accountId.isPresent()) {
             log.error("Authorization token expired");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        return ResponseEntity.ok(trainingService.findAll());
+        return ResponseEntity.ok(mapToTrainingDtos(trainingService.findAll()));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<TrainingEntity> findById(@RequestHeader("Authorization") String token, @PathVariable Long id) {
+    public ResponseEntity<TrainingDto> findById(@RequestHeader("Authorization") String token, @PathVariable Long id) {
         Optional<Long> accountId = loginService.getAccountIdByTokenUUID(token);
         if (!accountId.isPresent()) {
             log.error("Authorization token expired");
@@ -47,7 +51,7 @@ public class TrainingAPI {
             ResponseEntity.badRequest().build();
         }
 
-        return ResponseEntity.ok(training.get());
+        return ResponseEntity.ok(mapToTrainingDto(training.get()));
     }
 
     @PostMapping
@@ -58,13 +62,13 @@ public class TrainingAPI {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(trainingService.save(training));
+        return ResponseEntity.status(HttpStatus.CREATED).body(mapToTrainingDto(trainingService.save(training)));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<TrainingEntity> update(@RequestHeader("Authorization") String token,
+    public ResponseEntity<TrainingDto> update(@RequestHeader("Authorization") String token,
                                                  @PathVariable Long id,
-                                                 @Valid @RequestBody TrainingEntity training) {
+                                                 @Valid @RequestBody TrainingDto training) {
         Optional<Long> accountId = loginService.getAccountIdByTokenUUID(token);
         if (!accountId.isPresent()) {
             log.error("Authorization token expired");
@@ -76,7 +80,7 @@ public class TrainingAPI {
             return ResponseEntity.badRequest().build();
         }
 
-        return ResponseEntity.ok(trainingService.save(training));
+        return ResponseEntity.ok(mapToTrainingDto(trainingService.update(training)));
     }
 
     @DeleteMapping("/{id}")

@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import pl.wizard.software.sport.dto.CreateTrainingDto;
 import pl.wizard.software.sport.dto.CreateTrainingExerciseDto;
+import pl.wizard.software.sport.dto.TrainingDto;
 import pl.wizard.software.sport.exercises.ExerciseDao;
 import pl.wizard.software.sport.exercises.ExerciseEntity;
 import pl.wizard.software.sport.trainings.TrainingDao;
@@ -60,5 +61,9 @@ public class TrainingService {
                 .build();
 
         return save(trainingEntity);
+    }
+
+    public TrainingEntity update(TrainingDto training) {
+        return null;
     }
 }
