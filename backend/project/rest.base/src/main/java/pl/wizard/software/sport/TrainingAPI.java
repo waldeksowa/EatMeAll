@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.wizard.software.login.LoginService;
-import pl.wizard.software.sport.exercises.ExerciseEntity;
+import pl.wizard.software.sport.dto.CreateTrainingDto;
 import pl.wizard.software.sport.trainings.TrainingEntity;
 
 import javax.validation.Valid;
@@ -51,7 +51,7 @@ public class TrainingAPI {
     }
 
     @PostMapping
-    public ResponseEntity create(@RequestHeader("Authorization") String token, @Valid @RequestBody TrainingEntity training) {
+    public ResponseEntity create(@RequestHeader("Authorization") String token, @Valid @RequestBody CreateTrainingDto training) {
         Optional<Long> accountId = loginService.getAccountIdByTokenUUID(token);
         if (!accountId.isPresent()) {
             log.error("Authorization token expired");

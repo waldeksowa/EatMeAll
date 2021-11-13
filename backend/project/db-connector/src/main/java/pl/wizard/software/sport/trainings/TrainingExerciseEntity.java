@@ -1,9 +1,6 @@
 package pl.wizard.software.sport.trainings;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import pl.wizard.software.AbstractBaseEntity;
 import pl.wizard.software.sport.exercises.ExerciseEntity;
 
@@ -13,6 +10,7 @@ import javax.persistence.*;
 @Table(name = "TRAINING_EXERCISES")
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class TrainingExerciseEntity extends AbstractBaseEntity {

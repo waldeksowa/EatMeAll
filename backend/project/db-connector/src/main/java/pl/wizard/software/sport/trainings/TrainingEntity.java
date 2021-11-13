@@ -1,18 +1,16 @@
 package pl.wizard.software.sport.trainings;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import pl.wizard.software.AbstractBaseEntity;
 
 import javax.persistence.*;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Table(name = "TRAININGS")
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class TrainingEntity extends AbstractBaseEntity {
@@ -20,7 +18,7 @@ public class TrainingEntity extends AbstractBaseEntity {
     private String name;
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     @JoinColumn(name = "training_id")
-    private Set<TrainingExerciseEntity> exercises;
+    private List<TrainingExerciseEntity> exercises;
     @Enumerated(value = EnumType.ORDINAL)
     private TrainingType trainingType;
     private Integer result;
