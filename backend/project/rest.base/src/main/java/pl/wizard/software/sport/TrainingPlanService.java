@@ -2,6 +2,8 @@ package pl.wizard.software.sport;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import pl.wizard.software.diet.members.MemberDao;
 import pl.wizard.software.diet.members.MemberEntity;
@@ -63,5 +65,25 @@ public class TrainingPlanService {
                 .build();
 
         return save(trainingPlanEntity);
+    }
+
+    public List<TrainingPlanEntity> findAllByMember(Long accountId, Long memeberId) {
+        return trainingPlanRepository.findAllByMember(accountId, memeberId);
+    }
+
+    public Optional<TrainingPlanEntity> findCurrent(Long accountId, Long memberId) {
+        LocalDate currentMonth = LocalDate.now().withDayOfMonth(1);
+        Pageable topOne = PageRequest.of(0, 1);
+        return trainingPlanRepository.findByTrainingDate(accountId, memberId, currentMonth, topOne).stream().findFirst();
+    }
+
+    public Optional<TrainingPlanEntity> findNext(Long accountId, Long memberId) {
+        LocalDate nextMonth = LocalDate.now().plusMonths(1).withDayOfMonth(1);
+        Pageable topOne = PageRequest.of(0, 1);
+        return trainingPlanRepository.findByTrainingDate(accountId, memberId, nextMonth, topOne).stream().findFirst();
+    }
+
+    public Optional<TrainingPlanEntity> findById(Long accountId, Long memberId, Long trainingPlanId) {
+        return trainingPlanRepository.findById(accountId, memberId, trainingPlanId).stream().findFirst();
     }
 }
