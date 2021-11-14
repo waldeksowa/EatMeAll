@@ -343,10 +343,10 @@ CREATE TABLE public.training_plans (
     updated_at timestamp without time zone,
     version integer NOT NULL,
     training_plan_date date,
-    account_id bigint,
+    member_id bigint,
     CONSTRAINT training_plans_pkey PRIMARY KEY (id),
-    CONSTRAINT fk_training_plans_account_id FOREIGN KEY (account_id)
-        REFERENCES public.accounts (id) MATCH SIMPLE
+    CONSTRAINT fk_training_plans_member_id FOREIGN KEY (member_id)
+        REFERENCES public.members (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 );
