@@ -1,7 +1,9 @@
 package pl.wizard.software.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
@@ -10,6 +12,8 @@ import static pl.wizard.software.sport.trainings.TrainingEntity.TrainingType;
 
 @Getter
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class TrainingPlanItemDto {
 
     private Long trainingItemId;

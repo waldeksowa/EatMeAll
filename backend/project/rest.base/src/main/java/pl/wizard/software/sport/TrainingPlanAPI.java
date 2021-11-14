@@ -63,7 +63,7 @@ public class TrainingPlanAPI {
             return ResponseEntity.badRequest().build();
         }
 
-        Optional<TrainingPlanEntity> trainingPlan = trainingPlanService.findById(accountId.get(), memberId, trainingPlanId);
+        Optional<TrainingPlanEntity> trainingPlan = trainingPlanService.findByIdAndMember(accountId.get(), memberId, trainingPlanId);
         if (!trainingPlan.isPresent()) {
             log.error("Training plan with id " + trainingPlanId + " does not exists");
         }
@@ -124,5 +124,41 @@ public class TrainingPlanAPI {
         }
 
         return ResponseEntity.status(HttpStatus.CREATED).body(mapToTrainingPlanDto(trainingPlanService.save(trainingPlan)));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<TrainingPlanDto> update(@RequestHeader("Authorization") String token,
+                                              @PathVariable Long id,
+                                              @Valid @RequestBody TrainingPlanDto training) {
+        Optional<Long> accountId = loginService.getAccountIdByTokenUUID(token);
+        if (!accountId.isPresent()) {
+            log.error("Authorization token expired");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        if (!trainingPlanService.findById(id).isPresent()) {
+            log.error("Training with id = " + id + "does not exists");
+            return ResponseEntity.badRequest().build();
+        }
+
+        return ResponseEntity.ok(mapToTrainingPlanDto(trainingPlanService.update(training, id)));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity delete(@RequestHeader("Authorization") String token, @PathVariable Long id) {
+        Optional<Long> accountId = loginService.getAccountIdByTokenUUID(token);
+        if (!accountId.isPresent()) {
+            log.error("Authorization token expired");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        Optional<TrainingPlanEntity> training = trainingPlanService.findById(id);
+        if (!training.isPresent()) {
+            log.error("Training plan with id = " + id + "does not exists");
+            return ResponseEntity.badRequest().build();
+        }
+
+        trainingPlanService.deleteById(id);
+        return ResponseEntity.ok().build();
     }
 }

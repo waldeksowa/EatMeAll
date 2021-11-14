@@ -30,7 +30,7 @@ public interface TrainingPlanDao extends JpaRepository<TrainingPlanEntity, Long>
             "where m.accountId = :accountId and " +
             "m.id = :memberId and " +
             "t.id = :trainingPlanId")
-    List<TrainingPlanEntity> findById(@Param("accountId") Long accountId,
-                                          @Param("memberId") Long memberId,
-                                          @Param("trainingPlanId") Long trainingPlanId);
+    List<TrainingPlanEntity> findByIdAndMember(@Param("accountId") Long accountId,
+                                               @Param("memberId") Long memberId,
+                                               @Param("trainingPlanId") Long trainingPlanId);
 }
