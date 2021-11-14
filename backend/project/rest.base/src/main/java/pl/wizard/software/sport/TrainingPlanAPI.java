@@ -66,6 +66,7 @@ public class TrainingPlanAPI {
         Optional<TrainingPlanEntity> trainingPlan = trainingPlanService.findByIdAndMember(accountId.get(), memberId, trainingPlanId);
         if (!trainingPlan.isPresent()) {
             log.error("Training plan with id " + trainingPlanId + " does not exists");
+            return ResponseEntity.badRequest().build();
         }
 
         return ResponseEntity.ok(mapToTrainingPlanDto(trainingPlan.get()));
@@ -88,6 +89,7 @@ public class TrainingPlanAPI {
         Optional<TrainingPlanEntity> trainingPlan = trainingPlanService.findCurrent(accountId.get(), memberId);
         if (!trainingPlan.isPresent()) {
             log.error("There is no training plan for current month");
+            return ResponseEntity.badRequest().build();
         }
 
         return ResponseEntity.ok(mapToTrainingPlanDto(trainingPlan.get()));
@@ -110,6 +112,7 @@ public class TrainingPlanAPI {
         Optional<TrainingPlanEntity> trainingPlan = trainingPlanService.findNext(accountId.get(), memberId);
         if (!trainingPlan.isPresent()) {
             log.error("There is no training plan for next month");
+            return ResponseEntity.badRequest().build();
         }
 
         return ResponseEntity.ok(mapToTrainingPlanDto(trainingPlan.get()));
