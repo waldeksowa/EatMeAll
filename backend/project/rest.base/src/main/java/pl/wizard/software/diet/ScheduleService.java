@@ -85,6 +85,42 @@ public class ScheduleService {
         return ScheduleDtoMapper.mapToScheduleDto(scheduleRepository.save(scheduleEntity));
     }
 
+    public ScheduleForWeekNewDto createScheduleNew(CreateScheduleDto schedule) {
+        LocalDate scheduleDate = schedule.getSchedule().stream()
+                .map(s -> s.getDate())
+                .sorted()
+                .findFirst()
+                .get();
+
+        schedule.getSchedule().stream()
+                .map(scheduleForDayDto -> calculateMacros(scheduleForDayDto));
+
+        ScheduleEntity scheduleEntity = ScheduleEntity.builder()
+                .memberId(schedule.getMemberId())
+                .scheduleDate(scheduleDate)
+                .schedule(ScheduleDtoMapper.convertToBytes(schedule.getSchedule()))
+                .build();
+
+        return ScheduleDtoMapper.mapToScheduleDto(scheduleRepository.save(scheduleEntity));
+    }
+
+    private void calculateMacros(ScheduleForDayNewDto scheduleForDayDto) {
+        calculateMeal(scheduleForDayDto.getBreakfast(), scheduleForDayDto);
+        calculateMeal(scheduleForDayDto.getSecondBreakfast(), scheduleForDayDto);
+        calculateMeal(scheduleForDayDto.getLunch(), scheduleForDayDto);
+        calculateMeal(scheduleForDayDto.getDinner(), scheduleForDayDto);
+        calculateMeal(scheduleForDayDto.getSupper(), scheduleForDayDto);
+    }
+
+    private void calculateMeal(Long mealId, ScheduleForDayNewDto scheduleForDayDto) {
+        Optional<MealEntity> meal = mealRepository.findById(mealId);
+        if (!meal.isPresent()) {
+            log.error("Meal with id " + mealId + "does not exists");
+        } else {
+            scheduleForDayDto.recalculate(meal.get());
+        }
+    }
+
     @Transactional
     public List<ScheduleForWeekDto> findAll(Long accountId) {
         return scheduleRepository.findAll(accountId).stream()

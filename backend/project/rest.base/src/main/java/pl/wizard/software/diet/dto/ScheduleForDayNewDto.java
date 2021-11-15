@@ -42,7 +42,7 @@ public class ScheduleForDayNewDto implements Serializable {
         recalculate(mealEntity);
     }
 
-    private void recalculate(MealEntity mealEntity) {
+    public void recalculate(MealEntity mealEntity) {
         calorific += mealEntity.getCalorific();
         carbohydrates += mealEntity.getCarbohydrates();
         fat += mealEntity.getFat();

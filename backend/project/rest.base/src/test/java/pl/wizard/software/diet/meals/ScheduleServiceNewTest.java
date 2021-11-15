@@ -257,5 +257,5 @@ public class ScheduleServiceNewTest {
         assertEquals(15,result.getSchedule().get(MONDAY.ordinal()).getRoughage(),0);
 
     }
-    
+
 }
