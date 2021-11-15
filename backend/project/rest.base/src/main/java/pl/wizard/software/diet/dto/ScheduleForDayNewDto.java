@@ -3,9 +3,13 @@ package pl.wizard.software.diet.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
+import pl.wizard.software.diet.meals.MealEntity;
+import pl.wizard.software.diet.meals.MealTimeEnum;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+
+import static pl.wizard.software.diet.meals.MealTimeEnum.*;
 
 @Getter
 @Setter
@@ -23,11 +27,26 @@ public class ScheduleForDayNewDto implements Serializable {
     private double protein;
     private double roughage;
 
-//    private void recalculate() {
-//        calorific = meals.values().stream().map(meal -> meal.getCalorific()).mapToDouble(Double::doubleValue).sum();
-//        carbohydrates = meals.values().stream().map(meal -> meal.getCarbohydrates()).mapToDouble(Double::doubleValue).sum();
-//        fat = meals.values().stream().map(meal -> meal.getFat()).mapToDouble(Double::doubleValue).sum();
-//        protein = meals.values().stream().map(meal -> meal.getProtein()).mapToDouble(Double::doubleValue).sum();
-//        roughage = meals.values().stream().map(meal -> meal.getRoughage()).mapToDouble(Double::doubleValue).sum();
-//    }
+    public void add(MealEntity mealEntity, MealTimeEnum mealTime) {
+        if (mealTime == BREAKFAST) {
+            breakfast = mealEntity.getId();
+        } else if (mealTime == SECOND_BREAKFAST) {
+            secondBreakfast = mealEntity.getId();
+        } else if (mealTime == LUNCH) {
+            lunch = mealEntity.getId();
+        } else if (mealTime == DINNER) {
+            dinner = mealEntity.getId();
+        } else if (mealTime == SUPPER) {
+            supper = mealEntity.getId();
+        }
+        recalculate(mealEntity);
+    }
+
+    private void recalculate(MealEntity mealEntity) {
+        calorific += mealEntity.getCalorific();
+        carbohydrates += mealEntity.getCarbohydrates();
+        fat += mealEntity.getFat();
+        protein += mealEntity.getProtein();
+        roughage += mealEntity.getRoughage();
+    }
 }
