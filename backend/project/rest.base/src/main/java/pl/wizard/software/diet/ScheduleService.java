@@ -48,7 +48,7 @@ public class ScheduleService {
         return schedule;
     }
 
-    public ScheduleForWeekDto getScheduleByMealTimeNew() {
+    public ScheduleForWeekNewDto getScheduleByMealTimeNew() {
         ScheduleForWeekNewDto schedule = new ScheduleForWeekNewDto();
         LocalDate nextWeekMonday = LocalDate.now().minusDays(LocalDate.now().getDayOfWeek().ordinal()).plusDays(DAYS_IN_WEEK);
         for (DayOfWeek day : DayOfWeek.values()) {
@@ -62,12 +62,11 @@ public class ScheduleService {
                 Optional<MealEntity> meal = meals.stream().findFirst();
                 if (meal.isPresent()) {
                     schedule.getSchedule().get(day.ordinal()).add(meal.get(), MealTimeEnum.values()[i]);
-//                    schedule.get(day).put(MealTimeEnum.values()[i], MealDtoMapper.mapToMealDto(meal.get()));
                     meals.remove(meal.get());
                 }
             }
         }
-        return null;
+        return schedule;
     }
 
     public ScheduleForWeekDto createSchedule(CreateScheduleDto schedule) {
