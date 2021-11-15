@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -21,6 +22,6 @@ public class ScheduleForWeekNewDto {
     private int version;
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate scheduleDate;
-    private List<ScheduleForDayNewDto> schedule;
+    private List<ScheduleForDayNewDto> schedule = new ArrayList<>();
     private Long memberId;
 }
