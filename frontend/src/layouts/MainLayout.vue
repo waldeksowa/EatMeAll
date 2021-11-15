@@ -72,7 +72,6 @@ export default {
       tab: "home",
       navs: [
         { label: "home", icon: "home", to: "/plan" },
-        { label: "lista", icon: "list", to: "/list" },
         { label: "dodaj", icon: "add", to: "/dodajPosilek" },
         { label: "konta", icon: "account_circle", to: "/uzytkownicy" },
       ],

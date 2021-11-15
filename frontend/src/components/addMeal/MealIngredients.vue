@@ -3,7 +3,7 @@
     <div class="text-h4 text-center q-mt-lg">{{ header }}</div>
     <div class="q-pb-md" v-if="addedProducts.length !== 0">
       <div v-for="(p, i) in addedProducts" :key="i">
-        <q-card class="my-card full-width" flat bordered>
+        <q-card class="full-width" flat bordered>
           <q-item class="row">
             <q-item-section>
               <div class="text-body1 q-mt-sm q-mb-xs">

@@ -155,8 +155,8 @@
         </q-card-section>
 
         <q-card-section class="q-pt-none">
-          Ta akcja spowoduje usuniecie obecnego tygodnia, czy chcesz wygenerowac
-          nowy plan ?
+          Ta akcja spowoduje usuniecie na stałe kąta tego użytkownika, czy
+          jesteś tego pewny?
         </q-card-section>
         <q-card-section>
           <q-btn
@@ -174,23 +174,21 @@
 </template>
 <script>
 import { MEMBER } from "../EndpointAddresses";
-import { mapGetters } from "vuex";
-import { Notify } from "quasar";
+import { mapGetters, mapActions } from "vuex";
 export default {
   data() {
     return {
       isInputDisabled: true,
       deleteAccountDialogisShowed: false,
       memberData: [],
-      memberUrl: MEMBER,
     };
   },
   mounted() {},
   computed: {
-    ...mapGetters("store", ["memberIdToShow"]),
-    ...mapGetters("store", ["jwt"]),
+    ...mapGetters("store", ["memberIdToShowAccountDetail", "jwt"]),
   },
   methods: {
+    ...mapActions("store", ["errorMesage", "notifySucessful"]),
     fetchMemberData() {
       var myHeaders = new Headers();
       myHeaders.append("Authorization", `Bearer ${this.jwt}`);
@@ -200,23 +198,14 @@ export default {
         headers: myHeaders,
         redirect: "follow",
       };
-      const url = `${this.memberUrl}/${this.memberIdToShow}`;
+      const url = `${MEMBER}/${this.memberIdToShowAccountDetail}`;
       fetch(url, requestOptions)
         .then((response) => response.json())
         .then((result) => (this.memberData = result))
-        .catch((error) => console.log("error", error));
-    },
-    errorMesage(e) {
-      Notify.create({
-        message: `⚠ ${e}`,
-        classes: "full-width text-center bg-negative",
-      });
-    },
-    notifySucessful(e) {
-      Notify.create({
-        message: `${e}`,
-        classes: "full-width text-center bg-positive",
-      });
+        .catch((error) => {
+          console.log(error);
+          this.errorMesage("Ups... coś poszło nie tak");
+        });
     },
     postUpdatedData() {
       var myHeaders = new Headers();
@@ -226,6 +215,7 @@ export default {
       var raw = JSON.stringify({
         name: this.memberData.name,
         age: this.memberData.age,
+        height: this.memberData.height,
         currentWeight: this.memberData.currentWeight,
         currentFat: this.memberData.currentFat,
         currentMussels: this.memberData.currentMussels,
@@ -244,11 +234,14 @@ export default {
         redirect: "follow",
       };
 
-      const url = `${this.memberUrl}/${this.memberIdToShow}`;
+      const url = `${MEMBER}/${this.memberIdToShowAccountDetail}`;
       fetch(url, requestOptions)
         .then((response) => response.json())
-        .then((result) => console.log(result))
-        .catch((error) => console.log("error", error));
+        .then((result) => result)
+        .catch((error) => {
+          console.log(error);
+          this.errorMesage("Ups... coś poszło nie tak");
+        });
 
       this.isInputDisabled = true;
       this.notifySucessful("Dane zostały pomyślnie zmienione");
@@ -264,7 +257,7 @@ export default {
         redirect: "follow",
       };
 
-      const url = `${this.memberUrl}/${this.memberIdToShow}`;
+      const url = `${MEMBER}/${this.memberIdToShowAccountDetail}`;
       fetch(url, requestOptions)
         .then((response) => {
           if (response.ok) {
@@ -272,8 +265,11 @@ export default {
             return response.text();
           }
         })
-        .then((result) => console.log(result))
-        .catch((error) => console.log("error", error));
+        .then((result) => result)
+        .catch((error) => {
+          console.log(error);
+          this.errorMesage("Ups... coś poszło nie tak");
+        });
     },
   },
   mounted() {

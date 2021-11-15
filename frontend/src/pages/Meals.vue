@@ -1,129 +1,280 @@
 <template>
   <q-page>
-    <div class="full-width bg-primary" style="min-height: 20vh; height: 150px">
-      <div class="row q-pa-lg justify-end q-gutter-sm">
-        <q-btn class="bg-white" label="Generuj Posiłki"></q-btn>
-        <q-btn
-          class="bg-white"
-          label="Wygeneruj Obecny tydzień"
-          @click="createScheduleForWeek()"
-        ></q-btn>
-        <q-btn class="bg-white" label="Kalendarz"></q-btn>
+    <div class="row justify-end">
+      <div
+        v-for="(account, index) in membersAccounts"
+        :key="`member-${index}`"
+        :class="
+          memberIdToShowSchedule === account.id ? 'bg-accent' : 'bg-white'
+        "
+        class="member-width"
+        @click="showUserSchedule(account.id)"
+      >
+        <div class="q-my-sm">
+          <center>
+            <q-img src="../assets/Netflix-avatar.jpg" class="tumbnail" />
+            <p class="big-first-letter text-center q-ma-sm long-word">
+              {{ account.name }}
+            </p>
+          </center>
+        </div>
       </div>
     </div>
     <mealTable
       @showDeatilDialog="showDeatilDialog($event)"
+      @openDialog="openDialog"
       :mealsSchedule="mealsSchedule"
+      :isScheduleShow="isScheduleShow"
     />
     <q-dialog v-model="isDetailInfDialogShow">
       <moreInfoDialog :selectedMeal="selectedMeal"></moreInfoDialog>
     </q-dialog>
     <q-dialog v-model="isScheduleShow">
       <createScheduleDialog
-        @fetchScheduledata="fetchScheduledata()"
+        @fetchMemberSheduleData="fetchMemberSheduleData()"
       ></createScheduleDialog>
     </q-dialog>
   </q-page>
 </template>
 
 <script>
-import { Notify } from "quasar";
-import { SCHEDULE } from "../EndpointAddresses";
+import { mapGetters, mapActions } from "vuex";
+import { MEMBER } from "../EndpointAddresses";
+import {
+  RANDOMSCHEDULE,
+  SCHEDULE,
+  MEMBER_SCHEDULE,
+  MEALS,
+} from "../EndpointAddresses";
+import { date } from "quasar";
 export default {
   name: "PageIndex",
   data() {
     return {
       isDetailInfDialogShow: false,
       isScheduleShow: false,
+      showMealDialog: false,
       selectedMeal: Object,
       mealsSchedule: [],
-      showMealDialog: false,
       dataSelectedDialog: {},
+      membersAccounts: [],
     };
   },
-  watch: {
-    mealsSchedule: {
-      handler(aSchedule) {
-        localStorage.mealsSchedule = JSON.stringify(aSchedule);
-      },
-      deep: true,
-    },
+  computed: {
+    ...mapGetters("store", ["jwt", "memberIdToShowSchedule"]),
   },
-  mounted() {
-    this.parseLocalStorageValues();
+  created() {
+    this.fetchMembersAccountData();
+    this.fetchMemberSheduleData();
   },
   methods: {
-    async fetchScheduledata() {
-      this.removeLocalStorage();
-      try {
-        let responce = await fetch(SCHEDULE);
+    ...mapActions("store", ["updateMemberIdToShowSchedule", "errorMesage"]),
+    fetchMembersAccountData() {
+      var myHeaders = new Headers();
+      myHeaders.append("Authorization", `Bearer ${this.jwt}`);
 
-        if (!responce.ok) {
+      var requestOptions = {
+        method: "GET",
+        headers: myHeaders,
+        redirect: "follow",
+      };
+      fetch(MEMBER, requestOptions)
+        .then((response) => response.json())
+        .then((result) => (this.membersAccounts = result))
+        .catch((error) => {
           this.errorMesage("Ups... Cos poszlo nie tak");
-        }
-
-        let result = await responce.json();
-        this.prepareScheduleaData(result);
-      } catch (e) {
-        this.errorMesage("Ups... Cos poszlo nie tak");
-        console.log(e);
-      }
+          console.log(error);
+        });
     },
-    prepareScheduleaData(aResult) {
+    openDialog() {
+      this.isScheduleShow = true;
+    },
+    showUserSchedule(aMemberId) {
+      this.updateMemberIdToShowSchedule(aMemberId);
+      this.fetchMemberSheduleData();
+    },
+
+
+    fetchMemberSheduleData() {
+      // var myHeaders = new Headers();
+      // myHeaders.append("Authorization", `Bearer ${this.jwt}`);
+
+      // var requestOptions = {
+      //   method: "GET",
+      //   headers: myHeaders,
+      //   redirect: "follow",
+      // };
+      // const url = `${MEMBER_SCHEDULE}${this.memberIdToShowSchedule}`;
+      // fetch(RANDOMSCHEDULE, requestOptions)
+      //   .then((response) => {
+      //     if (!response.ok) {
+      //       this.errorMesage("Ups... Cos poszlo nie tak");
+      //     }
+      //     return response.json();
+      //   })
+      //   .then((result) => {
+      //     console.log("~ random", result);
+      //     this.mealsSchedule = result;
+      //   })
+      //   .catch((error) => {
+      //     this.errorMesage("Ups... Cos poszlo nie tak");
+      //     console.log(error);
+      //   });
+
+      let a = {
+        createdAt: "2021-11-06T11:03:15.917+0000",
+        updatedAt: "2021-11-06T11:03:15.917+0000",
+        version: 0,
+        scheduleDate: "2021-09-24",
+        schedule: [
+          {
+            date: "2021-09-24",
+            breakfast: 1,
+            secondBreakfast: 1,
+            lunch: 1,
+            dinner: 1,
+            supper: 1,
+            prepareTime: 55,
+            calorific: 33.4,
+            protein: 1.1,
+            fat: 0.2,
+            carbohydrates: 7.1,
+            roughage: 0.4,
+          },
+          {
+            date: "2021-09-25",
+            breakfast: 1,
+            secondBreakfast: 1,
+            lunch: 1,
+            dinner: 1,
+            supper: 1,
+            prepareTime: 55,
+            calorific: 33.4,
+            protein: 1.1,
+            fat: 0.2,
+            carbohydrates: 7.1,
+            roughage: 0.4,
+          },
+          {
+            date: "2021-09-26",
+            breakfast: 1,
+            secondBreakfast: 1,
+            lunch: 1,
+            dinner: 1,
+            supper: 1,
+            prepareTime: 55,
+            calorific: 33.4,
+            protein: 1.1,
+            fat: 0.2,
+            carbohydrates: 7.1,
+            roughage: 0.4,
+          },
+          {
+            date: "2021-09-27",
+            breakfast: 1,
+            secondBreakfast: 1,
+            lunch: 1,
+            dinner: 1,
+            supper: 1,
+            prepareTime: 55,
+            calorific: 33.4,
+            protein: 1.1,
+            fat: 0.2,
+            carbohydrates: 7.1,
+            roughage: 0.4,
+          },
+          {
+            date: "2021-09-28",
+            breakfast: 1,
+            secondBreakfast: 1,
+            lunch: 1,
+            dinner: 1,
+            supper: 1,
+            prepareTime: 55,
+            calorific: 33.4,
+            protein: 1.1,
+            fat: 0.2,
+            carbohydrates: 7.1,
+            roughage: 0.4,
+          },
+          {
+            date: "2021-09-29",
+            breakfast: 1,
+            secondBreakfast: 1,
+            lunch: 1,
+            dinner: 1,
+            supper: 1,
+            prepareTime: 55,
+            calorific: 33.4,
+            protein: 1.1,
+            fat: 0.2,
+            carbohydrates: 7.1,
+            roughage: 0.4,
+          },
+          {
+            date: "2021-09-30",
+            breakfast: 1,
+            secondBreakfast: 1,
+            lunch: 1,
+            dinner: 1,
+            supper: 1,
+            prepareTime: 55,
+            calorific: 33.4,
+            protein: 1.1,
+            fat: 0.2,
+            carbohydrates: 7.1,
+            roughage: 0.4,
+          },
+        ],
+        memberId: 1,
+        id: 49,
+      };
+      this.parseMemberScheduleData(a);
+    },
+    async parseMemberScheduleData(aSchedule) {
       let arr = [];
-      for (const [weekDay, mealObject] of Object.entries(aResult)) {
+
+      for (let i = 0; i < aSchedule.schedule.length; i++) {
         arr.push({
-          day: weekDay,
-          date: Object.keys(mealObject),
-          meal: Object.values(mealObject),
+          date: aSchedule.schedule[i].date,
+          meals: {
+            breakfast: await this.fetchMealDetails(
+              aSchedule.schedule[i].breakfast
+            ),
+            secondbreakfast: await this.fetchMealDetails(
+              aSchedule.schedule[i].secondBreakfast
+            ),
+            dinner: await this.fetchMealDetails(aSchedule.schedule[i].dinner),
+            lunch: await this.fetchMealDetails(aSchedule.schedule[i].lunch),
+            supper: await this.fetchMealDetails(aSchedule.schedule[i].supper),
+          },
+          mealsId: {
+            breakfast: aSchedule.schedule[i].breakfast,
+            secondbreakfast: aSchedule.schedule[i].secondBreakfast,
+            dinner: aSchedule.schedule[i].dinner,
+            lunch: aSchedule.schedule[i].lunch,
+            supper: aSchedule.schedule[i].supper,
+          },
         });
       }
-
-      this.sortMealDay(arr);
-      // this.sortMealTimeAndMealData(arr)
-
       this.mealsSchedule = arr;
     },
-    sortMealDay(Aaray) {
-      let ordering = {}, // map for efficient lookup of sortIndex
-        sortOrder = [
-          "MONDAY",
-          "TUESDAY",
-          "WEDNESDAY",
-          "THURSDAY",
-          "FRIDAY",
-          "SATURDAY",
-          "SUNDAY",
-        ];
-      for (var i = 0; i < sortOrder.length; i++) ordering[sortOrder[i]] = i;
-
-      Aaray.sort(function (a, b) {
-        return ordering[a.day] - ordering[b.day];
-      });
+    async fetchMealDetails(aId) {
+      let requestOptions = {
+        method: "GET",
+        redirect: "follow",
+      };
+      try {
+        let responce = await fetch(`${MEALS}${aId}`, requestOptions);
+        let result = await responce.json();
+        return result;
+      } catch (err) {
+        console.log(err);
+      }
     },
     showDeatilDialog(aMeal) {
       this.selectedMeal = aMeal;
       this.isDetailInfDialogShow = true;
-    },
-    parseLocalStorageValues() {
-      if (localStorage.mealsSchedule)
-        this.mealsSchedule = JSON.parse(localStorage.mealsSchedule);
-    },
-    removeLocalStorage() {
-      localStorage.removeItem("mealsSchedule");
-    },
-    createScheduleForWeek() {
-      if (localStorage.mealsSchedule) {
-        this.isScheduleShow = !this.isScheduleShow;
-      } else {
-        this.fetchScheduledata();
-      }
-    },
-    errorMesage(e) {
-      Notify.create({
-        message: `⚠ ${e}`,
-        classes: "full-width text-center bg-negative",
-      });
     },
   },
   components: {
@@ -138,7 +289,9 @@ export default {
 .dialog
   width: 90vw
   height: 90vh
-
-div:first-letter
-  text-transform: uppercase
+.member-width
+  width: 90px
+.tumbnail
+  width: 40px
+  border-radius: 100px
 </style>
