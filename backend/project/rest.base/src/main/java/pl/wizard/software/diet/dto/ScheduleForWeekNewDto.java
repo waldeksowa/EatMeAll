@@ -22,6 +22,6 @@ public class ScheduleForWeekNewDto {
     private int version;
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate scheduleDate;
-    private List<ScheduleForDayNewDto> schedule = new ArrayList<>();
+    private List<ScheduleForDayDto> schedule = new ArrayList<>();
     private Long memberId;
 }
