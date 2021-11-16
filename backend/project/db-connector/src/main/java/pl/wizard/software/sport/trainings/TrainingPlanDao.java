@@ -13,16 +13,16 @@ public interface TrainingPlanDao extends JpaRepository<TrainingPlanEntity, Long>
     @Query("select t from TrainingPlanEntity t " +
             "join t.member m " +
             "where m.accountId = :accountId and " +
-            "m.id = :memeberId")
-    List<TrainingPlanEntity> findAllByMember(@Param("accountId") Long accountId,@Param("memeberId") Long memeberId);
+            "m.id = :memberId")
+    List<TrainingPlanEntity> findAllByMember(@Param("accountId") Long accountId, @Param("memberId") Long memberId);
 
     @Query("select t from TrainingPlanEntity t " +
             "join t.member m " +
             "where m.accountId = :accountId and " +
-            "m.id = :memeberId and " +
+            "m.id = :memberId and " +
             "t.trainingPlanDate = :date")
     List<TrainingPlanEntity> findByTrainingDate(@Param("accountId") Long accountId,
-                                                @Param("memeberId") Long memberId,
+                                                @Param("memberId") Long memberId,
                                                 @Param("date") LocalDate date, Pageable pageable);
 
     @Query("select t from TrainingPlanEntity t " +

@@ -104,8 +104,8 @@ public class TrainingPlanService {
     }
 
     @Transactional
-    public List<TrainingPlanEntity> findAllByMember(Long accountId, Long memeberId) {
-        return trainingPlanRepository.findAllByMember(accountId, memeberId);
+    public List<TrainingPlanEntity> findAllByMember(Long accountId, Long memberId) {
+        return trainingPlanRepository.findAllByMember(accountId, memberId);
     }
 
     @Transactional
