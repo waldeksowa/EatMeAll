@@ -6,8 +6,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import pl.wizard.software.diet.dto.*;
-import pl.wizard.software.diet.mapper.MealDtoMapper;
+import pl.wizard.software.diet.dto.CreateScheduleDto;
+import pl.wizard.software.diet.dto.ScheduleForDayDto;
+import pl.wizard.software.diet.dto.ScheduleForWeekDto;
 import pl.wizard.software.diet.mapper.ScheduleDtoMapper;
 import pl.wizard.software.diet.meals.MealDao;
 import pl.wizard.software.diet.meals.MealEntity;
@@ -17,7 +18,8 @@ import pl.wizard.software.diet.schedules.ScheduleEntity;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -30,26 +32,8 @@ public class ScheduleService {
     private final MealDao mealRepository;
     private final ScheduleDao scheduleRepository;
 
-    public Map<DayOfWeek, DayDto> getScheduleByMealTime() {
-        Map<DayOfWeek, DayDto> schedule = new LinkedHashMap<>();
-        for (DayOfWeek day : DayOfWeek.values()) {
-            schedule.put(day, new DayDto());
-        }
-        for (int i = 1; i < MealTimeEnum.values().length; i++) {
-            List<MealEntity> meals = mealRepository.findRandomByMealTime(MealTimeEnum.values()[i].ordinal(), DAYS_IN_WEEK);
-            for (DayOfWeek day : DayOfWeek.values()) {
-                Optional<MealEntity> meal = meals.stream().findFirst();
-                if (meal.isPresent()) {
-                    schedule.get(day).put(MealTimeEnum.values()[i], MealDtoMapper.mapToMealDto(meal.get()));
-                    meals.remove(meal.get());
-                }
-            }
-        }
-        return schedule;
-    }
-
-    public ScheduleForWeekNewDto getScheduleByMealTimeNew() {
-        ScheduleForWeekNewDto schedule = new ScheduleForWeekNewDto();
+    public ScheduleForWeekDto getScheduleByMealTime() {
+        ScheduleForWeekDto schedule = new ScheduleForWeekDto();
         LocalDate nextWeekMonday = LocalDate.now().minusDays(LocalDate.now().getDayOfWeek().ordinal()).plusDays(DAYS_IN_WEEK);
         for (DayOfWeek day : DayOfWeek.values()) {
             ScheduleForDayDto scheduleForDayDto = new ScheduleForDayDto();
@@ -68,22 +52,6 @@ public class ScheduleService {
         }
         return schedule;
     }
-
-//    public ScheduleForWeekDto createSchedule(CreateScheduleDto schedule) {
-//        LocalDate scheduleDate = schedule.getSchedule().stream()
-//                .map(s -> s.getDate())
-//                .sorted()
-//                .findFirst()
-//                .get();
-//
-//        ScheduleEntity scheduleEntity = ScheduleEntity.builder()
-//                .memberId(schedule.getMemberId())
-//                .scheduleDate(scheduleDate)
-//                .schedule(ScheduleDtoMapper.convertToBytes(schedule.getSchedule()))
-//                .build();
-//
-//        return ScheduleDtoMapper.mapToScheduleDto(scheduleRepository.save(scheduleEntity));
-//    }
 
     public ScheduleForWeekDto createSchedule(CreateScheduleDto schedule) {
         LocalDate scheduleDate = schedule.getSchedule().stream()
