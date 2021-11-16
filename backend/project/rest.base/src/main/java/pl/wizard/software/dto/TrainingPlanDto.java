@@ -1,5 +1,6 @@
 package pl.wizard.software.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,6 +20,7 @@ public class TrainingPlanDto {
     private Date createdAt;
     private Date updatedAt;
     private int version;
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate trainingPlanDate;
     private Long memberId;
     private List<TrainingPlanItemDto> trainings;
