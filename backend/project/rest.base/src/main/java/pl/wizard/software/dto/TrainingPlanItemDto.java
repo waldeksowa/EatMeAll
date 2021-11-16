@@ -16,7 +16,6 @@ import static pl.wizard.software.sport.trainings.TrainingEntity.TrainingType;
 @NoArgsConstructor
 public class TrainingPlanItemDto {
 
-    private Long trainingItemId;
     private LocalDate trainingDate;
     private Long trainingId;
     private String trainingName;

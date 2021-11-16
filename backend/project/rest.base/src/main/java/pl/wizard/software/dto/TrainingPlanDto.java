@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -15,6 +16,9 @@ import java.util.List;
 public class TrainingPlanDto {
 
     private Long id;
+    private Date createdAt;
+    private Date updatedAt;
+    private int version;
     private LocalDate trainingPlanDate;
     private Long memberId;
     private List<TrainingPlanItemDto> trainings;

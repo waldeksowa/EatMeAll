@@ -5,12 +5,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import pl.wizard.software.diet.members.MemberDao;
 import pl.wizard.software.diet.members.MemberEntity;
 import pl.wizard.software.dto.CreateTrainingItemDto;
 import pl.wizard.software.dto.CreateTrainingPlanDto;
 import pl.wizard.software.dto.TrainingPlanDto;
 import pl.wizard.software.dto.TrainingPlanItemDto;
+import pl.wizard.software.mapper.TrainingPlanDtoMapper;
 import pl.wizard.software.sport.trainings.*;
 
 import java.time.LocalDate;
@@ -26,10 +28,8 @@ import java.util.stream.Stream;
 public class TrainingPlanService {
 
     private final TrainingPlanDao trainingPlanRepository;
-    private final TrainingPlanItemDao trainingPlanItemRepository;
     private final TrainingDao trainingRepository;
     private final MemberDao memberRepository;
-
 
     public TrainingPlanEntity save(TrainingPlanEntity trainingPlanEntity) {
         return trainingPlanRepository.save(trainingPlanEntity);
@@ -41,17 +41,21 @@ public class TrainingPlanService {
                 .map(createTraining -> createTraining.getTrainingDate().getMonth());
         checkTrainingsMonth(months);
 
-        List<TrainingPlanItemEntity> trainingPlanItemEntities = new ArrayList<>();
+        List<TrainingPlanItemDto> trainingPlanItemDtos = new ArrayList<>();
         for (CreateTrainingItemDto training : createTrainingPlanDto.getTrainings()) {
             Optional<TrainingEntity> trainingEntity = trainingRepository.findById(training.getTrainingId());
             if (!trainingEntity.isPresent()) {
                 log.error("Training with id " + training.getTrainingId() + "does not exists");
             } else {
-                TrainingPlanItemEntity trainingPlanItemEntity = TrainingPlanItemEntity.builder()
-                        .training(trainingEntity.get())
+                TrainingPlanItemDto trainingPlanItemDto = TrainingPlanItemDto.builder()
+                        .trainingId(training.getTrainingId())
                         .trainingDate(training.getTrainingDate())
+                        .trainingName(trainingEntity.get().getName())
+                        .trainingType(trainingEntity.get().getTrainingType())
+                        .trainingResult(trainingEntity.get().getResult())
+                        .trainingRating(trainingEntity.get().getTrainingRating())
                         .build();
-                trainingPlanItemEntities.add(trainingPlanItemEntity);
+                trainingPlanItemDtos.add(trainingPlanItemDto);
             }
         }
 
@@ -60,7 +64,7 @@ public class TrainingPlanService {
         TrainingPlanEntity trainingPlanEntity = TrainingPlanEntity.builder()
                 .trainingPlanDate(firstTrainingDate.withDayOfMonth(1))
                 .member(memberEntity)
-                .trainings(trainingPlanItemEntities)
+                .trainings(TrainingPlanDtoMapper.convertToBytes(trainingPlanItemDtos))
                 .build();
 
         return save(trainingPlanEntity);
@@ -71,29 +75,21 @@ public class TrainingPlanService {
                 .map(trainingPlanItemDto -> trainingPlanItemDto.getTrainingDate().getMonth());
         checkTrainingsMonth(months);
 
-        List<TrainingPlanItemEntity> trainingPlanItemEntities = new ArrayList<>();
+        List<TrainingPlanItemDto> trainingPlanItemDtos = new ArrayList<>();
         for (TrainingPlanItemDto trainingPlanItemDto : training.getTrainings()) {
             Optional<TrainingEntity> trainingEntity = trainingRepository.findById(trainingPlanItemDto.getTrainingId());
             if (!trainingEntity.isPresent()) {
                 log.error("Training with id " + trainingPlanItemDto.getTrainingId() + "does not exists");
             } else {
-                if (trainingPlanItemDto.getTrainingItemId() != null) {
-                    Optional<TrainingPlanItemEntity> trainingPlanItem = trainingPlanItemRepository.findById(trainingPlanItemDto.getTrainingItemId());
-                    if (!trainingPlanItem.isPresent()) {
-                        log.error("Training item with id " + trainingPlanItemDto.getTrainingItemId() + "does not exists");
-                    } else {
-                        TrainingPlanItemEntity trainingPlanItemEntity = trainingPlanItem.get();
-                        trainingPlanItemEntity.setTraining(trainingEntity.get());
-                        trainingPlanItemEntity.setTrainingDate(trainingPlanItemDto.getTrainingDate());
-                        trainingPlanItemEntities.add(trainingPlanItemEntity);
-                    }
-                } else {
-                    TrainingPlanItemEntity trainingPlanItemEntity = TrainingPlanItemEntity.builder()
-                            .training(trainingEntity.get())
-                            .trainingDate(trainingPlanItemDto.getTrainingDate())
-                            .build();
-                    trainingPlanItemEntities.add(trainingPlanItemEntity);
-                }
+                TrainingPlanItemDto trainingPlanItem = TrainingPlanItemDto.builder()
+                        .trainingId(trainingPlanItemDto.getTrainingId())
+                        .trainingDate(trainingPlanItemDto.getTrainingDate())
+                        .trainingName(trainingEntity.get().getName())
+                        .trainingType(trainingEntity.get().getTrainingType())
+                        .trainingResult(trainingPlanItemDto.getTrainingResult())
+                        .trainingRating(trainingPlanItemDto.getTrainingRating())
+                        .build();
+                trainingPlanItemDtos.add(trainingPlanItemDto);
             }
         }
 
@@ -102,37 +98,42 @@ public class TrainingPlanService {
         TrainingPlanEntity trainingPlanEntity = trainingPlanRepository.findById(id).get();
         trainingPlanEntity.setMember(memberEntity);
         trainingPlanEntity.setTrainingPlanDate(training.getTrainingPlanDate().withDayOfMonth(1));
-        trainingPlanEntity.setTrainings(trainingPlanItemEntities);
+        trainingPlanEntity.setTrainings(TrainingPlanDtoMapper.convertToBytes(trainingPlanItemDtos));
 
         return save(trainingPlanEntity);
     }
 
+    @Transactional
     public List<TrainingPlanEntity> findAllByMember(Long accountId, Long memeberId) {
         return trainingPlanRepository.findAllByMember(accountId, memeberId);
     }
 
+    @Transactional
     public Optional<TrainingPlanEntity> findCurrent(Long accountId, Long memberId) {
         LocalDate currentMonth = LocalDate.now().withDayOfMonth(1);
         Pageable topOne = PageRequest.of(0, 1);
         return trainingPlanRepository.findByTrainingDate(accountId, memberId, currentMonth, topOne).stream().findFirst();
     }
 
+    @Transactional
     public Optional<TrainingPlanEntity> findNext(Long accountId, Long memberId) {
         LocalDate nextMonth = LocalDate.now().plusMonths(1).withDayOfMonth(1);
         Pageable topOne = PageRequest.of(0, 1);
         return trainingPlanRepository.findByTrainingDate(accountId, memberId, nextMonth, topOne).stream().findFirst();
     }
 
+    @Transactional
     public Optional<TrainingPlanEntity> findByIdAndMember(Long accountId, Long memberId, Long trainingPlanId) {
         return trainingPlanRepository.findByIdAndMember(accountId, memberId, trainingPlanId).stream().findFirst();
     }
 
-    public void deleteById(Long id) {
-        trainingPlanRepository.deleteById(id);
-    }
-
+    @Transactional
     public Optional<TrainingPlanEntity> findById(Long id) {
         return trainingPlanRepository.findById(id);
+    }
+
+    public void deleteById(Long id) {
+        trainingPlanRepository.deleteById(id);
     }
 
     private void checkTrainingsMonth(Stream<Month> months) {

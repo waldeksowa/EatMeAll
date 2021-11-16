@@ -6,7 +6,6 @@ import pl.wizard.software.diet.members.MemberEntity;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.List;
 
 @Entity
 @Table(name = "TRAINING_PLANS")
@@ -18,9 +17,9 @@ import java.util.List;
 public class TrainingPlanEntity extends AbstractBaseEntity {
 
     private LocalDate trainingPlanDate;
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-    @JoinColumn(name = "training_plan_id")
-    private List<TrainingPlanItemEntity> trainings;
+    @Lob
+    @Column(columnDefinition = "BLOB")
+    private byte[] trainings;
     @OneToOne
     @JoinColumn(name = "member_id")
     private MemberEntity member;

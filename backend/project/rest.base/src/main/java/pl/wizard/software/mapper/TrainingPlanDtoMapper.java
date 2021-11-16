@@ -1,13 +1,15 @@
 package pl.wizard.software.mapper;
 
+import lombok.extern.slf4j.Slf4j;
 import pl.wizard.software.dto.TrainingPlanDto;
 import pl.wizard.software.dto.TrainingPlanItemDto;
 import pl.wizard.software.sport.trainings.TrainingPlanEntity;
-import pl.wizard.software.sport.trainings.TrainingPlanItemEntity;
 
+import java.io.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 public class TrainingPlanDtoMapper {
 
     private TrainingPlanDtoMapper() {
@@ -16,9 +18,12 @@ public class TrainingPlanDtoMapper {
     public static TrainingPlanDto mapToTrainingPlanDto(TrainingPlanEntity trainingPlanEntity) {
         return TrainingPlanDto.builder()
                 .id(trainingPlanEntity.getId())
+                .createdAt(trainingPlanEntity.getCreatedAt())
+                .updatedAt(trainingPlanEntity.getUpdatedAt())
+                .version(trainingPlanEntity.getVersion())
                 .trainingPlanDate(trainingPlanEntity.getTrainingPlanDate())
                 .memberId(trainingPlanEntity.getMember().getId())
-                .trainings(mapToTrainingPlanItemDtos(trainingPlanEntity.getTrainings()))
+                .trainings(convertFromBytes(trainingPlanEntity.getTrainings()))
                 .build();
     }
 
@@ -28,21 +33,26 @@ public class TrainingPlanDtoMapper {
                 .collect(Collectors.toList());
     }
 
-    private static List<TrainingPlanItemDto> mapToTrainingPlanItemDtos(List<TrainingPlanItemEntity> trainings) {
-        return trainings.stream()
-                .map(trainingPlanItemEntity -> mapToTrainingPlanItemDto(trainingPlanItemEntity))
-                .collect(Collectors.toList());
+    public static byte[] convertToBytes(List<TrainingPlanItemDto> trainings) {
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        try {
+            ObjectOutputStream out = new ObjectOutputStream(bos);
+            out.writeObject(trainings);
+            return bos.toByteArray();
+        } catch (IOException e) {
+            log.error("Error when serialize training plan", e);
+        }
+        return null;
     }
 
-    public static TrainingPlanItemDto mapToTrainingPlanItemDto(TrainingPlanItemEntity trainingPlanItemEntity) {
-        return TrainingPlanItemDto.builder()
-                .trainingItemId(trainingPlanItemEntity.getId())
-                .trainingDate(trainingPlanItemEntity.getTrainingDate())
-                .trainingId(trainingPlanItemEntity.getTraining().getId())
-                .trainingName(trainingPlanItemEntity.getTraining().getName())
-                .trainingType(trainingPlanItemEntity.getTraining().getTrainingType())
-                .trainingResult(trainingPlanItemEntity.getTraining().getResult())
-                .trainingRating(trainingPlanItemEntity.getTraining().getTrainingRating())
-                .build();
+    private static List<TrainingPlanItemDto> convertFromBytes(byte[] trainings) {
+        ByteArrayInputStream bis = new ByteArrayInputStream(trainings);
+        try {
+            ObjectInputStream in = new ObjectInputStream(bis);
+            return (List<TrainingPlanItemDto>)in.readObject();
+        } catch (Exception e) {
+            log.error("Error when deserialize training plan", e);
+        }
+        return null;
     }
 }
