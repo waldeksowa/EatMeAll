@@ -343,6 +343,7 @@ CREATE TABLE public.training_plans (
     updated_at timestamp without time zone,
     version integer NOT NULL,
     training_plan_date date,
+    trainings oid,
     member_id bigint,
     CONSTRAINT training_plans_pkey PRIMARY KEY (id),
     CONSTRAINT fk_training_plans_member_id FOREIGN KEY (member_id)
@@ -353,27 +354,6 @@ CREATE TABLE public.training_plans (
 
 ALTER TABLE public.training_plans OWNER to eatmeall;
 
-
-CREATE TABLE public.training_plan_items (
-    id bigint NOT NULL,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
-    version integer NOT NULL,
-    training_date date,
-    training_plan_id bigint,
-    training_id bigint,
-    CONSTRAINT training_plan_items_pkey PRIMARY KEY (id),
-    CONSTRAINT fk_training_plan_items_training_plan_id FOREIGN KEY (training_plan_id)
-        REFERENCES public.training_plans (id) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION,
-    CONSTRAINT fk_training_plan_items_training_id FOREIGN KEY (training_id)
-        REFERENCES public.trainings (id) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION
-);
-
-ALTER TABLE public.training_plan_items OWNER to eatmeall;
 
 
 INSERT INTO public.products(
