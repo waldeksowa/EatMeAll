@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.wizard.software.diet.dto.CreateScheduleDto;
+import pl.wizard.software.diet.dto.CreateScheduleForDayDto;
 import pl.wizard.software.diet.dto.ScheduleForDayDto;
 import pl.wizard.software.diet.dto.ScheduleForWeekDto;
 import pl.wizard.software.diet.mapper.ScheduleDtoMapper;
@@ -18,9 +19,12 @@ import pl.wizard.software.diet.schedules.ScheduleEntity;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static pl.wizard.software.diet.meals.MealTimeEnum.*;
 
 
 @Service
@@ -40,12 +44,12 @@ public class ScheduleService {
             scheduleForDayDto.setDate(nextWeekMonday.plusDays(day.ordinal()));
             schedule.getSchedule().add(scheduleForDayDto);
         }
-        for (int i = 1; i < MealTimeEnum.values().length; i++) {
-            List<MealEntity> meals = mealRepository.findRandomByMealTime(MealTimeEnum.values()[i].ordinal(), DAYS_IN_WEEK);
+        for (int i = 1; i < values().length; i++) {
+            List<MealEntity> meals = mealRepository.findRandomByMealTime(values()[i].ordinal(), DAYS_IN_WEEK);
             for (DayOfWeek day : DayOfWeek.values()) {
                 Optional<MealEntity> meal = meals.stream().findFirst();
                 if (meal.isPresent()) {
-                    schedule.getSchedule().get(day.ordinal()).add(meal.get(), MealTimeEnum.values()[i]);
+                    schedule.getSchedule().get(day.ordinal()).add(meal.get(), values()[i]);
                     meals.remove(meal.get());
                 }
             }
@@ -55,43 +59,45 @@ public class ScheduleService {
 
     public ScheduleForWeekDto createSchedule(CreateScheduleDto schedule) {
         LocalDate scheduleDate = schedule.getSchedule().stream()
-                .map(s -> s.getDate())
+                .map(CreateScheduleForDayDto::getDate)
                 .sorted()
                 .findFirst()
-                .get();
+                .orElseThrow(() -> new IllegalArgumentException("There is no date in create schedule"));
 
-        schedule.getSchedule().forEach(scheduleForDayDto -> calculateMacros(scheduleForDayDto));
+        List<ScheduleForDayDto> scheduleForDayDtos = new ArrayList<>();
+        for (CreateScheduleForDayDto createScheduleForDayDto : schedule.getSchedule()) {
+            ScheduleForDayDto scheduleForDayDto = new ScheduleForDayDto();
+            scheduleForDayDto.setDate(createScheduleForDayDto.getDate());
+            addMeal(createScheduleForDayDto.getBreakfast(), BREAKFAST, scheduleForDayDto);
+            addMeal(createScheduleForDayDto.getSecondBreakfast(), SECOND_BREAKFAST, scheduleForDayDto);
+            addMeal(createScheduleForDayDto.getLunch(), LUNCH, scheduleForDayDto);
+            addMeal(createScheduleForDayDto.getDinner(), DINNER, scheduleForDayDto);
+            addMeal(createScheduleForDayDto.getSupper(), SUPPER, scheduleForDayDto);
+            scheduleForDayDtos.add(scheduleForDayDto);
+        }
 
         ScheduleEntity scheduleEntity = ScheduleEntity.builder()
                 .memberId(schedule.getMemberId())
                 .scheduleDate(scheduleDate)
-                .schedule(ScheduleDtoMapper.convertToBytes(schedule.getSchedule()))
+                .schedule(ScheduleDtoMapper.convertToBytes(scheduleForDayDtos))
                 .build();
 
         return ScheduleDtoMapper.mapToScheduleDto(scheduleRepository.save(scheduleEntity));
     }
 
-    private void calculateMacros(ScheduleForDayDto scheduleForDayDto) {
-        calculateMeal(scheduleForDayDto.getBreakfast(), scheduleForDayDto);
-        calculateMeal(scheduleForDayDto.getSecondBreakfast(), scheduleForDayDto);
-        calculateMeal(scheduleForDayDto.getLunch(), scheduleForDayDto);
-        calculateMeal(scheduleForDayDto.getDinner(), scheduleForDayDto);
-        calculateMeal(scheduleForDayDto.getSupper(), scheduleForDayDto);
-    }
-
-    private void calculateMeal(Long mealId, ScheduleForDayDto scheduleForDayDto) {
-        Optional<MealEntity> meal = mealRepository.findById(mealId);
-        if (!meal.isPresent()) {
+    private void addMeal(Long mealId, MealTimeEnum mealTime, ScheduleForDayDto scheduleForDayDto) {
+        Optional<MealEntity> mealEntity = mealRepository.findById(mealId);
+        if (mealEntity.isEmpty()) {
             log.error("Meal with id " + mealId + "does not exists");
         } else {
-            scheduleForDayDto.recalculate(meal.get());
+            scheduleForDayDto.add(mealEntity.get(), mealTime);
         }
     }
 
     @Transactional
     public List<ScheduleForWeekDto> findAll(Long accountId) {
         return scheduleRepository.findAll(accountId).stream()
-                .map(scheduleEntity -> ScheduleDtoMapper.mapToScheduleDto(scheduleEntity))
+                .map(ScheduleDtoMapper::mapToScheduleDto)
                 .collect(Collectors.toList());
     }
 

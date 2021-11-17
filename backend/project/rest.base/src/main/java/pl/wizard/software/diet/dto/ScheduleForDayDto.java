@@ -1,7 +1,9 @@
 package pl.wizard.software.diet.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import pl.wizard.software.diet.meals.MealEntity;
 import pl.wizard.software.diet.meals.MealTimeEnum;
@@ -13,6 +15,8 @@ import static pl.wizard.software.diet.meals.MealTimeEnum.*;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class ScheduleForDayDto implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate date;
@@ -42,7 +46,7 @@ public class ScheduleForDayDto implements Serializable {
         recalculate(mealEntity);
     }
 
-    public void recalculate(MealEntity mealEntity) {
+    private void recalculate(MealEntity mealEntity) {
         calorific += mealEntity.getCalorific();
         carbohydrates += mealEntity.getCarbohydrates();
         fat += mealEntity.getFat();
