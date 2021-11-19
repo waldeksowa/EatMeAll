@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import pl.wizard.software.diet.members.MemberDao;
 import pl.wizard.software.diet.members.MemberEntity;
 import pl.wizard.software.dto.CreateTrainingItemDto;
@@ -15,6 +14,7 @@ import pl.wizard.software.dto.TrainingPlanItemDto;
 import pl.wizard.software.mapper.TrainingPlanDtoMapper;
 import pl.wizard.software.sport.trainings.*;
 
+import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.ArrayList;
@@ -35,6 +35,7 @@ public class TrainingPlanService {
         return trainingPlanRepository.save(trainingPlanEntity);
     }
 
+    @Transactional
     public TrainingPlanEntity save(CreateTrainingPlanDto createTrainingPlanDto) {
         LocalDate firstTrainingDate = createTrainingPlanDto.getTrainings().get(0).getTrainingDate();
         Stream<Month> months = createTrainingPlanDto.getTrainings().stream()
@@ -70,6 +71,7 @@ public class TrainingPlanService {
         return save(trainingPlanEntity);
     }
 
+    @Transactional
     public TrainingPlanEntity update(TrainingPlanDto training, Long id) {
         Stream<Month> months = training.getTrainings().stream()
                 .map(trainingPlanItemDto -> trainingPlanItemDto.getTrainingDate().getMonth());
