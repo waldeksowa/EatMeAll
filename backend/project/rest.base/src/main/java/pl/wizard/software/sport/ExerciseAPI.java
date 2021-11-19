@@ -54,10 +54,8 @@ public class ExerciseAPI {
                                                  @Valid @RequestBody ExerciseEntity exercise) {
         Long account = loginService.getAccountIdByTokenUUID(token)
                 .orElseThrow(() -> new AuthorizationFailedException(token));
-        ExerciseEntity exerciseEntity = exerciseService.findById(id)
-                .orElseThrow(() -> new ExerciseNotFoundException(id));
 
-        return ResponseEntity.ok(exerciseService.save(exercise));
+        return ResponseEntity.ok(exerciseService.update(exercise, id));
     }
 
     @DeleteMapping("/{id}")

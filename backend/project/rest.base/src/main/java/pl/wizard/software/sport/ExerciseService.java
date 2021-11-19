@@ -2,9 +2,12 @@ package pl.wizard.software.sport;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import pl.wizard.software.exception.ExerciseNotFoundException;
 import pl.wizard.software.sport.exercises.ExerciseDao;
 import pl.wizard.software.sport.exercises.ExerciseEntity;
 
+import javax.transaction.Transactional;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,5 +31,15 @@ public class ExerciseService {
 
     public void deleteById(Long id) {
         exerciseRepository.deleteById(id);
+    }
+
+    @Transactional
+    public ExerciseEntity update(ExerciseEntity exercise, Long id) {
+        ExerciseEntity exerciseToUpdate = exerciseRepository.findById(id)
+                .orElseThrow(() -> new ExerciseNotFoundException(id));
+        exerciseToUpdate.setName(exercise.getName());
+        exerciseToUpdate.setMusclePart(exercise.getMusclePart());
+        exerciseToUpdate.setUpdatedAt(new Date());
+        return save(exerciseToUpdate);
     }
 }
