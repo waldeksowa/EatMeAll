@@ -1,4 +1,4 @@
-package pl.wizard.software.sport.exception;
+package pl.wizard.software.exception;
 
 public class AuthorizationFailedException extends RuntimeException {
 

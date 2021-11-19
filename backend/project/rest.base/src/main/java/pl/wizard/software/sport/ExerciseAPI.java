@@ -6,8 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.wizard.software.login.LoginService;
-import pl.wizard.software.sport.exception.AuthorizationFailedException;
-import pl.wizard.software.sport.exception.ExerciseNotFoundException;
+import pl.wizard.software.exception.AuthorizationFailedException;
+import pl.wizard.software.exception.ExerciseNotFoundException;
 import pl.wizard.software.sport.exercises.ExerciseEntity;
 
 import javax.validation.Valid;

@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.*;
 import pl.wizard.software.dto.CreateTrainingDto;
 import pl.wizard.software.dto.TrainingDto;
 import pl.wizard.software.login.LoginService;
-import pl.wizard.software.sport.exception.AuthorizationFailedException;
-import pl.wizard.software.sport.exception.TrainingNotFoundException;
+import pl.wizard.software.exception.AuthorizationFailedException;
+import pl.wizard.software.exception.TrainingNotFoundException;
 import pl.wizard.software.sport.trainings.TrainingEntity;
 
 import javax.validation.Valid;
