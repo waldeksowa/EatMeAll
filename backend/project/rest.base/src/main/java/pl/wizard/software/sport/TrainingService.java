@@ -14,6 +14,7 @@ import pl.wizard.software.sport.trainings.TrainingEntity;
 import pl.wizard.software.sport.trainings.TrainingExerciseDao;
 import pl.wizard.software.sport.trainings.TrainingExerciseEntity;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -43,6 +44,7 @@ public class TrainingService {
         trainingRepository.deleteById(id);
     }
 
+    @Transactional
     public TrainingEntity save(CreateTrainingDto training) {
         List<TrainingExerciseEntity> trainingExerciseEntities = new ArrayList<>();
         for (CreateTrainingExerciseDto trainingExercise : training.getExercises()) {
@@ -68,6 +70,7 @@ public class TrainingService {
         return save(trainingEntity);
     }
 
+    @Transactional
     public TrainingEntity update(TrainingDto training, Long id) {
         List<TrainingExerciseEntity> trainingExerciseEntities = new ArrayList<>();
         for (TrainingExerciseDto trainingExercise : training.getExercises()) {

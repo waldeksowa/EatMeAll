@@ -24,22 +24,26 @@ public class ExerciseAPI {
 
     @GetMapping
     public ResponseEntity<Collection<ExerciseEntity>> findAll(@RequestHeader("Authorization") String token) {
-        Long account = loginService.getAccountIdByTokenUUID(token).orElseThrow(() -> new AuthorizationFailedException(token));
+        Long account = loginService.getAccountIdByTokenUUID(token)
+                .orElseThrow(() -> new AuthorizationFailedException(token));
 
         return ResponseEntity.ok(exerciseService.findAll());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ExerciseEntity> findById(@RequestHeader("Authorization") String token, @PathVariable Long id) {
-        Long account = loginService.getAccountIdByTokenUUID(token).orElseThrow(() -> new AuthorizationFailedException(token));
-        ExerciseEntity exercise = exerciseService.findById(id).orElseThrow(() -> new ExerciseNotFoundException(id));
+        Long account = loginService.getAccountIdByTokenUUID(token)
+                .orElseThrow(() -> new AuthorizationFailedException(token));
+        ExerciseEntity exercise = exerciseService.findById(id)
+                .orElseThrow(() -> new ExerciseNotFoundException(id));
 
         return ResponseEntity.ok(exercise);
     }
 
     @PostMapping
     public ResponseEntity create(@RequestHeader("Authorization") String token, @Valid @RequestBody ExerciseEntity exercise) {
-        Long account = loginService.getAccountIdByTokenUUID(token).orElseThrow(() -> new AuthorizationFailedException(token));
+        Long account = loginService.getAccountIdByTokenUUID(token)
+                .orElseThrow(() -> new AuthorizationFailedException(token));
 
         return ResponseEntity.status(HttpStatus.CREATED).body(exerciseService.save(exercise));
     }
@@ -48,16 +52,20 @@ public class ExerciseAPI {
     public ResponseEntity<ExerciseEntity> update(@RequestHeader("Authorization") String token,
                                                  @PathVariable Long id,
                                                  @Valid @RequestBody ExerciseEntity exercise) {
-        Long account = loginService.getAccountIdByTokenUUID(token).orElseThrow(() -> new AuthorizationFailedException(token));
-        ExerciseEntity exerciseEntity = exerciseService.findById(id).orElseThrow(() -> new ExerciseNotFoundException(id));
+        Long account = loginService.getAccountIdByTokenUUID(token)
+                .orElseThrow(() -> new AuthorizationFailedException(token));
+        ExerciseEntity exerciseEntity = exerciseService.findById(id)
+                .orElseThrow(() -> new ExerciseNotFoundException(id));
 
         return ResponseEntity.ok(exerciseService.save(exercise));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity delete(@RequestHeader("Authorization") String token, @PathVariable Long id) {
-        Long account = loginService.getAccountIdByTokenUUID(token).orElseThrow(() -> new AuthorizationFailedException(token));
-        ExerciseEntity exercise = exerciseService.findById(id).orElseThrow(() -> new ExerciseNotFoundException(id));
+        Long account = loginService.getAccountIdByTokenUUID(token)
+                .orElseThrow(() -> new AuthorizationFailedException(token));
+        ExerciseEntity exercise = exerciseService.findById(id)
+                .orElseThrow(() -> new ExerciseNotFoundException(id));
         exerciseService.deleteById(id);
 
         return ResponseEntity.ok().build();
