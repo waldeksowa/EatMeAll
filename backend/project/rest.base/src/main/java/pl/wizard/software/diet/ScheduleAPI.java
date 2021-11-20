@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.wizard.software.diet.dto.CreateScheduleDto;
 import pl.wizard.software.diet.dto.ScheduleForWeekDto;
+import pl.wizard.software.diet.dto.ScheduleForWeekNewDto;
 import pl.wizard.software.login.LoginService;
 
 import javax.validation.Valid;
@@ -71,7 +72,7 @@ public class ScheduleAPI {
     }
 
     @GetMapping("/random")
-    public ResponseEntity<Map<DayOfWeek, DayDto>> getSchedule() {
+    public ResponseEntity<ScheduleForWeekDto> getSchedule() {
         return ResponseEntity.ok(scheduleService.getScheduleByMealTime());
     }
 

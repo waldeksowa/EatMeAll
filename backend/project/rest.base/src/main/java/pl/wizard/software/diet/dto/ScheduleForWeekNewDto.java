@@ -15,13 +15,13 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ScheduleForWeekDto {
+public class ScheduleForWeekNewDto {
     private Long Id;
     private Date createdAt;
     private Date updatedAt;
     private int version;
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate scheduleDate;
-    private List<ScheduleForDayDto> schedule = new ArrayList<>();;
+    private List<ScheduleForDayDto> schedule = new ArrayList<>();
     private Long memberId;
 }
