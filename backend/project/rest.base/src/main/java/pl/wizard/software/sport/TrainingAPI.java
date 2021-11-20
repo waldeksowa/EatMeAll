@@ -59,8 +59,6 @@ public class TrainingAPI {
                                                  @Valid @RequestBody TrainingDto training) {
         Long account = loginService.getAccountIdByTokenUUID(token)
                 .orElseThrow(() -> new AuthorizationFailedException(token));
-        TrainingEntity trainingEntity = trainingService.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("Could not find training with id " + id));
 
         return ResponseEntity.ok(mapToTrainingDto(trainingService.update(training, id)));
     }
@@ -69,9 +67,8 @@ public class TrainingAPI {
     public ResponseEntity delete(@RequestHeader("Authorization") String token, @PathVariable Long id) {
         Long account = loginService.getAccountIdByTokenUUID(token)
                 .orElseThrow(() -> new AuthorizationFailedException(token));
-        TrainingEntity trainingEntity = trainingService.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("Could not find training with id " + id));
-        trainingService.deleteById(id);
+
+        trainingService.delete(id);
 
         return ResponseEntity.ok().build();
     }

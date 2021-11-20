@@ -17,6 +17,7 @@ import pl.wizard.software.sport.trainings.TrainingExerciseEntity;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -40,7 +41,10 @@ public class TrainingService {
         return trainingRepository.save(training);
     }
 
-    public void deleteById(Long id) {
+    @Transactional
+    public void delete(Long id) {
+        TrainingEntity trainingEntity = findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Could not find training with id " + id));
         trainingRepository.deleteById(id);
     }
 
@@ -48,17 +52,14 @@ public class TrainingService {
     public TrainingEntity save(CreateTrainingDto training) {
         List<TrainingExerciseEntity> trainingExerciseEntities = new ArrayList<>();
         for (CreateTrainingExerciseDto trainingExercise : training.getExercises()) {
-            Optional<ExerciseEntity> exercise = exerciseRepository.findById(trainingExercise.getExerciseId());
-            if (!exercise.isPresent()) {
-                log.error("Exercise with id " + trainingExercise.getExerciseId() + "does not exists");
-            } else {
-                TrainingExerciseEntity trainingExerciseEntity = TrainingExerciseEntity.builder()
-                        .exercise(exercise.get())
-                        .exerciseType(trainingExercise.getExerciseType())
-                        .amount(trainingExercise.getAmount())
-                        .build();
-                trainingExerciseEntities.add(trainingExerciseEntity);
-            }
+            ExerciseEntity exercise = exerciseRepository.findById(trainingExercise.getExerciseId())
+                    .orElseThrow(() -> new NoSuchElementException("Could not find exercise with id " + trainingExercise.getExerciseId()));
+            TrainingExerciseEntity trainingExerciseEntity = TrainingExerciseEntity.builder()
+                    .exercise(exercise)
+                    .exerciseType(trainingExercise.getExerciseType())
+                    .amount(trainingExercise.getAmount())
+                    .build();
+            trainingExerciseEntities.add(trainingExerciseEntity);
         }
 
         TrainingEntity trainingEntity = TrainingEntity.builder()
@@ -72,24 +73,22 @@ public class TrainingService {
 
     @Transactional
     public TrainingEntity update(TrainingDto training, Long id) {
+        TrainingEntity trainingEntity = findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Could not find training with id " + id));
+
         List<TrainingExerciseEntity> trainingExerciseEntities = new ArrayList<>();
         for (TrainingExerciseDto trainingExercise : training.getExercises()) {
-            Optional<ExerciseEntity> exercise = exerciseRepository.findById(trainingExercise.getExerciseId());
-            Optional<TrainingExerciseEntity> trainingExer = trainingExerciseRepository.findById(trainingExercise.getTrainingExerciseId());
-            if (!exercise.isPresent()) {
-                log.error("Exercise with id " + trainingExercise.getExerciseId() + "does not exists");
-            } else if (!trainingExer.isPresent()) {
-                log.error("Treining exercise with id " + trainingExercise.getTrainingExerciseId() + "does not exists");
-            } else {
-                TrainingExerciseEntity trainingExerciseEntity = trainingExer.get();
-                trainingExerciseEntity.setExercise(exercise.get());
-                trainingExerciseEntity.setExerciseType(trainingExercise.getExerciseType());
-                trainingExerciseEntity.setAmount(trainingExercise.getAmount());
-                trainingExerciseEntities.add(trainingExerciseEntity);
-            }
+            ExerciseEntity exercise = exerciseRepository.findById(trainingExercise.getExerciseId())
+                    .orElseThrow(() -> new NoSuchElementException("Could not find exercise with id " + trainingExercise.getExerciseId()));
+            TrainingExerciseEntity trainingExer = trainingExerciseRepository.findById(trainingExercise.getTrainingExerciseId())
+                    .orElseThrow(() -> new NoSuchElementException("Could not find training exercise with id " + trainingExercise.getTrainingExerciseId()));;
+            TrainingExerciseEntity trainingExerciseEntity = trainingExer;
+            trainingExerciseEntity.setExercise(exercise);
+            trainingExerciseEntity.setExerciseType(trainingExercise.getExerciseType());
+            trainingExerciseEntity.setAmount(trainingExercise.getAmount());
+            trainingExerciseEntities.add(trainingExerciseEntity);
         }
 
-        TrainingEntity trainingEntity = trainingRepository.findById(id).get();
         trainingEntity.setName(training.getName());
         trainingEntity.setExercises(trainingExerciseEntities);
         trainingEntity.setTrainingType(training.getTrainingType());
