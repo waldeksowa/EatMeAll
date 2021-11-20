@@ -21,7 +21,8 @@ public class TrainingEntity extends AbstractBaseEntity {
     private List<TrainingExerciseEntity> exercises;
     @Enumerated(value = EnumType.ORDINAL)
     private TrainingType trainingType;
-    private Integer result;
+    private Integer repetitionResult;
+    private Double timeWeightResult;
     @Enumerated(value = EnumType.ORDINAL)
     private TrainingRating trainingRating;
 
