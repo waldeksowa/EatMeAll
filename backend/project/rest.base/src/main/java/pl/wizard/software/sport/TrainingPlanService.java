@@ -11,7 +11,6 @@ import pl.wizard.software.dto.CreateTrainingItemDto;
 import pl.wizard.software.dto.CreateTrainingPlanDto;
 import pl.wizard.software.dto.TrainingPlanDto;
 import pl.wizard.software.dto.TrainingPlanItemDto;
-import pl.wizard.software.exception.InvalidRequestBodyException;
 import pl.wizard.software.mapper.TrainingPlanDtoMapper;
 import pl.wizard.software.sport.trainings.TrainingDao;
 import pl.wizard.software.sport.trainings.TrainingEntity;
@@ -110,13 +109,6 @@ public class TrainingPlanService {
         return save(trainingPlanEntity);
     }
 
-    private void checkResultType(TrainingPlanItemDto trainingPlanItemDto) {
-        if ((trainingPlanItemDto.getTrainingType() == AS_MANY_REPS_AS_POSSIBLE && trainingPlanItemDto.getTimeWeightResult() != null)
-                || (trainingPlanItemDto.getTrainingType() != AS_MANY_REPS_AS_POSSIBLE && trainingPlanItemDto.getRepetitionResult() != null)) {
-            throw new InvalidRequestBodyException("Incompatible training result and training type for training with id " + trainingPlanItemDto.getTrainingId());
-        }
-    }
-
     @Transactional
     public List<TrainingPlanEntity> findAllByMember(Long accountId, Long memberId) {
         return trainingPlanRepository.findAllByMember(accountId, memberId);
@@ -159,6 +151,13 @@ public class TrainingPlanService {
                 .count();
         if (numberOfDifferentMonth > 1) {
             throw new IllegalArgumentException("All trainings should belong to the same month");
+        }
+    }
+
+    private void checkResultType(TrainingPlanItemDto trainingPlanItemDto) {
+        if ((trainingPlanItemDto.getTrainingType() == AS_MANY_REPS_AS_POSSIBLE && trainingPlanItemDto.getTimeWeightResult() != null)
+                || (trainingPlanItemDto.getTrainingType() != AS_MANY_REPS_AS_POSSIBLE && trainingPlanItemDto.getRepetitionResult() != null)) {
+            throw new IllegalArgumentException("Incompatible training result and training type for training with id " + trainingPlanItemDto.getTrainingId());
         }
     }
 }
