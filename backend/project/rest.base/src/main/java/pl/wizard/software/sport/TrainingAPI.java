@@ -7,13 +7,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.wizard.software.dto.CreateTrainingDto;
 import pl.wizard.software.dto.TrainingDto;
-import pl.wizard.software.login.LoginService;
 import pl.wizard.software.exception.AuthorizationFailedException;
-import pl.wizard.software.exception.TrainingNotFoundException;
+import pl.wizard.software.login.LoginService;
 import pl.wizard.software.sport.trainings.TrainingEntity;
 
 import javax.validation.Valid;
 import java.util.Collection;
+import java.util.NoSuchElementException;
 
 import static pl.wizard.software.mapper.TrainingDtoMapper.mapToTrainingDto;
 import static pl.wizard.software.mapper.TrainingDtoMapper.mapToTrainingDtos;
@@ -40,7 +40,7 @@ public class TrainingAPI {
         Long account = loginService.getAccountIdByTokenUUID(token)
                 .orElseThrow(() -> new AuthorizationFailedException(token));
         TrainingEntity training = trainingService.findById(id)
-                .orElseThrow(() -> new TrainingNotFoundException(id));
+                .orElseThrow(() -> new NoSuchElementException("Could not find training with id " + id));
 
         return ResponseEntity.ok(mapToTrainingDto(training));
     }
@@ -60,7 +60,7 @@ public class TrainingAPI {
         Long account = loginService.getAccountIdByTokenUUID(token)
                 .orElseThrow(() -> new AuthorizationFailedException(token));
         TrainingEntity trainingEntity = trainingService.findById(id)
-                .orElseThrow(() -> new TrainingNotFoundException(id));
+                .orElseThrow(() -> new NoSuchElementException("Could not find training with id " + id));
 
         return ResponseEntity.ok(mapToTrainingDto(trainingService.update(training, id)));
     }
@@ -70,7 +70,7 @@ public class TrainingAPI {
         Long account = loginService.getAccountIdByTokenUUID(token)
                 .orElseThrow(() -> new AuthorizationFailedException(token));
         TrainingEntity trainingEntity = trainingService.findById(id)
-                .orElseThrow(() -> new TrainingNotFoundException(id));
+                .orElseThrow(() -> new NoSuchElementException("Could not find training with id " + id));
         trainingService.deleteById(id);
 
         return ResponseEntity.ok().build();

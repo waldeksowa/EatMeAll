@@ -6,13 +6,15 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import java.util.NoSuchElementException;
+
 @ControllerAdvice
-public class ExerciseNotFoundAdvice {
+public class NoSuchElementAdvice {
 
     @ResponseBody
-    @ExceptionHandler(ExerciseNotFoundException.class)
+    @ExceptionHandler(NoSuchElementException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public String exerciseNotFoundHandler(ExerciseNotFoundException exception) {
+    public String noSuchElementHandler(NoSuchElementException exception) {
         return exception.getMessage();
     }
 }

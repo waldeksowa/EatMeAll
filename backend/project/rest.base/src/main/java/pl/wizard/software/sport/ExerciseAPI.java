@@ -5,13 +5,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.wizard.software.login.LoginService;
 import pl.wizard.software.exception.AuthorizationFailedException;
-import pl.wizard.software.exception.ExerciseNotFoundException;
+import pl.wizard.software.login.LoginService;
 import pl.wizard.software.sport.exercises.ExerciseEntity;
 
 import javax.validation.Valid;
 import java.util.Collection;
+import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/v2/exercises")
@@ -35,7 +35,7 @@ public class ExerciseAPI {
         Long account = loginService.getAccountIdByTokenUUID(token)
                 .orElseThrow(() -> new AuthorizationFailedException(token));
         ExerciseEntity exercise = exerciseService.findById(id)
-                .orElseThrow(() -> new ExerciseNotFoundException(id));
+                .orElseThrow(() -> new NoSuchElementException("Could not find exercise with id " + id));
 
         return ResponseEntity.ok(exercise);
     }
@@ -62,9 +62,7 @@ public class ExerciseAPI {
     public ResponseEntity delete(@RequestHeader("Authorization") String token, @PathVariable Long id) {
         Long account = loginService.getAccountIdByTokenUUID(token)
                 .orElseThrow(() -> new AuthorizationFailedException(token));
-        ExerciseEntity exercise = exerciseService.findById(id)
-                .orElseThrow(() -> new ExerciseNotFoundException(id));
-        exerciseService.deleteById(id);
+        exerciseService.delete(id);
 
         return ResponseEntity.ok().build();
     }

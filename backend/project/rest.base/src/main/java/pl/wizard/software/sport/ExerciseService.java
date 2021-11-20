@@ -2,13 +2,13 @@ package pl.wizard.software.sport;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import pl.wizard.software.exception.ExerciseNotFoundException;
 import pl.wizard.software.sport.exercises.ExerciseDao;
 import pl.wizard.software.sport.exercises.ExerciseEntity;
 
 import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -29,14 +29,17 @@ public class ExerciseService {
         return exerciseRepository.save(exercise);
     }
 
-    public void deleteById(Long id) {
+    @Transactional
+    public void delete(Long id) {
+        ExerciseEntity exercise = findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Could not find exercise with id " + id));
         exerciseRepository.deleteById(id);
     }
 
     @Transactional
     public ExerciseEntity update(ExerciseEntity exercise, Long id) {
         ExerciseEntity exerciseToUpdate = exerciseRepository.findById(id)
-                .orElseThrow(() -> new ExerciseNotFoundException(id));
+                .orElseThrow(() -> new NoSuchElementException("Could not find exercise with id " + id));
         exerciseToUpdate.setName(exercise.getName());
         exerciseToUpdate.setMusclePart(exercise.getMusclePart());
         exerciseToUpdate.setUpdatedAt(new Date());
