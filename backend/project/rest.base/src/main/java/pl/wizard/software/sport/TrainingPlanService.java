@@ -19,6 +19,7 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -36,7 +37,7 @@ public class TrainingPlanService {
     }
 
     @Transactional
-    public TrainingPlanEntity save(CreateTrainingPlanDto createTrainingPlanDto) {
+    public TrainingPlanEntity create(CreateTrainingPlanDto createTrainingPlanDto) {
         LocalDate firstTrainingDate = createTrainingPlanDto.getTrainings().get(0).getTrainingDate();
         Stream<Month> months = createTrainingPlanDto.getTrainings().stream()
                 .map(createTraining -> createTraining.getTrainingDate().getMonth());
@@ -44,24 +45,21 @@ public class TrainingPlanService {
 
         List<TrainingPlanItemDto> trainingPlanItemDtos = new ArrayList<>();
         for (CreateTrainingItemDto training : createTrainingPlanDto.getTrainings()) {
-            Optional<TrainingEntity> trainingEntity = trainingRepository.findById(training.getTrainingId());
-            if (!trainingEntity.isPresent()) {
-                log.error("Training with id " + training.getTrainingId() + "does not exists");
-            } else {
-                TrainingPlanItemDto trainingPlanItemDto = TrainingPlanItemDto.builder()
-                        .trainingId(training.getTrainingId())
-                        .trainingDate(training.getTrainingDate())
-                        .trainingName(trainingEntity.get().getName())
-                        .trainingType(trainingEntity.get().getTrainingType())
-                        .trainingResult(trainingEntity.get().getResult())
-                        .trainingRating(trainingEntity.get().getTrainingRating())
-                        .build();
-                trainingPlanItemDtos.add(trainingPlanItemDto);
-            }
+            TrainingEntity trainingEntity = trainingRepository.findById(training.getTrainingId())
+                    .orElseThrow(() -> new NoSuchElementException("Could not find training with id " + training.getTrainingId()));
+            TrainingPlanItemDto trainingPlanItemDto = TrainingPlanItemDto.builder()
+                    .trainingId(training.getTrainingId())
+                    .trainingDate(training.getTrainingDate())
+                    .trainingName(trainingEntity.getName())
+                    .trainingType(trainingEntity.getTrainingType())
+                    .trainingResult(trainingEntity.getResult())
+                    .trainingRating(trainingEntity.getTrainingRating())
+                    .build();
+            trainingPlanItemDtos.add(trainingPlanItemDto);
         }
 
         MemberEntity memberEntity = memberRepository.findById(createTrainingPlanDto.getMemberId())
-                .orElseThrow(() -> new IllegalArgumentException("Member with id " + createTrainingPlanDto.getMemberId() + "does not exists"));
+                .orElseThrow(() -> new NoSuchElementException("Could not find member with id " + createTrainingPlanDto.getMemberId()));
         TrainingPlanEntity trainingPlanEntity = TrainingPlanEntity.builder()
                 .trainingPlanDate(firstTrainingDate.withDayOfMonth(1))
                 .member(memberEntity)
@@ -73,31 +71,29 @@ public class TrainingPlanService {
 
     @Transactional
     public TrainingPlanEntity update(TrainingPlanDto training, Long id) {
+        TrainingPlanEntity trainingPlanEntity = trainingPlanRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Could not find training plan with id " + id));
         Stream<Month> months = training.getTrainings().stream()
                 .map(trainingPlanItemDto -> trainingPlanItemDto.getTrainingDate().getMonth());
         checkTrainingsMonth(months);
 
         List<TrainingPlanItemDto> trainingPlanItemDtos = new ArrayList<>();
         for (TrainingPlanItemDto trainingPlanItemDto : training.getTrainings()) {
-            Optional<TrainingEntity> trainingEntity = trainingRepository.findById(trainingPlanItemDto.getTrainingId());
-            if (!trainingEntity.isPresent()) {
-                log.error("Training with id " + trainingPlanItemDto.getTrainingId() + "does not exists");
-            } else {
-                TrainingPlanItemDto trainingPlanItem = TrainingPlanItemDto.builder()
-                        .trainingId(trainingPlanItemDto.getTrainingId())
-                        .trainingDate(trainingPlanItemDto.getTrainingDate())
-                        .trainingName(trainingEntity.get().getName())
-                        .trainingType(trainingEntity.get().getTrainingType())
-                        .trainingResult(trainingPlanItemDto.getTrainingResult())
-                        .trainingRating(trainingPlanItemDto.getTrainingRating())
-                        .build();
-                trainingPlanItemDtos.add(trainingPlanItemDto);
-            }
+            TrainingEntity trainingEntity = trainingRepository.findById(trainingPlanItemDto.getTrainingId())
+                    .orElseThrow(() -> new NoSuchElementException("Could not find training with id " + trainingPlanItemDto.getTrainingId()));
+            TrainingPlanItemDto trainingPlanItem = TrainingPlanItemDto.builder()
+                    .trainingId(trainingPlanItemDto.getTrainingId())
+                    .trainingDate(trainingPlanItemDto.getTrainingDate())
+                    .trainingName(trainingEntity.getName())
+                    .trainingType(trainingEntity.getTrainingType())
+                    .trainingResult(trainingPlanItemDto.getTrainingResult())
+                    .trainingRating(trainingPlanItemDto.getTrainingRating())
+                    .build();
+            trainingPlanItemDtos.add(trainingPlanItem);
         }
 
         MemberEntity memberEntity = memberRepository.findById(training.getMemberId())
-                .orElseThrow(() -> new IllegalArgumentException("Member with id " + training.getMemberId() + "does not exists"));
-        TrainingPlanEntity trainingPlanEntity = trainingPlanRepository.findById(id).get();
+                .orElseThrow(() -> new NoSuchElementException("Could not find member with id " + training.getMemberId()));
         trainingPlanEntity.setMember(memberEntity);
         trainingPlanEntity.setTrainingPlanDate(training.getTrainingPlanDate().withDayOfMonth(1));
         trainingPlanEntity.setTrainings(TrainingPlanDtoMapper.convertToBytes(trainingPlanItemDtos));
@@ -134,7 +130,10 @@ public class TrainingPlanService {
         return trainingPlanRepository.findById(id);
     }
 
-    public void deleteById(Long id) {
+    @Transactional
+    public void delete(Long id) {
+        TrainingPlanEntity trainingPlanEntity = trainingPlanRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Could not find training plan with id " + id));
         trainingPlanRepository.deleteById(id);
     }
 

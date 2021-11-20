@@ -9,14 +9,13 @@ import pl.wizard.software.diet.MemberService;
 import pl.wizard.software.dto.CreateTrainingPlanDto;
 import pl.wizard.software.dto.MemberDto;
 import pl.wizard.software.dto.TrainingPlanDto;
-import pl.wizard.software.login.LoginService;
 import pl.wizard.software.exception.AuthorizationFailedException;
-import pl.wizard.software.exception.MemberNotFoundException;
-import pl.wizard.software.exception.TrainingPlanNotFoundException;
+import pl.wizard.software.login.LoginService;
 import pl.wizard.software.sport.trainings.TrainingPlanEntity;
 
 import javax.validation.Valid;
 import java.util.Collection;
+import java.util.NoSuchElementException;
 
 import static pl.wizard.software.mapper.TrainingPlanDtoMapper.mapToTrainingPlanDto;
 import static pl.wizard.software.mapper.TrainingPlanDtoMapper.mapToTrainingPlanDtos;
@@ -37,7 +36,7 @@ public class TrainingPlanAPI {
         Long accountId = loginService.getAccountIdByTokenUUID(token)
                 .orElseThrow(() -> new AuthorizationFailedException(token));
         MemberDto member = memberService.findMemberById(accountId, memberId)
-                .orElseThrow(() -> new MemberNotFoundException(memberId));
+                .orElseThrow(() -> new NoSuchElementException("Could not find member with id " + memberId));
 
         return ResponseEntity.ok(mapToTrainingPlanDtos(trainingPlanService.findAllByMember(accountId, memberId)));
     }
@@ -49,9 +48,9 @@ public class TrainingPlanAPI {
         Long accountId = loginService.getAccountIdByTokenUUID(token)
                 .orElseThrow(() -> new AuthorizationFailedException(token));
         MemberDto member = memberService.findMemberById(accountId, memberId)
-                .orElseThrow(() -> new MemberNotFoundException(memberId));
+                .orElseThrow(() -> new NoSuchElementException("Could not find member with id " + memberId));
         TrainingPlanEntity trainingPlan = trainingPlanService.findByIdAndMember(accountId, memberId, trainingPlanId)
-                .orElseThrow(TrainingPlanNotFoundException::new);
+                .orElseThrow(() -> new NoSuchElementException("Could not find training plan with id " + trainingPlanId));
 
         return ResponseEntity.ok(mapToTrainingPlanDto(trainingPlan));
     }
@@ -61,9 +60,9 @@ public class TrainingPlanAPI {
         Long accountId = loginService.getAccountIdByTokenUUID(token)
                 .orElseThrow(() -> new AuthorizationFailedException(token));
         MemberDto member = memberService.findMemberById(accountId, memberId)
-                .orElseThrow(() -> new MemberNotFoundException(memberId));
+                .orElseThrow(() -> new NoSuchElementException("Could not find member with id " + memberId));
         TrainingPlanEntity trainingPlan = trainingPlanService.findCurrent(accountId, memberId)
-                .orElseThrow(TrainingPlanNotFoundException::new);
+                .orElseThrow(() -> new NoSuchElementException("Could not find current training plan for member with id " + memberId));
 
         return ResponseEntity.ok(mapToTrainingPlanDto(trainingPlan));
     }
@@ -73,9 +72,9 @@ public class TrainingPlanAPI {
         Long accountId = loginService.getAccountIdByTokenUUID(token)
                 .orElseThrow(() -> new AuthorizationFailedException(token));
         MemberDto member = memberService.findMemberById(accountId, memberId)
-                .orElseThrow(() -> new MemberNotFoundException(memberId));
+                .orElseThrow(() -> new NoSuchElementException("Could not find member with id " + memberId));
         TrainingPlanEntity trainingPlan = trainingPlanService.findNext(accountId, memberId)
-                .orElseThrow(TrainingPlanNotFoundException::new);
+                .orElseThrow(() -> new NoSuchElementException("Could not find next training plan for member with id " + memberId));
 
         return ResponseEntity.ok(mapToTrainingPlanDto(trainingPlan));
     }
@@ -85,7 +84,7 @@ public class TrainingPlanAPI {
         Long accountId = loginService.getAccountIdByTokenUUID(token)
                 .orElseThrow(() -> new AuthorizationFailedException(token));
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(mapToTrainingPlanDto(trainingPlanService.save(trainingPlan)));
+        return ResponseEntity.status(HttpStatus.CREATED).body(mapToTrainingPlanDto(trainingPlanService.create(trainingPlan)));
     }
 
     @PutMapping("/{id}")
@@ -94,8 +93,6 @@ public class TrainingPlanAPI {
                                               @Valid @RequestBody TrainingPlanDto training) {
         Long accountId = loginService.getAccountIdByTokenUUID(token)
                 .orElseThrow(() -> new AuthorizationFailedException(token));
-        trainingPlanService.findById(id)
-                .orElseThrow(TrainingPlanNotFoundException::new);
 
         return ResponseEntity.ok(mapToTrainingPlanDto(trainingPlanService.update(training, id)));
     }
@@ -104,10 +101,8 @@ public class TrainingPlanAPI {
     public ResponseEntity delete(@RequestHeader("Authorization") String token, @PathVariable Long id) {
         Long accountId = loginService.getAccountIdByTokenUUID(token)
                 .orElseThrow(() -> new AuthorizationFailedException(token));
-        trainingPlanService.findById(id)
-                .orElseThrow(TrainingPlanNotFoundException::new);
 
-        trainingPlanService.deleteById(id);
+        trainingPlanService.delete(id);
         return ResponseEntity.ok().build();
     }
 }
