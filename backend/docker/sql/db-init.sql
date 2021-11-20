@@ -306,7 +306,8 @@ CREATE TABLE public.trainings (
     version integer NOT NULL,
     name character varying(255) NOT NULL,
     training_type integer,
-    result integer,
+    repetition_result integer,
+    time_weight_result double precision,
     training_rating integer,
     CONSTRAINT trainings_pkey PRIMARY KEY (id)
 );
