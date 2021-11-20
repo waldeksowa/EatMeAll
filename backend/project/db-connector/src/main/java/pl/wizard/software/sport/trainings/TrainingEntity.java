@@ -27,7 +27,7 @@ public class TrainingEntity extends AbstractBaseEntity {
     private TrainingRating trainingRating;
 
     public enum TrainingType {
-        AS_MANY_REPS_AS_POSSIBLE, FOR_TIME
+        AS_MANY_REPS_AS_POSSIBLE, FOR_TIME, FOR_WEIGHT
     }
 
     public enum TrainingRating {
