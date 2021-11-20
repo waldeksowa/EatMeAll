@@ -23,6 +23,7 @@ public class TrainingPlanItemDto implements Serializable {
     private Long trainingId;
     private String trainingName;
     private TrainingType trainingType;
-    private Integer trainingResult;
+    private Integer repetitionResult;
+    private Double timeWeightResult;
     private TrainingRating trainingRating;
 }

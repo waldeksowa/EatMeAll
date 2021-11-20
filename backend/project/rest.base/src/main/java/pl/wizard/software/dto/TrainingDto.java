@@ -17,6 +17,7 @@ public class TrainingDto {
     private String name;
     private List<TrainingExerciseDto> exercises;
     private TrainingType trainingType;
-    private Integer result;
+    private Integer repetitionResult;
+    private Double timeWeightResult;
     private TrainingRating trainingRating;
 }

@@ -24,7 +24,8 @@ public class TrainingDtoMapper {
                 .id(trainingEntity.getId())
                 .name(trainingEntity.getName())
                 .trainingType(trainingEntity.getTrainingType())
-                .result(trainingEntity.getResult())
+                .repetitionResult(trainingEntity.getRepetitionResult())
+                .timeWeightResult(trainingEntity.getTimeWeightResult())
                 .trainingRating(trainingEntity.getTrainingRating())
                 .exercises(mapToTrainingExerciseDtos(trainingEntity.getExercises()))
                 .build();

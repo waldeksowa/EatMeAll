@@ -49,7 +49,7 @@ public class TrainingService {
     }
 
     @Transactional
-    public TrainingEntity save(CreateTrainingDto training) {
+    public TrainingEntity create(CreateTrainingDto training) {
         List<TrainingExerciseEntity> trainingExerciseEntities = new ArrayList<>();
         for (CreateTrainingExerciseDto trainingExercise : training.getExercises()) {
             ExerciseEntity exercise = exerciseRepository.findById(trainingExercise.getExerciseId())
@@ -80,9 +80,8 @@ public class TrainingService {
         for (TrainingExerciseDto trainingExercise : training.getExercises()) {
             ExerciseEntity exercise = exerciseRepository.findById(trainingExercise.getExerciseId())
                     .orElseThrow(() -> new NoSuchElementException("Could not find exercise with id " + trainingExercise.getExerciseId()));
-            TrainingExerciseEntity trainingExer = trainingExerciseRepository.findById(trainingExercise.getTrainingExerciseId())
+            TrainingExerciseEntity trainingExerciseEntity = trainingExerciseRepository.findById(trainingExercise.getTrainingExerciseId())
                     .orElseThrow(() -> new NoSuchElementException("Could not find training exercise with id " + trainingExercise.getTrainingExerciseId()));;
-            TrainingExerciseEntity trainingExerciseEntity = trainingExer;
             trainingExerciseEntity.setExercise(exercise);
             trainingExerciseEntity.setExerciseType(trainingExercise.getExerciseType());
             trainingExerciseEntity.setAmount(trainingExercise.getAmount());
@@ -92,8 +91,6 @@ public class TrainingService {
         trainingEntity.setName(training.getName());
         trainingEntity.setExercises(trainingExerciseEntities);
         trainingEntity.setTrainingType(training.getTrainingType());
-        trainingEntity.setResult(training.getResult());
-        trainingEntity.setTrainingRating(training.getTrainingRating());
 
         return save(trainingEntity);
     }

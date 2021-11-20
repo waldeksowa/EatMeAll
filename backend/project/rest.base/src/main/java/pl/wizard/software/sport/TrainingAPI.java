@@ -50,7 +50,7 @@ public class TrainingAPI {
         Long account = loginService.getAccountIdByTokenUUID(token)
                 .orElseThrow(() -> new AuthorizationFailedException(token));
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(mapToTrainingDto(trainingService.save(training)));
+        return ResponseEntity.status(HttpStatus.CREATED).body(mapToTrainingDto(trainingService.create(training)));
     }
 
     @PutMapping("/{id}")

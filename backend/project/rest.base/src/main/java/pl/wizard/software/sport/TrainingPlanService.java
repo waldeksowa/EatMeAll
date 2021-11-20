@@ -11,8 +11,12 @@ import pl.wizard.software.dto.CreateTrainingItemDto;
 import pl.wizard.software.dto.CreateTrainingPlanDto;
 import pl.wizard.software.dto.TrainingPlanDto;
 import pl.wizard.software.dto.TrainingPlanItemDto;
+import pl.wizard.software.exception.InvalidRequestBodyException;
 import pl.wizard.software.mapper.TrainingPlanDtoMapper;
-import pl.wizard.software.sport.trainings.*;
+import pl.wizard.software.sport.trainings.TrainingDao;
+import pl.wizard.software.sport.trainings.TrainingEntity;
+import pl.wizard.software.sport.trainings.TrainingPlanDao;
+import pl.wizard.software.sport.trainings.TrainingPlanEntity;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
@@ -22,6 +26,8 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Stream;
+
+import static pl.wizard.software.sport.trainings.TrainingEntity.TrainingType.AS_MANY_REPS_AS_POSSIBLE;
 
 @Service
 @RequiredArgsConstructor
@@ -52,7 +58,8 @@ public class TrainingPlanService {
                     .trainingDate(training.getTrainingDate())
                     .trainingName(trainingEntity.getName())
                     .trainingType(trainingEntity.getTrainingType())
-                    .trainingResult(trainingEntity.getResult())
+                    .repetitionResult(trainingEntity.getRepetitionResult())
+                    .timeWeightResult(trainingEntity.getTimeWeightResult())
                     .trainingRating(trainingEntity.getTrainingRating())
                     .build();
             trainingPlanItemDtos.add(trainingPlanItemDto);
@@ -79,6 +86,7 @@ public class TrainingPlanService {
 
         List<TrainingPlanItemDto> trainingPlanItemDtos = new ArrayList<>();
         for (TrainingPlanItemDto trainingPlanItemDto : training.getTrainings()) {
+            checkResultType(trainingPlanItemDto);
             TrainingEntity trainingEntity = trainingRepository.findById(trainingPlanItemDto.getTrainingId())
                     .orElseThrow(() -> new NoSuchElementException("Could not find training with id " + trainingPlanItemDto.getTrainingId()));
             TrainingPlanItemDto trainingPlanItem = TrainingPlanItemDto.builder()
@@ -86,7 +94,8 @@ public class TrainingPlanService {
                     .trainingDate(trainingPlanItemDto.getTrainingDate())
                     .trainingName(trainingEntity.getName())
                     .trainingType(trainingEntity.getTrainingType())
-                    .trainingResult(trainingPlanItemDto.getTrainingResult())
+                    .repetitionResult(trainingPlanItemDto.getRepetitionResult())
+                    .timeWeightResult(trainingPlanItemDto.getTimeWeightResult())
                     .trainingRating(trainingPlanItemDto.getTrainingRating())
                     .build();
             trainingPlanItemDtos.add(trainingPlanItem);
@@ -99,6 +108,13 @@ public class TrainingPlanService {
         trainingPlanEntity.setTrainings(TrainingPlanDtoMapper.convertToBytes(trainingPlanItemDtos));
 
         return save(trainingPlanEntity);
+    }
+
+    private void checkResultType(TrainingPlanItemDto trainingPlanItemDto) {
+        if ((trainingPlanItemDto.getTrainingType() == AS_MANY_REPS_AS_POSSIBLE && trainingPlanItemDto.getTimeWeightResult() != null)
+                || (trainingPlanItemDto.getTrainingType() != AS_MANY_REPS_AS_POSSIBLE && trainingPlanItemDto.getRepetitionResult() != null)) {
+            throw new InvalidRequestBodyException("Incompatible training result and training type for training with id " + trainingPlanItemDto.getTrainingId());
+        }
     }
 
     @Transactional
