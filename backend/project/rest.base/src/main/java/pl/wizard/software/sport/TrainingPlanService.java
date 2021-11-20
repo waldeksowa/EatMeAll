@@ -158,7 +158,7 @@ public class TrainingPlanService {
     private void checkResultType(TrainingPlanItemDto trainingPlanItemDto) {
         if ((trainingPlanItemDto.getTrainingType() == AS_MANY_REPS_AS_POSSIBLE && trainingPlanItemDto.getTimeWeightResult() != null)
                 || (trainingPlanItemDto.getTrainingType() != AS_MANY_REPS_AS_POSSIBLE && trainingPlanItemDto.getRepetitionResult() != null)) {
-            throw new InvalidRequestBodyException("Incompatible training result and training type for training in "
+            throw new InvalidRequestBodyException("Incompatible training result and training type for training on "
                                                     + trainingPlanItemDto.getTrainingDate().toString());
         }
     }
