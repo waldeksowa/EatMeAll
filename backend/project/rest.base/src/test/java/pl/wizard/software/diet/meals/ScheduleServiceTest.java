@@ -7,9 +7,9 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import pl.wizard.software.diet.ScheduleService;
-import pl.wizard.software.diet.dto.ScheduleForWeekDto;
 import pl.wizard.software.diet.products.ProductEntity;
 import pl.wizard.software.diet.schedules.ScheduleDao;
+import pl.wizard.software.dto.ScheduleForWeekDto;
 
 import java.util.ArrayList;
 import java.util.List;

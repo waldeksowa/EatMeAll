@@ -6,16 +6,16 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import pl.wizard.software.diet.dto.CreateScheduleDto;
-import pl.wizard.software.diet.dto.CreateScheduleForDayDto;
-import pl.wizard.software.diet.dto.ScheduleForDayDto;
-import pl.wizard.software.diet.dto.ScheduleForWeekDto;
-import pl.wizard.software.diet.mapper.ScheduleDtoMapper;
 import pl.wizard.software.diet.meals.MealDao;
 import pl.wizard.software.diet.meals.MealEntity;
 import pl.wizard.software.diet.meals.MealTimeEnum;
 import pl.wizard.software.diet.schedules.ScheduleDao;
 import pl.wizard.software.diet.schedules.ScheduleEntity;
+import pl.wizard.software.dto.CreateScheduleDto;
+import pl.wizard.software.dto.CreateScheduleForDayDto;
+import pl.wizard.software.dto.ScheduleForDayDto;
+import pl.wizard.software.dto.ScheduleForWeekDto;
+import pl.wizard.software.mapper.ScheduleDtoMapper;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -124,11 +124,7 @@ public class ScheduleService {
     }
 
     private Optional<ScheduleForWeekDto> getScheduleForWeekDto(Optional<ScheduleEntity> schedule) {
-        if (schedule.isPresent()) {
-            return Optional.of(ScheduleDtoMapper.mapToScheduleDto(schedule.get()));
-        } else {
-            return Optional.empty();
-        }
+        return schedule.map(ScheduleDtoMapper::mapToScheduleDto);
     }
 
 }

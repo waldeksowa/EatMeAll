@@ -1,7 +1,7 @@
 package pl.wizard.software.diet;
 
 import lombok.Getter;
-import pl.wizard.software.diet.dto.MealDto;
+import pl.wizard.software.dto.MealDto;
 import pl.wizard.software.diet.meals.MealTimeEnum;
 
 import java.util.HashMap;
