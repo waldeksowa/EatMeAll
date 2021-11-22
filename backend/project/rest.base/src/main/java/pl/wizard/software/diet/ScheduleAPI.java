@@ -71,7 +71,7 @@ public class ScheduleAPI {
     }
 
     @GetMapping("/random")
-    public ResponseEntity<Map<DayOfWeek, DayDto>> getSchedule() {
+    public ResponseEntity<ScheduleForWeekDto> getSchedule() {
         return ResponseEntity.ok(scheduleService.getScheduleByMealTime());
     }
 

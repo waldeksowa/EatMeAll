@@ -9,5 +9,5 @@ import java.util.List;
 @Setter
 public class CreateScheduleDto {
     private Long memberId;
-    private List<ScheduleForDayDto> schedule;
+    private List<CreateScheduleForDayDto> schedule;
 }

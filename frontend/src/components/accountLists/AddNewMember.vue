@@ -93,22 +93,17 @@
       </div>
     </div>
     <div class="row justify-center q-pa-md q-gutter-lg">
-      <q-btn
-        @click="addNewUser()"
-        size="lg"
-        :v-close-popup="returnNumberByBoolen()"
-        class="bg-primary text-white"
-        >Dodaj</q-btn
-      >
+      <div @click="addNewUser()">
+        <q-btn size="lg" class="bg-primary text-white">Dodaj</q-btn>
+      </div>
       <q-btn class="bg-primary text-white" size="lg" v-close-popup
-        >Anuluj</q-btn
+        >Zamknij okno</q-btn
       >
     </div>
   </q-card>
 </template>
 <script>
-import { Notify } from "quasar";
-
+import { mapActions } from "vuex";
 export default {
   data() {
     return {
@@ -124,28 +119,10 @@ export default {
       recommendedFat: null,
       recommendedProtein: null,
       recommendedRoughage: null,
-      isDataValid: false,
     };
   },
   methods: {
-    returnNumberByBoolen() {
-      if (this.isDataValid) {
-        return 1;
-      }
-      return 0;
-    },
-    errorMesage(e) {
-      Notify.create({
-        message: `⚠ ${e}`,
-        classes: "full-width text-center bg-negative",
-      });
-    },
-    notifySucessful(e) {
-      Notify.create({
-        message: `${e}`,
-        classes: "full-width text-center bg-positive",
-      });
-    },
+    ...mapActions("store", ["errorMesage", "notifySucessful"]),
     addNewUser() {
       if (
         this.name ||
@@ -161,7 +138,6 @@ export default {
         this.recommendedProtein ||
         this.recommendedRoughage
       ) {
-        this.isDataValid = true;
         this.$emit("addNewUser", {
           name: this.name,
           age: this.age,
@@ -176,9 +152,23 @@ export default {
           recommendedProtein: this.recommendedProtein,
           recommendedRoughage: this.recommendedRoughage,
         });
+        this.name = null;
+        this.age = null;
+        this.height = null;
+        this.currentWeight = null;
+        this.currentFat = null;
+        this.currentMussels = null;
+        this.currentWater = null;
+        this.recommendedCalories = null;
+        this.recommendedCarbohydrates = null;
+        this.recommendedFat = null;
+        this.recommendedProtein = null;
+        this.recommendedRoughage = null;
+        this.notifySucessful("Użytkownik został dodany pomyślnie");
       } else {
         this.errorMesage("Uzupelnij wszystkie pola");
       }
+    
     },
   },
 };

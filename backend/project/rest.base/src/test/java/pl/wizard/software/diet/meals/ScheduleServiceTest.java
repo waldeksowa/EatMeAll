@@ -6,17 +6,16 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
-import pl.wizard.software.diet.DayDto;
 import pl.wizard.software.diet.ScheduleService;
+import pl.wizard.software.diet.dto.ScheduleForWeekDto;
 import pl.wizard.software.diet.products.ProductEntity;
 import pl.wizard.software.diet.schedules.ScheduleDao;
 
-import java.time.DayOfWeek;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
+import static java.time.DayOfWeek.MONDAY;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
@@ -66,14 +65,14 @@ public class ScheduleServiceTest {
         when(mealRepository.findRandomByMealTime(Mockito.anyInt(),Mockito.anyInt())).thenReturn(mockList);
 
         //when
-        Map<DayOfWeek, DayDto> result = scheduleService.getScheduleByMealTime();
+        ScheduleForWeekDto result = scheduleService.getScheduleByMealTime();
 
         //then
-        assertEquals(500,result.get(DayOfWeek.MONDAY).getCalorific(),0);
-        assertEquals(450,result.get(DayOfWeek.MONDAY).getCarbohydrates(),0);
-        assertEquals(400,result.get(DayOfWeek.MONDAY).getFat(),0);
-        assertEquals(350,result.get(DayOfWeek.MONDAY).getProtein(),0);
-        assertEquals(5,result.get(DayOfWeek.MONDAY).getRoughage(),0);
+        assertEquals(500,result.getSchedule().get(MONDAY.ordinal()).getCalorific(),0);
+        assertEquals(450,result.getSchedule().get(MONDAY.ordinal()).getCarbohydrates(),0);
+        assertEquals(400,result.getSchedule().get(MONDAY.ordinal()).getFat(),0);
+        assertEquals(350,result.getSchedule().get(MONDAY.ordinal()).getProtein(),0);
+        assertEquals(5,result.getSchedule().get(MONDAY.ordinal()).getRoughage(),0);
     }
 
     @Test
@@ -121,14 +120,14 @@ public class ScheduleServiceTest {
         when(mealRepository.findRandomByMealTime(Mockito.anyInt(),Mockito.anyInt())).thenReturn(mockList);
 
         //when
-        Map<DayOfWeek, DayDto> result = scheduleService.getScheduleByMealTime();
+        ScheduleForWeekDto result = scheduleService.getScheduleByMealTime();
 
         //then
-        assertEquals(1005,result.get(DayOfWeek.MONDAY).getCalorific(),0);
-        assertEquals(905,result.get(DayOfWeek.MONDAY).getCarbohydrates(),0);
-        assertEquals(805,result.get(DayOfWeek.MONDAY).getFat(),0);
-        assertEquals(705,result.get(DayOfWeek.MONDAY).getProtein(),0);
-        assertEquals(15,result.get(DayOfWeek.MONDAY).getRoughage(),0);
+        assertEquals(1005,result.getSchedule().get(MONDAY.ordinal()).getCalorific(),0);
+        assertEquals(905,result.getSchedule().get(MONDAY.ordinal()).getCarbohydrates(),0);
+        assertEquals(805,result.getSchedule().get(MONDAY.ordinal()).getFat(),0);
+        assertEquals(705,result.getSchedule().get(MONDAY.ordinal()).getProtein(),0);
+        assertEquals(15,result.getSchedule().get(MONDAY.ordinal()).getRoughage(),0);
 
     }
 
@@ -248,14 +247,15 @@ public class ScheduleServiceTest {
         when(mealRepository.findRandomByMealTime(5, 7)).thenReturn(new ArrayList<>(List.of(meal_supper)));
 
         //when
-        Map<DayOfWeek, DayDto> result = scheduleService.getScheduleByMealTime();
+        ScheduleForWeekDto result = scheduleService.getScheduleByMealTime();
 
         //then
-        assertEquals(510,result.get(DayOfWeek.MONDAY).getCalorific(),0);
-        assertEquals(460,result.get(DayOfWeek.MONDAY).getCarbohydrates(),0);
-        assertEquals(410,result.get(DayOfWeek.MONDAY).getFat(),0);
-        assertEquals(360,result.get(DayOfWeek.MONDAY).getProtein(),0);
-        assertEquals(15,result.get(DayOfWeek.MONDAY).getRoughage(),0);
+        assertEquals(510,result.getSchedule().get(MONDAY.ordinal()).getCalorific(),0);
+        assertEquals(460,result.getSchedule().get(MONDAY.ordinal()).getCarbohydrates(),0);
+        assertEquals(410,result.getSchedule().get(MONDAY.ordinal()).getFat(),0);
+        assertEquals(360,result.getSchedule().get(MONDAY.ordinal()).getProtein(),0);
+        assertEquals(15,result.getSchedule().get(MONDAY.ordinal()).getRoughage(),0);
 
     }
+
 }

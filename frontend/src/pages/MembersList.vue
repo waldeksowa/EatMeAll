@@ -11,9 +11,17 @@
       "
     >
       <div v-for="(account, index) in membersAccounts" :key="`member-${index}`">
-        <div @click="goToMemberSite(account.id)" :userData="membersAccounts">
-          <q-img src="../assets/Netflix-avatar.jpg" class="user-icon" />
-          <h5 class="text-center">{{ account.name }}</h5>
+        <div
+          @click="goToMemberSite(account.id)"
+          :userData="membersAccounts"
+          class="member-container"
+        >
+          <center>
+            <q-img src="../assets/Netflix-avatar.jpg" class="user-icon" />
+          </center>
+          <h5 class="text-center long-word big-first-letter">
+            {{ account.name }}
+          </h5>
         </div>
       </div>
       <div @click="isDialogAddNewMemberShowed = !isDialogAddNewMemberShowed">
@@ -41,14 +49,13 @@ export default {
     return {
       isDialogAddNewMemberShowed: false,
       membersAccounts: [],
-      memberUrl: MEMBER,
     };
   },
   computed: {
     ...mapGetters("store", ["jwt"]),
   },
   methods: {
-    ...mapActions("store", ["updateMemberIdToShow"]),
+    ...mapActions("store", ["updateMemberIdToShow", "errorMesage"]),
     fetchData() {
       var myHeaders = new Headers();
       myHeaders.append("Authorization", `Bearer ${this.jwt}`);
@@ -59,13 +66,16 @@ export default {
         redirect: "follow",
       };
 
-      fetch(this.memberUrl, requestOptions)
+      fetch(MEMBER, requestOptions)
         .then((response) => response.json())
         .then((result) => (this.membersAccounts = result))
-        .catch((error) => console.log("error", error));
+        .catch((error) => {
+          console.log(error);
+          this.errorMesage("Ups... coś poszło nie tak");
+        });
     },
-    goToMemberSite(memberIdToShow) {
-      this.updateMemberIdToShow(memberIdToShow);
+    goToMemberSite(aMemberIdToShowAccountDetail) {
+      this.updateMemberIdToShow(aMemberIdToShowAccountDetail);
       this.$router.push("/konto");
     },
     addNewUser(data) {
@@ -82,12 +92,15 @@ export default {
         redirect: "follow",
       };
 
-      fetch(this.memberUrl, requestOptions)
-        .then((response) => response.text())
+      fetch(MEMBER, requestOptions)
+        .then((response) => response.json())
         .then((result) => result)
-        .catch((error) => console.log("error", error));
+        .catch((error) => {
+          console.log(error);
+          this.errorMesage("Ups... coś poszło nie tak");
+        });
 
-      this.fetchData();
+      this.$router.go(0);
     },
   },
   components: {
@@ -99,6 +112,8 @@ export default {
 };
 </script>
 <style lang="sass">
+.member-container
+  width: 200px
 .big-faces
   font-size: 12rem
 .user-icon

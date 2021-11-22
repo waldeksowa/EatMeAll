@@ -1,4 +1,5 @@
 import { KILOCALORIES, CARBOHYDRATES, FATS, PROTEINS } from '../translate/common/macrosName.js'
+import { Notify } from "quasar";
 const state = {
   macrosName: {
     calorific: KILOCALORIES,
@@ -6,32 +7,38 @@ const state = {
     fat: FATS,
     protein: PROTEINS
   },
+  memberIdToShowSchedule: '',
   jwt: "",
-  objectJwt: '',
-  memberIdToShow: ""
+  memberIdToShowAccountDetail: ""
 }
 const mutations = {
   updateJwt(state, payload) {
     state.jwt = payload;
   },
+  updateMemberIdToShowSchedule(state, payload) {
+    state.memberIdToShowSchedule = payload;
+  },
   updateMemberIdToShow(state, payload) {
-    state.memberIdToShow = payload;
+    state.memberIdToShowAccountDetail = payload;
   }
 }
 const actions = {
   updateJwt({ commit }, payload) {
     commit('updateJwt', payload)
   },
+  updateMemberIdToShowSchedule({ commit }, payload) {
+    commit('updateMemberIdToShowSchedule', payload)
+  },
   updateMemberIdToShow({ commit }, payload) {
     commit('updateMemberIdToShow', payload)
   },
-  errorMesage(e) {
+  errorMesage({ commit }, e) {
     Notify.create({
       message: `⚠ ${e}`,
       classes: "full-width text-center bg-negative",
     });
   },
-  notifySucessful(e) {
+  notifySucessful({ commit }, e) {
     Notify.create({
       message: `${e}`,
       classes: "full-width text-center bg-positive",
@@ -41,8 +48,9 @@ const actions = {
 const getters = {
   objectJwt: (state) => { return state.macrosName },
   macrosName: (state) => { return state.macrosName },
-  memberIdToShow: (state) => { return state.memberIdToShow },
+  memberIdToShowAccountDetail: (state) => { return state.memberIdToShowAccountDetail },
   jwt: (state) => { return state.jwt },
+  memberIdToShowSchedule: (state) => { return state.memberIdToShowSchedule },
   isJwtTokenDefined: (state) => {
     if (state.jwt) {
       return true
