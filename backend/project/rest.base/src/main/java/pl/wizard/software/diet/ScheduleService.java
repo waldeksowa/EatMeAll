@@ -100,7 +100,21 @@ public class ScheduleService {
         mealEntity.getProducts().forEach(
                 mealProduct -> mealProduct.setAmount(amountCalculator.calculateProductAmount(mealProduct.getAmount(), mealEntity.getCalorific(), memberCalories))
         );
+        recalculateMealMacros(mealEntity);
         scheduleForDayDto.add(mealEntity, mealTime);
+    }
+
+    private void recalculateMealMacros(MealEntity mealEntity) {
+        mealEntity.setCalorific(mealEntity.getProducts().stream()
+                .mapToDouble(mealProduct -> (mealProduct.getAmount() / 100.0) * mealProduct.getProduct().getCalorific()).sum());
+        mealEntity.setProtein(mealEntity.getProducts().stream()
+                .mapToDouble(mealProduct -> (mealProduct.getAmount() / 100.0) * mealProduct.getProduct().getProtein()).sum());
+        mealEntity.setFat(mealEntity.getProducts().stream()
+                .mapToDouble(mealProduct -> (mealProduct.getAmount() / 100.0) * mealProduct.getProduct().getFat()).sum());
+        mealEntity.setCarbohydrates(mealEntity.getProducts().stream()
+                .mapToDouble(mealProduct -> (mealProduct.getAmount() / 100.0) * mealProduct.getProduct().getCarbohydrates()).sum());
+        mealEntity.setRoughage(mealEntity.getProducts().stream()
+                .mapToDouble(mealProduct -> (mealProduct.getAmount() / 100.0) * mealProduct.getProduct().getRoughage()).sum());
     }
 
     @Transactional
