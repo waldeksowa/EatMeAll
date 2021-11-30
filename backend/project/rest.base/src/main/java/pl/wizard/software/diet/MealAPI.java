@@ -17,7 +17,6 @@ import pl.wizard.software.mapper.MealDtoMapper;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/v2/meals")
@@ -39,10 +38,8 @@ public class MealAPI {
     public ResponseEntity<MealEntity> findById(@RequestHeader("Authorization") String token, @PathVariable Long id) {
         Long accountId = loginService.getAccountIdByTokenUUID(token)
                 .orElseThrow(() -> new AuthorizationFailedException(token));
-        MealEntity meal = mealService.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("Could not find meal with id " + id));
 
-        return ResponseEntity.ok(meal);
+        return ResponseEntity.ok(mealService.findById(id));
     }
 
     @GetMapping("/{mealId}/member/{memberId}")

@@ -30,8 +30,10 @@ public class MealService {
         return mealRepository.findAll();
     }
 
-    public Optional<MealEntity> findById(Long id) {
-        return mealRepository.findById(id);
+    public MealEntity findById(Long id) {
+        MealEntity meal = mealRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Could not find meal with id " + id));
+        return meal;
     }
 
     public MealEntity findByIdAndMember(Long mealId, Long memberId) {
