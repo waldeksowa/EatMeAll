@@ -6,7 +6,9 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
+import pl.wizard.software.diet.CalculateProductAmountFactory;
 import pl.wizard.software.diet.ScheduleService;
+import pl.wizard.software.diet.members.MemberDao;
 import pl.wizard.software.diet.products.ProductEntity;
 import pl.wizard.software.diet.schedules.ScheduleDao;
 import pl.wizard.software.dto.ScheduleForWeekDto;
@@ -28,10 +30,14 @@ public class ScheduleServiceTest {
     MealDao mealRepository;
     @Mock
     ScheduleDao scheduleRepository;
+    @Mock
+    MemberDao memberRepository;
+    @Mock
+    CalculateProductAmountFactory calculateProductAmountFactory;
 
     @Before
     public void init() {
-        scheduleService = new ScheduleService(mealRepository, scheduleRepository);
+        scheduleService = new ScheduleService(mealRepository, scheduleRepository, memberRepository, calculateProductAmountFactory);
     }
 
     @Test

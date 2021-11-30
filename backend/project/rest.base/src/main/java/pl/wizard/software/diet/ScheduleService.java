@@ -9,6 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 import pl.wizard.software.diet.meals.MealDao;
 import pl.wizard.software.diet.meals.MealEntity;
 import pl.wizard.software.diet.meals.MealTimeEnum;
+import pl.wizard.software.diet.members.MemberDao;
+import pl.wizard.software.diet.members.MemberEntity;
 import pl.wizard.software.diet.schedules.ScheduleDao;
 import pl.wizard.software.diet.schedules.ScheduleEntity;
 import pl.wizard.software.dto.CreateScheduleDto;
@@ -21,6 +23,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -35,6 +38,8 @@ public class ScheduleService {
     public static final int DAYS_IN_WEEK = 7;
     private final MealDao mealRepository;
     private final ScheduleDao scheduleRepository;
+    private final MemberDao memberRepository;
+    private final CalculateProductAmountFactory calculateProductAmountFactory;
 
     public ScheduleForWeekDto getScheduleByMealTime() {
         ScheduleForWeekDto schedule = new ScheduleForWeekDto();
@@ -58,6 +63,9 @@ public class ScheduleService {
     }
 
     public ScheduleForWeekDto createSchedule(CreateScheduleDto schedule) {
+        MemberEntity member = memberRepository.findById(schedule.getMemberId())
+                .orElseThrow(() -> new NoSuchElementException("Could not find member with id " + schedule.getMemberId()));
+
         LocalDate scheduleDate = schedule.getSchedule().stream()
                 .map(CreateScheduleForDayDto::getDate)
                 .sorted()
@@ -68,11 +76,11 @@ public class ScheduleService {
         for (CreateScheduleForDayDto createScheduleForDayDto : schedule.getSchedule()) {
             ScheduleForDayDto scheduleForDayDto = new ScheduleForDayDto();
             scheduleForDayDto.setDate(createScheduleForDayDto.getDate());
-            addMeal(createScheduleForDayDto.getBreakfast(), BREAKFAST, scheduleForDayDto);
-            addMeal(createScheduleForDayDto.getSecondBreakfast(), SECOND_BREAKFAST, scheduleForDayDto);
-            addMeal(createScheduleForDayDto.getLunch(), LUNCH, scheduleForDayDto);
-            addMeal(createScheduleForDayDto.getDinner(), DINNER, scheduleForDayDto);
-            addMeal(createScheduleForDayDto.getSupper(), SUPPER, scheduleForDayDto);
+            addMeal(createScheduleForDayDto.getBreakfast(), BREAKFAST, member.getRecommendedCalories(), scheduleForDayDto);
+            addMeal(createScheduleForDayDto.getSecondBreakfast(), SECOND_BREAKFAST, member.getRecommendedCalories(), scheduleForDayDto);
+            addMeal(createScheduleForDayDto.getLunch(), LUNCH, member.getRecommendedCalories(), scheduleForDayDto);
+            addMeal(createScheduleForDayDto.getDinner(), DINNER, member.getRecommendedCalories(), scheduleForDayDto);
+            addMeal(createScheduleForDayDto.getSupper(), SUPPER, member.getRecommendedCalories(), scheduleForDayDto);
             scheduleForDayDtos.add(scheduleForDayDto);
         }
 
@@ -85,13 +93,14 @@ public class ScheduleService {
         return ScheduleDtoMapper.mapToScheduleDto(scheduleRepository.save(scheduleEntity));
     }
 
-    private void addMeal(Long mealId, MealTimeEnum mealTime, ScheduleForDayDto scheduleForDayDto) {
-        Optional<MealEntity> mealEntity = mealRepository.findById(mealId);
-        if (mealEntity.isEmpty()) {
-            log.error("Meal with id " + mealId + "does not exists");
-        } else {
-            scheduleForDayDto.add(mealEntity.get(), mealTime);
-        }
+    private void addMeal(Long mealId, MealTimeEnum mealTime, Double memberCalories, ScheduleForDayDto scheduleForDayDto) {
+        MealEntity mealEntity = mealRepository.findById(mealId)
+                .orElseThrow(() -> new NoSuchElementException("Could not find meal with id " + mealId));
+        CalculateProductAmountIf amountCalculator = calculateProductAmountFactory.createCalculator();
+        mealEntity.getProducts().forEach(
+                mealProduct -> mealProduct.setAmount(amountCalculator.calculateProductAmount(mealProduct.getAmount(), mealEntity.getCalorific(), memberCalories))
+        );
+        scheduleForDayDto.add(mealEntity, mealTime);
     }
 
     @Transactional
