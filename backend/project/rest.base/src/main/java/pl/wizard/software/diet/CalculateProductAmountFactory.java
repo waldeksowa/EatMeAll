@@ -1,10 +1,12 @@
 package pl.wizard.software.diet;
 
+import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Service;
 
-@Service
+@NoArgsConstructor
 public class CalculateProductAmountFactory {
-    public static CalculateProductAmountIf createCalculator() {
+
+    public CalculateProductAmountIf createCalculator() {
         return new DefaultCalculateProductAmount();
     }
 }
