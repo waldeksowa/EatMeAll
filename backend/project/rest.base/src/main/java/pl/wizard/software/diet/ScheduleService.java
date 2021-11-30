@@ -13,10 +13,7 @@ import pl.wizard.software.diet.members.MemberDao;
 import pl.wizard.software.diet.members.MemberEntity;
 import pl.wizard.software.diet.schedules.ScheduleDao;
 import pl.wizard.software.diet.schedules.ScheduleEntity;
-import pl.wizard.software.dto.CreateScheduleDto;
-import pl.wizard.software.dto.CreateScheduleForDayDto;
-import pl.wizard.software.dto.ScheduleForDayDto;
-import pl.wizard.software.dto.ScheduleForWeekDto;
+import pl.wizard.software.dto.*;
 import pl.wizard.software.mapper.ScheduleDtoMapper;
 
 import java.time.DayOfWeek;
@@ -96,12 +93,16 @@ public class ScheduleService {
     private void addMeal(Long mealId, MealTimeEnum mealTime, Double memberCalories, ScheduleForDayDto scheduleForDayDto) {
         MealEntity mealEntity = mealRepository.findById(mealId)
                 .orElseThrow(() -> new NoSuchElementException("Could not find meal with id " + mealId));
+        customizeMealEntity(memberCalories, mealEntity);
+        scheduleForDayDto.add(mealEntity, mealTime);
+    }
+
+    private void customizeMealEntity(Double memberCalories, MealEntity mealEntity) {
         CalculateProductAmountIf amountCalculator = calculateProductAmountFactory.createCalculator();
         mealEntity.getProducts().forEach(
                 mealProduct -> mealProduct.setAmount(amountCalculator.calculateProductAmount(mealProduct.getAmount(), mealEntity.getCalorific(), memberCalories))
         );
         recalculateMealMacros(mealEntity);
-        scheduleForDayDto.add(mealEntity, mealTime);
     }
 
     private void recalculateMealMacros(MealEntity mealEntity) {
@@ -156,4 +157,8 @@ public class ScheduleService {
         return schedule.map(ScheduleDtoMapper::mapToScheduleDto);
     }
 
+    public MealEntity customizeMeal(MemberDto member, MealEntity meal) {
+        customizeMealEntity(member.getRecommendedCalories(), meal);
+        return meal;
+    }
 }
