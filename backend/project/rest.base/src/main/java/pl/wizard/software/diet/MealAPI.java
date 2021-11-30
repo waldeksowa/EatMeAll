@@ -45,6 +45,14 @@ public class MealAPI {
         return ResponseEntity.ok(meal);
     }
 
+    @GetMapping("/{mealId}/member/{memberId}")
+    public ResponseEntity<MealEntity> findByIdAndMember(@RequestHeader("Authorization") String token, @PathVariable Long mealId, @PathVariable Long memberId) {
+        Long accountId = loginService.getAccountIdByTokenUUID(token)
+                .orElseThrow(() -> new AuthorizationFailedException(token));
+
+        return ResponseEntity.ok(mealService.findByIdAndMember(mealId, memberId));
+    }
+
     @GetMapping("/random/{amount}/{mealTime}")
     public ResponseEntity<List<MealDto>> findRandomByAmountAndMealTime(
             @RequestHeader("Authorization") String token,

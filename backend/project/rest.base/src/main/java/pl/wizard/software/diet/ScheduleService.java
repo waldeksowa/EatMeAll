@@ -36,7 +36,7 @@ public class ScheduleService {
     private final MealDao mealRepository;
     private final ScheduleDao scheduleRepository;
     private final MemberDao memberRepository;
-    private final CalculateProductAmountFactory calculateProductAmountFactory;
+    private final MealService mealService;
 
     public ScheduleForWeekDto getScheduleByMealTime() {
         ScheduleForWeekDto schedule = new ScheduleForWeekDto();
@@ -90,32 +90,10 @@ public class ScheduleService {
         return ScheduleDtoMapper.mapToScheduleDto(scheduleRepository.save(scheduleEntity));
     }
 
-    private void addMeal(Long mealId, MealTimeEnum mealTime, Double memberCalories, ScheduleForDayDto scheduleForDayDto) {
+    private void addMeal(Long mealId, MealTimeEnum mealTime, double memberCalories, ScheduleForDayDto scheduleForDayDto) {
         MealEntity mealEntity = mealRepository.findById(mealId)
                 .orElseThrow(() -> new NoSuchElementException("Could not find meal with id " + mealId));
-        customizeMealEntity(memberCalories, mealEntity);
-        scheduleForDayDto.add(mealEntity, mealTime);
-    }
-
-    private void customizeMealEntity(Double memberCalories, MealEntity mealEntity) {
-        CalculateProductAmountIf amountCalculator = calculateProductAmountFactory.createCalculator();
-        mealEntity.getProducts().forEach(
-                mealProduct -> mealProduct.setAmount(amountCalculator.calculateProductAmount(mealProduct.getAmount(), mealEntity.getCalorific(), memberCalories))
-        );
-        recalculateMealMacros(mealEntity);
-    }
-
-    private void recalculateMealMacros(MealEntity mealEntity) {
-        mealEntity.setCalorific(mealEntity.getProducts().stream()
-                .mapToDouble(mealProduct -> (mealProduct.getAmount() / 100.0) * mealProduct.getProduct().getCalorific()).sum());
-        mealEntity.setProtein(mealEntity.getProducts().stream()
-                .mapToDouble(mealProduct -> (mealProduct.getAmount() / 100.0) * mealProduct.getProduct().getProtein()).sum());
-        mealEntity.setFat(mealEntity.getProducts().stream()
-                .mapToDouble(mealProduct -> (mealProduct.getAmount() / 100.0) * mealProduct.getProduct().getFat()).sum());
-        mealEntity.setCarbohydrates(mealEntity.getProducts().stream()
-                .mapToDouble(mealProduct -> (mealProduct.getAmount() / 100.0) * mealProduct.getProduct().getCarbohydrates()).sum());
-        mealEntity.setRoughage(mealEntity.getProducts().stream()
-                .mapToDouble(mealProduct -> (mealProduct.getAmount() / 100.0) * mealProduct.getProduct().getRoughage()).sum());
+        scheduleForDayDto.add(mealService.customizeByCalories(memberCalories, mealEntity), mealTime);
     }
 
     @Transactional
@@ -155,10 +133,5 @@ public class ScheduleService {
 
     private Optional<ScheduleForWeekDto> getScheduleForWeekDto(Optional<ScheduleEntity> schedule) {
         return schedule.map(ScheduleDtoMapper::mapToScheduleDto);
-    }
-
-    public MealEntity customizeMeal(MemberDto member, MealEntity meal) {
-        customizeMealEntity(member.getRecommendedCalories(), meal);
-        return meal;
     }
 }

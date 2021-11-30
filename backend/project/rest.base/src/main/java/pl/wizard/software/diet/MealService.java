@@ -4,13 +4,16 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import pl.wizard.software.dto.CreateMealDto;
-import pl.wizard.software.dto.SimpleProductDto;
 import pl.wizard.software.diet.meals.*;
-import pl.wizard.software.diet.meals.MealTimeEnum;
+import pl.wizard.software.diet.members.MemberDao;
+import pl.wizard.software.diet.members.MemberEntity;
 import pl.wizard.software.diet.products.ProductDao;
 import pl.wizard.software.diet.products.ProductEntity;
+import pl.wizard.software.dto.CreateMealDto;
+import pl.wizard.software.dto.SimpleProductDto;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -20,6 +23,8 @@ import java.util.stream.Collectors;
 public class MealService {
     private final MealDao mealRepository;
     private final ProductDao productRepository;
+    private final CalculateProductAmountFactory calculateProductAmountFactory;
+    private final MemberDao memberRepository;
 
     public List<MealEntity> findAll() {
         return mealRepository.findAll();
@@ -27,6 +32,15 @@ public class MealService {
 
     public Optional<MealEntity> findById(Long id) {
         return mealRepository.findById(id);
+    }
+
+    public MealEntity findByIdAndMember(Long mealId, Long memberId) {
+        MealEntity meal = mealRepository.findById(mealId)
+                .orElseThrow(() -> new NoSuchElementException("Could not find meal with id " + mealId));
+        MemberEntity member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new NoSuchElementException("Could not find member with id " + memberId));
+
+        return customizeByCalories(member.getRecommendedCalories(), meal);
     }
 
     @Transactional
@@ -93,5 +107,33 @@ public class MealService {
             specialAmountList.put(specialamount, specialamount.nameByAmount(1));
         }
         return specialAmountList;
+    }
+
+    public MealEntity customizeByCalories(double memberCalories, MealEntity mealEntity) {
+        CalculateProductAmountIf amountCalculator = calculateProductAmountFactory.createCalculator();
+        mealEntity.getProducts().forEach(
+                mealProduct -> mealProduct.setAmount(amountCalculator.calculateProductAmount(mealProduct.getAmount(), mealEntity.getCalorific(), memberCalories))
+        );
+        recalculateMealMacros(mealEntity);
+        return mealEntity;
+    }
+
+    private void recalculateMealMacros(MealEntity mealEntity) {
+        double calorific = mealEntity.getProducts().stream()
+                .mapToDouble(mealProduct -> (mealProduct.getAmount() / 100.0) * mealProduct.getProduct().getCalorific()).sum();
+        double protein = mealEntity.getProducts().stream()
+                .mapToDouble(mealProduct -> (mealProduct.getAmount() / 100.0) * mealProduct.getProduct().getProtein()).sum();
+        double fat = mealEntity.getProducts().stream()
+                .mapToDouble(mealProduct -> (mealProduct.getAmount() / 100.0) * mealProduct.getProduct().getFat()).sum();
+        double carbohydrates = mealEntity.getProducts().stream()
+                .mapToDouble(mealProduct -> (mealProduct.getAmount() / 100.0) * mealProduct.getProduct().getCarbohydrates()).sum();
+        double roughage = mealEntity.getProducts().stream()
+                .mapToDouble(mealProduct -> (mealProduct.getAmount() / 100.0) * mealProduct.getProduct().getRoughage()).sum();
+
+        mealEntity.setCalorific(new BigDecimal(calorific).setScale(1, RoundingMode.HALF_UP).doubleValue());
+        mealEntity.setProtein(new BigDecimal(protein).setScale(1, RoundingMode.HALF_UP).doubleValue());
+        mealEntity.setFat(new BigDecimal(fat).setScale(1, RoundingMode.HALF_UP).doubleValue());
+        mealEntity.setCarbohydrates(new BigDecimal(carbohydrates).setScale(1, RoundingMode.HALF_UP).doubleValue());
+        mealEntity.setRoughage(new BigDecimal(roughage).setScale(1, RoundingMode.HALF_UP).doubleValue());
     }
 }

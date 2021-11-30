@@ -47,11 +47,11 @@ public class ShoppingListServiceTest {
     @Mock
     MemberDao memberRepository;
     @Mock
-    CalculateProductAmountFactory calculateProductAmountFactory;
+    MealService mealService;
 
     @Before
     public void init() {
-        shoppingListService = new ShoppingListService(mealRepository, shoppingListRepository, shoppingListItemRepository, new ScheduleService(mealRepository, scheduleRepository,memberRepository,calculateProductAmountFactory), productRepository, accountRepository);
+        shoppingListService = new ShoppingListService(mealRepository, shoppingListRepository, shoppingListItemRepository, new ScheduleService(mealRepository, scheduleRepository,memberRepository,mealService), productRepository, accountRepository);
     }
 
     @Test
