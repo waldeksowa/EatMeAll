@@ -6,6 +6,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
+import pl.wizard.software.diet.members.MemberDao;
 import pl.wizard.software.dto.ProductWithAmountDto;
 import pl.wizard.software.diet.meals.MealDao;
 import pl.wizard.software.diet.meals.MealEntity;
@@ -43,10 +44,14 @@ public class ShoppingListServiceTest {
     AccountDao accountRepository;
     @Mock
     ShoppingListItemDao shoppingListItemRepository;
+    @Mock
+    MemberDao memberRepository;
+    @Mock
+    CalculateProductAmountFactory calculateProductAmountFactory;
 
     @Before
     public void init() {
-        shoppingListService = new ShoppingListService(mealRepository, shoppingListRepository, shoppingListItemRepository, new ScheduleService(mealRepository, scheduleRepository), productRepository, accountRepository);
+        shoppingListService = new ShoppingListService(mealRepository, shoppingListRepository, shoppingListItemRepository, new ScheduleService(mealRepository, scheduleRepository,memberRepository,calculateProductAmountFactory), productRepository, accountRepository);
     }
 
     @Test
