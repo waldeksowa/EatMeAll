@@ -45,6 +45,10 @@ public class MealService {
         return customizeByCalories(member.getRecommendedCalories(), meal);
     }
 
+    public List<MealEntity> findRandomByMealTime(int mealTime, int amount) {
+        return mealRepository.findRandomByMealTime(mealTime, amount);
+    }
+
     @Transactional
     public MealEntity save(Long mealId, MealEntity meal) {
         MealEntity mealToUpdate = mealRepository.findById(mealId)

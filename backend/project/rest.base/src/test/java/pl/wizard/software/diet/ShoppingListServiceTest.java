@@ -51,7 +51,7 @@ public class ShoppingListServiceTest {
 
     @Before
     public void init() {
-        shoppingListService = new ShoppingListService(mealRepository, shoppingListRepository, shoppingListItemRepository, new ScheduleService(mealRepository, scheduleRepository,memberRepository,mealService), productRepository, accountRepository);
+        shoppingListService = new ShoppingListService(mealRepository, shoppingListRepository, shoppingListItemRepository, new ScheduleService(mealService, scheduleRepository,memberRepository), productRepository, accountRepository);
     }
 
     @Test

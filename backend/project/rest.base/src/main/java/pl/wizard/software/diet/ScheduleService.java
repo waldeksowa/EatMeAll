@@ -6,14 +6,16 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import pl.wizard.software.diet.meals.MealDao;
 import pl.wizard.software.diet.meals.MealEntity;
 import pl.wizard.software.diet.meals.MealTimeEnum;
 import pl.wizard.software.diet.members.MemberDao;
 import pl.wizard.software.diet.members.MemberEntity;
 import pl.wizard.software.diet.schedules.ScheduleDao;
 import pl.wizard.software.diet.schedules.ScheduleEntity;
-import pl.wizard.software.dto.*;
+import pl.wizard.software.dto.CreateScheduleDto;
+import pl.wizard.software.dto.CreateScheduleForDayDto;
+import pl.wizard.software.dto.ScheduleForDayDto;
+import pl.wizard.software.dto.ScheduleForWeekDto;
 import pl.wizard.software.mapper.ScheduleDtoMapper;
 
 import java.time.DayOfWeek;
@@ -33,10 +35,9 @@ import static pl.wizard.software.diet.meals.MealTimeEnum.*;
 public class ScheduleService {
 
     public static final int DAYS_IN_WEEK = 7;
-    private final MealDao mealRepository;
+    private final MealService mealService;
     private final ScheduleDao scheduleRepository;
     private final MemberDao memberRepository;
-    private final MealService mealService;
 
     public ScheduleForWeekDto getScheduleByMealTime() {
         ScheduleForWeekDto schedule = new ScheduleForWeekDto();
@@ -47,7 +48,7 @@ public class ScheduleService {
             schedule.getSchedule().add(scheduleForDayDto);
         }
         for (int i = 1; i < values().length; i++) {
-            List<MealEntity> meals = mealRepository.findRandomByMealTime(values()[i].ordinal(), DAYS_IN_WEEK);
+            List<MealEntity> meals = mealService.findRandomByMealTime(values()[i].ordinal(), DAYS_IN_WEEK);
             for (DayOfWeek day : DayOfWeek.values()) {
                 Optional<MealEntity> meal = meals.stream().findFirst();
                 if (meal.isPresent()) {
@@ -91,8 +92,7 @@ public class ScheduleService {
     }
 
     private void addMeal(Long mealId, MealTimeEnum mealTime, double memberCalories, ScheduleForDayDto scheduleForDayDto) {
-        MealEntity mealEntity = mealRepository.findById(mealId)
-                .orElseThrow(() -> new NoSuchElementException("Could not find meal with id " + mealId));
+        MealEntity mealEntity = mealService.findById(mealId);
         scheduleForDayDto.add(mealService.customizeByCalories(memberCalories, mealEntity), mealTime);
     }
 
