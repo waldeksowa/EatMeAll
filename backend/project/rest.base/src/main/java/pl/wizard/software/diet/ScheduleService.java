@@ -137,12 +137,18 @@ public class ScheduleService {
         return getScheduleForWeekDto(schedule);
     }
 
-    public ScheduleForWeekDto save(ScheduleForWeekDto schedule) {
+    @Transactional
+    public ScheduleForWeekDto save(Long accountId, Long scheduleId, ScheduleForWeekDto schedule) {
+        ScheduleForWeekDto scheduleToUpdate = findById(accountId, scheduleId)
+                .orElseThrow(() -> new NoSuchElementException("Could not find schedule with id " + scheduleId));
         ScheduleEntity scheduleEntity = ScheduleDtoMapper.mapToScheduleEntity(schedule);
         return ScheduleDtoMapper.mapToScheduleDto(scheduleRepository.save(scheduleEntity));
     }
 
-    public void deleteById(Long scheduleId) {
+    @Transactional
+    public void deleteById(Long accountId, Long scheduleId) {
+        ScheduleForWeekDto schedule = findById(accountId, scheduleId)
+                .orElseThrow(() -> new NoSuchElementException("Could not find schedule with id " + scheduleId));
         scheduleRepository.deleteById(scheduleId);
     }
 

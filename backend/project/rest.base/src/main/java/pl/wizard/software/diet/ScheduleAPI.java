@@ -12,7 +12,7 @@ import pl.wizard.software.login.LoginService;
 
 import javax.validation.Valid;
 import java.util.Collection;
-import java.util.Optional;
+import java.util.NoSuchElementException;
 
 
 @RestController
@@ -36,28 +36,20 @@ public class ScheduleAPI {
     public ResponseEntity<ScheduleForWeekDto> findById(@RequestHeader("Authorization") String token, @PathVariable Long id) {
         Long accountId = loginService.getAccountIdByTokenUUID(token)
                 .orElseThrow(() -> new AuthorizationFailedException(token));
+        ScheduleForWeekDto schedule = scheduleService.findByMember(accountId, id)
+                .orElseThrow(() -> new NoSuchElementException("Could not find schedule with id " + id));
 
-        Optional<ScheduleForWeekDto> stock = scheduleService.findById(accountId, id);
-        if (!stock.isPresent()) {
-            log.error("Schedule with Id " + id + " does not exists");
-            ResponseEntity.badRequest().build();
-        }
-
-        return ResponseEntity.ok(stock.get());
+        return ResponseEntity.ok(schedule);
     }
 
     @GetMapping("/member/{id}")
     public ResponseEntity<ScheduleForWeekDto> findByMember(@RequestHeader("Authorization") String token, @PathVariable Long id) {
         Long accountId = loginService.getAccountIdByTokenUUID(token)
                 .orElseThrow(() -> new AuthorizationFailedException(token));
+        ScheduleForWeekDto schedule = scheduleService.findByMember(accountId, id)
+                .orElseThrow(() -> new NoSuchElementException("Could not find schedule for member with id " + id));
 
-        Optional<ScheduleForWeekDto> schedule = scheduleService.findByMember(accountId, id);
-        if (!schedule.isPresent()) {
-            log.error("Schedule for member with Id " + id + " does not exists");
-            return ResponseEntity.badRequest().build();
-        }
-
-        return ResponseEntity.ok(schedule.get());
+        return ResponseEntity.ok(schedule);
     }
 
     @GetMapping("/random")
@@ -78,12 +70,7 @@ public class ScheduleAPI {
         Long accountId = loginService.getAccountIdByTokenUUID(token)
                 .orElseThrow(() -> new AuthorizationFailedException(token));
 
-        if (!scheduleService.findById(accountId, id).isPresent()) {
-            log.error("Schedule with id " + id + " does not exists");
-            return ResponseEntity.badRequest().build();
-        }
-
-        return ResponseEntity.ok(scheduleService.save(schedule));
+        return ResponseEntity.ok(scheduleService.save(accountId, id, schedule));
     }
 
     @DeleteMapping("/{id}")
@@ -91,12 +78,7 @@ public class ScheduleAPI {
         Long accountId = loginService.getAccountIdByTokenUUID(token)
                 .orElseThrow(() -> new AuthorizationFailedException(token));
 
-        if (!scheduleService.findById(accountId, id).isPresent()) {
-            log.error("Schedule with id " + id + " does not exists");
-            return ResponseEntity.badRequest().build();
-        }
-        scheduleService.deleteById(id);
-
+        scheduleService.deleteById(accountId, id);
         return ResponseEntity.ok().build();
     }
 }
