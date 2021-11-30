@@ -1,9 +1,8 @@
 package pl.wizard.software.diet;
 
-import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Service;
 
-@NoArgsConstructor
+@Service
 public class CalculateProductAmountFactory {
 
     public CalculateProductAmountIf createCalculator() {
