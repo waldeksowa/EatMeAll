@@ -20,7 +20,7 @@ public class DefaultCalculateProductAmountTest {
     }
 
     @Test
-    public void shouldReturnProductWithAmount500BecauseMemberNeed500Calories() {
+    public void shouldReturnProductWithAmount500BecauseMemberNeed500CaloriesPerMeal() {
         ProductEntity product = new ProductEntity();
         product.setName("template product");
         product.setCalorific(100D);
@@ -29,13 +29,13 @@ public class DefaultCalculateProductAmountTest {
         int templateProductAmount = 1000;
         mealProduct.setAmount(templateProductAmount);
         double templateMealCalories = new BigDecimal((templateProductAmount/100) * product.getCalorific()).setScale(1, RoundingMode.HALF_UP).doubleValue();
-        double memberCalories = 500;
+        double memberCalories = 2500;
 
         assertEquals(500, amountCalculator.calculateProductAmount(templateProductAmount, 1000, memberCalories));
     }
 
     @Test
-    public void shouldReturnProductWithAmount2000BecauseMemberNeed2000Calories() {
+    public void shouldReturnProductWithAmount2000BecauseMemberNeed2000CaloriesPerMeal() {
         ProductEntity product = new ProductEntity();
         product.setName("template product");
         product.setCalorific(100D);
@@ -44,7 +44,7 @@ public class DefaultCalculateProductAmountTest {
         int templateProductAmount = 1000;
         mealProduct.setAmount(templateProductAmount);
         double templateMealCalories = new BigDecimal((templateProductAmount/100) * product.getCalorific()).setScale(1, RoundingMode.HALF_UP).doubleValue();
-        double memberCalories = 2000;
+        double memberCalories = 10000;
 
         assertEquals(2000, amountCalculator.calculateProductAmount(templateProductAmount, 1000, memberCalories));
     }
