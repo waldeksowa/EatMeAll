@@ -17,6 +17,7 @@ import pl.wizard.software.mapper.MealDtoMapper;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/v2/meals")
@@ -35,19 +36,18 @@ public class MealAPI {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<MealEntity> findById(@RequestHeader("Authorization") String token, @PathVariable Long id) {
+    public ResponseEntity<MealEntity> findById(
+            @RequestHeader("Authorization") String token,
+            @PathVariable Long id,
+            @RequestParam Optional<Long> member) {
         Long accountId = loginService.getAccountIdByTokenUUID(token)
                 .orElseThrow(() -> new AuthorizationFailedException(token));
 
-        return ResponseEntity.ok(mealService.findById(id));
-    }
-
-    @GetMapping("/{mealId}/member/{memberId}")
-    public ResponseEntity<MealEntity> findByIdAndMember(@RequestHeader("Authorization") String token, @PathVariable Long mealId, @PathVariable Long memberId) {
-        Long accountId = loginService.getAccountIdByTokenUUID(token)
-                .orElseThrow(() -> new AuthorizationFailedException(token));
-
-        return ResponseEntity.ok(mealService.findByIdAndMember(mealId, memberId));
+        if (member.isEmpty()) {
+            return ResponseEntity.ok(mealService.findById(id));
+        } else {
+            return ResponseEntity.ok(mealService.findByIdAndMember(id, member.get()));
+        }
     }
 
     @GetMapping("/random/{amount}/{mealTime}")
