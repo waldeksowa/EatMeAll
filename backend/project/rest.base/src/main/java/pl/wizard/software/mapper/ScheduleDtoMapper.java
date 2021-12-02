@@ -1,14 +1,12 @@
 package pl.wizard.software.mapper;
 
 import lombok.extern.slf4j.Slf4j;
+import pl.wizard.software.diet.schedules.ScheduleEntity;
 import pl.wizard.software.dto.ScheduleForDayDto;
 import pl.wizard.software.dto.ScheduleForWeekDto;
-import pl.wizard.software.diet.schedules.ScheduleEntity;
 
 import java.io.*;
-import java.util.Date;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -16,10 +14,10 @@ public class ScheduleDtoMapper {
     private ScheduleDtoMapper() {
     }
 
-    public static Set<ScheduleForWeekDto> mapToScheduleDtos(Set<ScheduleEntity> schedules) {
+    public static List<ScheduleForWeekDto> mapToScheduleDtos(List<ScheduleEntity> schedules) {
         return schedules.stream()
                 .map(schedule -> mapToScheduleDto(schedule))
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
 
     }
 
@@ -33,18 +31,6 @@ public class ScheduleDtoMapper {
                 .memberId(scheduleEntity.getMemberId())
                 .schedule(convertFromBytes(scheduleEntity.getSchedule()))
                 .build();
-    }
-
-    public static ScheduleEntity mapToScheduleEntity(ScheduleForWeekDto schedule) {
-        ScheduleEntity scheduleEntity = new ScheduleEntity();
-        scheduleEntity.setId(schedule.getId());
-        scheduleEntity.setCreatedAt(schedule.getCreatedAt());
-        scheduleEntity.setUpdatedAt(new Date());
-        scheduleEntity.setVersion(schedule.getVersion());
-        scheduleEntity.setScheduleDate(schedule.getScheduleDate());
-        scheduleEntity.setMemberId(schedule.getMemberId());
-        scheduleEntity.setSchedule(convertToBytes(schedule.getSchedule()));
-        return scheduleEntity;
     }
 
     public static byte[] convertToBytes(List<ScheduleForDayDto> schedule) {

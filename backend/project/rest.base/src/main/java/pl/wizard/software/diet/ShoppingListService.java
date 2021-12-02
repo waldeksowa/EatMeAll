@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import pl.wizard.software.dto.*;
 import pl.wizard.software.mapper.ProductDtoMapper;
 import pl.wizard.software.diet.meals.MealDao;
@@ -119,7 +120,10 @@ public class ShoppingListService {
         return shoppingListRepository.findByIdAndAccount(shoppingListId, accountId);
     }
 
-    public void deleteById(Long shoppingListId) {
+    @Transactional
+    public void deleteById(Long accountId, Long shoppingListId) {
+        ShoppingListEntity shoppingList =  findById(shoppingListId, accountId)
+                .orElseThrow(() -> new NoSuchElementException("Could not find shopping list with id " + shoppingListId));
         shoppingListRepository.deleteById(shoppingListId);
     }
 

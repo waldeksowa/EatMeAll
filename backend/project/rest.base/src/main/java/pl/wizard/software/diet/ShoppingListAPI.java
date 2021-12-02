@@ -5,19 +5,20 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pl.wizard.software.diet.products.ProductEntity.ProductTypeEnum;
+import pl.wizard.software.diet.shoppingList.ShoppingListEntity;
 import pl.wizard.software.dto.CreateShoppingListDto;
 import pl.wizard.software.dto.ProductWithAmountDto;
 import pl.wizard.software.dto.ShoppingListDto;
-import pl.wizard.software.mapper.ShoppingListDtoMapper;
-import pl.wizard.software.diet.products.ProductEntity.ProductTypeEnum;
-import pl.wizard.software.diet.shoppingList.ShoppingListEntity;
+import pl.wizard.software.exception.AuthorizationFailedException;
 import pl.wizard.software.login.LoginService;
+import pl.wizard.software.mapper.ShoppingListDtoMapper;
 
 import javax.validation.Valid;
 import java.time.DayOfWeek;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
+import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/v2/shoppinglist")
@@ -33,56 +34,36 @@ public class ShoppingListAPI {
             @RequestHeader("Authorization") String token,
             @RequestParam(required = true) List<Long> member,
             @RequestParam(required = true) List<DayOfWeek> day) {
+        Long accountId = loginService.getAccountIdByTokenUUID(token)
+                .orElseThrow(() -> new AuthorizationFailedException(token));
 
-        Optional<Long> accountId = loginService.getAccountIdByTokenUUID(token);
-        if (!accountId.isPresent()) {
-            log.error("Authorization token expired");
-            return ResponseEntity.badRequest().build();
-        }
-        return ResponseEntity.ok(shoppingListService.getByMemberAndDay(member, day, accountId.get()));
+        return ResponseEntity.ok(shoppingListService.getByMemberAndDay(member, day, accountId));
     }
 
     @GetMapping("/current")
     public ResponseEntity<ShoppingListDto> getCurrent(@RequestHeader("Authorization") String token) {
-        Optional<Long> accountId = loginService.getAccountIdByTokenUUID(token);
-        if (!accountId.isPresent()) {
-            log.error("Authorization token expired");
-            return ResponseEntity.badRequest().build();
-        }
+        Long accountId = loginService.getAccountIdByTokenUUID(token)
+                .orElseThrow(() -> new AuthorizationFailedException(token));
+        ShoppingListEntity shoppingList = shoppingListService.getCurrent(accountId)
+                .orElseThrow(() -> new NoSuchElementException("Could not find current shopping list"));
 
-        Optional<ShoppingListEntity> shoppingList = shoppingListService.getCurrent(accountId.get());
-        if (!shoppingList.isPresent()) {
-            log.error("Current shopping list does not exists");
-            return ResponseEntity.badRequest().build();
-        }
-
-        return ResponseEntity.ok(ShoppingListDtoMapper.mapToShoppingListDto(shoppingList.get()));
+        return ResponseEntity.ok(ShoppingListDtoMapper.mapToShoppingListDto(shoppingList));
     }
 
     @GetMapping("/{shoppingListId}")
     public ResponseEntity<ShoppingListDto> getById(@RequestHeader("Authorization") String token, @PathVariable Long shoppingListId) {
-        Optional<Long> accountId = loginService.getAccountIdByTokenUUID(token);
-        if (!accountId.isPresent()) {
-            log.error("Authorization token expired");
-            return ResponseEntity.badRequest().build();
-        }
+        Long accountId = loginService.getAccountIdByTokenUUID(token)
+                .orElseThrow(() -> new AuthorizationFailedException(token));
+        ShoppingListEntity shoppingList = shoppingListService.findById(accountId, shoppingListId)
+                .orElseThrow(() -> new NoSuchElementException("Could not find shopping list with id " + shoppingListId));
 
-        Optional<ShoppingListEntity> shoppingList = shoppingListService.findById(shoppingListId, accountId.get());
-        if (!shoppingList.isPresent()) {
-            log.error("Shopping list with Id " + shoppingListId + " does not exists");
-            ResponseEntity.badRequest().build();
-        }
-
-        return ResponseEntity.ok(ShoppingListDtoMapper.mapToShoppingListDto(shoppingList.get()));
+        return ResponseEntity.ok(ShoppingListDtoMapper.mapToShoppingListDto(shoppingList));
     }
 
     @PostMapping
     public ResponseEntity create(@RequestHeader("Authorization") String token, @Valid @RequestBody CreateShoppingListDto shoppingList) {
-        Optional<Long> accountId = loginService.getAccountIdByTokenUUID(token);
-        if (!accountId.isPresent()) {
-            log.error("Authorization token expired");
-            return ResponseEntity.badRequest().build();
-        }
+        Long accountId = loginService.getAccountIdByTokenUUID(token)
+                .orElseThrow(() -> new AuthorizationFailedException(token));
 
         return ResponseEntity.status(HttpStatus.CREATED).body(ShoppingListDtoMapper.mapToShoppingListDto(shoppingListService.create(shoppingList)));
     }
@@ -92,34 +73,20 @@ public class ShoppingListAPI {
             @RequestHeader("Authorization") String token,
             @PathVariable Long shoppingListId,
             @Valid @RequestBody ShoppingListDto shoppingList) {
-
-        Optional<Long> accountId = loginService.getAccountIdByTokenUUID(token);
-        if (!accountId.isPresent()) {
-            log.error("Authorization token expired");
-            return ResponseEntity.badRequest().build();
-        }
-        Optional<ShoppingListEntity> shoppingListEntity = shoppingListService.findById(shoppingListId, accountId.get());
-        if (!shoppingListEntity.isPresent()) {
-            log.error("Shopping list with id " + shoppingListId + " does not exists");
-            return ResponseEntity.badRequest().build();
-        }
+        Long accountId = loginService.getAccountIdByTokenUUID(token)
+                .orElseThrow(() -> new AuthorizationFailedException(token));
+        ShoppingListEntity shoppingListEntity = shoppingListService.findById(shoppingListId, accountId)
+                .orElseThrow(() -> new NoSuchElementException("Could not find shopping list with id " + shoppingListId));
 
         return ResponseEntity.ok(ShoppingListDtoMapper.mapToShoppingListDto(shoppingListService.update(shoppingList)));
     }
 
     @DeleteMapping("/{shoppingListId}")
     public ResponseEntity delete(@RequestHeader("Authorization") String token, @PathVariable Long shoppingListId) {
-        Optional<Long> accountId = loginService.getAccountIdByTokenUUID(token);
-        if (!accountId.isPresent()) {
-            log.error("Authorization token expired");
-            return ResponseEntity.badRequest().build();
-        }
-        if (!shoppingListService.findById(shoppingListId, accountId.get()).isPresent()) {
-            log.error("Shopping list with id " + shoppingListId + " does not exists");
-            return ResponseEntity.badRequest().build();
-        }
-        shoppingListService.deleteById(shoppingListId);
+        Long accountId = loginService.getAccountIdByTokenUUID(token)
+                .orElseThrow(() -> new AuthorizationFailedException(token));
 
+        shoppingListService.deleteById(accountId, shoppingListId);
         return ResponseEntity.ok().build();
     }
 }
