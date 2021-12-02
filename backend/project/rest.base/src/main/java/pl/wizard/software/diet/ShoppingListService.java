@@ -40,13 +40,10 @@ public class ShoppingListService {
         HashMap<ProductTypeEnum, List<ProductWithAmountDto>> shoppingList = new HashMap<>();
         List<MealProductEntity> mealProducts = new ArrayList<>();
         for (Long id : ids) {
-            Optional<MealEntity> meal = mealRepository.findById(id);
-            if (!meal.isPresent()) {
-                log.error("Meal with id = " + id + " does not exists");
-            } else {
-                meal.get().getProducts()
-                        .forEach(mealProductEntity -> mealProducts.add(mealProductEntity));
-            }
+            MealEntity meal = mealRepository.findById(id)
+                    .orElseThrow(() -> new NoSuchElementException("Could not find meal with id " + id));
+            meal.getProducts()
+                    .forEach(mealProductEntity -> mealProducts.add(mealProductEntity));
         }
         List<MealProductEntity> uniqueProducts = makeProductsUnique(mealProducts);
         prepareShoppingList(shoppingList, uniqueProducts);
@@ -54,29 +51,26 @@ public class ShoppingListService {
         return shoppingList;
     }
 
-    public Optional<ShoppingListEntity> getCurrent(Long accountId) {
+    public Optional<ShoppingListEntity> findCurrent(Long accountId) {
         Pageable topOne = PageRequest.of(0, 1);
         return shoppingListRepository.findCurrent(accountId, topOne).stream().findFirst();
     }
 
-    public ShoppingListEntity create(CreateShoppingListDto createShoppingListDto) {
+    public ShoppingListEntity create(Long accountId, CreateShoppingListDto createShoppingListDto) {
         List<ShoppingListItemEntity> items = new ArrayList<>();
         for (CreateShoppingListItemDto item : createShoppingListDto.getItems()) {
-            Optional<ProductEntity> product = productRepository.findById(item.getProductId());
-            if (!product.isPresent()) {
-                log.error("Product with id " + item.getProductId() + " does not exists");
-            } else {
-                ShoppingListItemEntity shoppingListItem = ShoppingListItemEntity.builder()
-                        .product(product.get())
-                        .amount(item.getAmount())
-                        .specialAmount(item.getSpecialAmount())
-                        .isBuyed(item.isBuyed())
-                        .build();
-                items.add(shoppingListItem);
-            }
+            ProductEntity product = productRepository.findById(item.getProductId())
+                    .orElseThrow(() -> new NoSuchElementException("Could not find product with id " + item.getProductId()));
+            ShoppingListItemEntity shoppingListItem = ShoppingListItemEntity.builder()
+                    .product(product)
+                    .amount(item.getAmount())
+                    .specialAmount(item.getSpecialAmount())
+                    .isBuyed(item.isBuyed())
+                    .build();
+            items.add(shoppingListItem);
         }
         ShoppingListEntity shoppingListEntity = ShoppingListEntity.builder()
-                .account(accountRepository.findById(createShoppingListDto.getAccountId()).get())
+                .account(accountRepository.findById(accountId).get())
                 .shoppingListDate(new Date())
                 .items(items)
                 .build();
@@ -84,36 +78,27 @@ public class ShoppingListService {
         return shoppingListRepository.save(shoppingListEntity);
     }
 
-    public ShoppingListEntity update(ShoppingListDto shoppingList) {
+    @Transactional
+    public ShoppingListEntity update(Long accountId, Long shoppingListId, ShoppingListDto shoppingList) {
+        ShoppingListEntity shoppingListToUpdate = findById(shoppingListId, accountId)
+                .orElseThrow(() -> new NoSuchElementException("Could not find shopping list with id " + shoppingListId));
+
         List<ShoppingListItemEntity> items = new ArrayList<>();
         for (ShoppingListItemDto item : shoppingList.getItems()) {
-            Optional<ProductEntity> product = productRepository.findById(item.getProductId());
-            if (!product.isPresent()) {
-                log.error("Product with id " + item.getProductId() + " does not exists");
-            } else {
-                Optional<ShoppingListItemEntity> shoppingListItemEntity = shoppingListItemRepository.findById(item.getId());
-                if (!shoppingListItemEntity.isPresent()) {
-                    log.error("ShoppingListItem with id " + item.getId() + " does not exists");
-                } else {
-                    ShoppingListItemEntity shoppingListItem = shoppingListItemEntity.get();
-                    shoppingListItem.setProduct(product.get());
-                    shoppingListItem.setAmount(item.getAmount());
-                    shoppingListItem.setSpecialAmount(item.getSpecialAmount());
-                    shoppingListItem.setBuyed(item.isBuyed());
-                    items.add(shoppingListItem);
-                }
-            }
+            ProductEntity product = productRepository.findById(item.getProductId())
+                    .orElseThrow(() -> new NoSuchElementException("Could not find product with id " + item.getProductId()));
+            ShoppingListItemEntity shoppingListItem = shoppingListItemRepository.findById(item.getId())
+                    .orElseThrow(() -> new NoSuchElementException("Could not find shopping list item with id " + item.getId()));
+            shoppingListItem.setProduct(product);
+            shoppingListItem.setAmount(item.getAmount());
+            shoppingListItem.setSpecialAmount(item.getSpecialAmount());
+            shoppingListItem.setBuyed(item.isBuyed());
+            items.add(shoppingListItem);
         }
-        ShoppingListEntity shoppingListEntity = findById(shoppingList.getId(), shoppingList.getAccountId()).get();
-        shoppingListEntity.setShoppingListDate(shoppingList.getShoppingListDate());
-        shoppingListEntity.setAccount(accountRepository.findById(shoppingList.getAccountId()).get());
-        shoppingListEntity.setItems(items);
-
-        return shoppingListRepository.save(shoppingListEntity);
-    }
-
-    public ShoppingListEntity save(ShoppingListEntity shoppingList) {
-        return shoppingListRepository.save(shoppingList);
+        shoppingListToUpdate.setShoppingListDate(shoppingList.getShoppingListDate());
+        shoppingListToUpdate.setAccount(accountRepository.findById(accountId).get());
+        shoppingListToUpdate.setItems(items);
+        return shoppingListToUpdate;
     }
 
     public Optional<ShoppingListEntity> findById(Long shoppingListId, Long accountId) {

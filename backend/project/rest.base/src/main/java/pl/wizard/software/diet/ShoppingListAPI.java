@@ -44,7 +44,7 @@ public class ShoppingListAPI {
     public ResponseEntity<ShoppingListDto> getCurrent(@RequestHeader("Authorization") String token) {
         Long accountId = loginService.getAccountIdByTokenUUID(token)
                 .orElseThrow(() -> new AuthorizationFailedException(token));
-        ShoppingListEntity shoppingList = shoppingListService.getCurrent(accountId)
+        ShoppingListEntity shoppingList = shoppingListService.findCurrent(accountId)
                 .orElseThrow(() -> new NoSuchElementException("Could not find current shopping list"));
 
         return ResponseEntity.ok(ShoppingListDtoMapper.mapToShoppingListDto(shoppingList));
@@ -65,7 +65,9 @@ public class ShoppingListAPI {
         Long accountId = loginService.getAccountIdByTokenUUID(token)
                 .orElseThrow(() -> new AuthorizationFailedException(token));
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(ShoppingListDtoMapper.mapToShoppingListDto(shoppingListService.create(shoppingList)));
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(ShoppingListDtoMapper.mapToShoppingListDto(shoppingListService.create(accountId, shoppingList)));
     }
 
     @PutMapping("/{shoppingListId}")
@@ -75,10 +77,8 @@ public class ShoppingListAPI {
             @Valid @RequestBody ShoppingListDto shoppingList) {
         Long accountId = loginService.getAccountIdByTokenUUID(token)
                 .orElseThrow(() -> new AuthorizationFailedException(token));
-        ShoppingListEntity shoppingListEntity = shoppingListService.findById(shoppingListId, accountId)
-                .orElseThrow(() -> new NoSuchElementException("Could not find shopping list with id " + shoppingListId));
 
-        return ResponseEntity.ok(ShoppingListDtoMapper.mapToShoppingListDto(shoppingListService.update(shoppingList)));
+        return ResponseEntity.ok(ShoppingListDtoMapper.mapToShoppingListDto(shoppingListService.update(accountId, shoppingListId, shoppingList)));
     }
 
     @DeleteMapping("/{shoppingListId}")
