@@ -6,21 +6,19 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
-import pl.wizard.software.diet.members.MemberDao;
-import pl.wizard.software.dto.ProductWithAmountDto;
-import pl.wizard.software.diet.meals.MealDao;
 import pl.wizard.software.diet.meals.MealEntity;
 import pl.wizard.software.diet.meals.MealProductEntity;
+import pl.wizard.software.diet.members.MemberDao;
 import pl.wizard.software.diet.products.ProductDao;
 import pl.wizard.software.diet.products.ProductEntity;
 import pl.wizard.software.diet.schedules.ScheduleDao;
 import pl.wizard.software.diet.shoppingList.ShoppingListDao;
 import pl.wizard.software.diet.shoppingList.ShoppingListItemDao;
+import pl.wizard.software.dto.ProductWithAmountDto;
 import pl.wizard.software.login.AccountDao;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
@@ -31,9 +29,7 @@ import static pl.wizard.software.diet.products.ProductEntity.ProductTypeEnum.CER
 public class ShoppingListServiceTest {
 
     private ShoppingListService shoppingListService;
-
-    @Mock
-    MealDao mealRepository;
+    
     @Mock
     ShoppingListDao shoppingListRepository;
     @Mock
@@ -80,7 +76,7 @@ public class ShoppingListServiceTest {
         meal.setName("test meal");
         meal.setProducts(Set.of(firstMealProduct, secondMealProduct));
 
-        Mockito.lenient().when(mealRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(meal));
+        Mockito.lenient().when(mealService.findById(Mockito.anyLong())).thenReturn(meal);
         //when
         HashMap<ProductEntity.ProductTypeEnum, List<ProductWithAmountDto>> result = shoppingListService.getShoppingList(List.of(1L, 2L));
         //then
@@ -115,8 +111,8 @@ public class ShoppingListServiceTest {
         secondMeal.setName("second meal");
         secondMeal.setProducts(Set.of(mealProduct));
 
-        Mockito.lenient().when(mealRepository.findById(Mockito.eq(1L))).thenReturn(Optional.of(firstMeal));
-        Mockito.lenient().when(mealRepository.findById(Mockito.eq(2L))).thenReturn(Optional.of(secondMeal));
+        Mockito.lenient().when(mealService.findById(Mockito.eq(1L))).thenReturn(firstMeal);
+        Mockito.lenient().when(mealService.findById(Mockito.eq(2L))).thenReturn(secondMeal);
         //when
         HashMap<ProductEntity.ProductTypeEnum, List<ProductWithAmountDto>> result = shoppingListService.getShoppingList(List.of(1L, 2L));
         //then
