@@ -195,11 +195,8 @@ public class ShoppingListService {
             }
             for (Long memberMealId : memberMealIds) {
                 MealEntity meal = mealService.findByIdAndMember(memberMealId, memberId);
-                for (MealProductEntity mealProduct : meal.getProducts()) {
-                    mealProducts.add(mealProduct);
-                }
-//                meal.getProducts().stream()
-//                        .map(mealProductEntity -> mealProducts.add(mealProductEntity));
+                meal.getProducts().stream()
+                        .map(mealProductEntity -> mealProducts.add(mealProductEntity));
             }
         }
     }

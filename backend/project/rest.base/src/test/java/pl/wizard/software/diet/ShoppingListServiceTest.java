@@ -141,7 +141,7 @@ public class ShoppingListServiceTest {
     }
 
     @Test
-    public void shouldReturnShoppingListWithTwoProductsAndHalfAmountOfEachProduct() {
+    public void shouldReturnShoppingListWithTwoProductsAndHalfAmountOfEachProductWhenHaveTwoTheSameMeals() {
         ProductEntity firstProduct = new ProductEntity();
         firstProduct.setId(1L);
         firstProduct.setName("first product");
@@ -205,14 +205,77 @@ public class ShoppingListServiceTest {
 
         HashMap<ProductEntity.ProductTypeEnum, List<ProductWithAmountDto>> result = shoppingListService.getByMemberAndDay(List.of(2L), List.of(DayOfWeek.MONDAY), 1L);
 
-        assertEquals(1, 1);
-//        assertEquals(1, result.keySet().size());
-//        assertTrue(result.keySet().stream().anyMatch(key -> key == CEREALS));
-//        assertEquals(2, result.get(CEREALS).size());
-//        assertTrue(result.get(CEREALS).stream()
-//                .anyMatch(product -> product.getName().equals("first product") && product.getAmount() == 20));
-//        assertTrue(result.get(CEREALS).stream()
-//                .anyMatch(product -> product.getName().equals("second product") && product.getAmount() == 40));
+        assertEquals(1, result.keySet().size());
+        assertTrue(result.keySet().stream().anyMatch(key -> key == CEREALS));
+        assertEquals(2, result.get(CEREALS).size());
+        assertTrue(result.get(CEREALS).stream()
+                .anyMatch(product -> product.getName().equals("first product") && product.getAmount() == 1250));
+        assertTrue(result.get(CEREALS).stream()
+                .anyMatch(product -> product.getName().equals("second product") && product.getAmount() == 1250));
+    }
+
+    @Test
+    public void shouldReturnShoppingListWithOneProductAndHalfAmountWhenHaveTwoMealsWithTheSameProduct() {
+        ProductEntity testProduct = new ProductEntity();
+        testProduct.setId(1L);
+        testProduct.setName("test product");
+        testProduct.setProductType(CEREALS);
+        testProduct.setCalorific(100D);
+        testProduct.setProtein(100D);
+        testProduct.setFat(100D);
+        testProduct.setCarbohydrates(100D);
+        testProduct.setRoughage(100D);
+
+        MealProductEntity mealProduct = new MealProductEntity();
+        mealProduct.setId(10L);
+        mealProduct.setAmount(1000);
+        mealProduct.setProduct(testProduct);
+
+        MealEntity firstMeal = new MealEntity();
+        firstMeal.setId(100L);
+        firstMeal.setName("test meal");
+        firstMeal.setProducts(Set.of(mealProduct));
+        firstMeal.setCalorific(1000D);
+
+        MealEntity secondMeal = new MealEntity();
+        secondMeal.setId(200L);
+        secondMeal.setName("test meal");
+        secondMeal.setProducts(Set.of(mealProduct));
+        secondMeal.setCalorific(1000D);
+
+        MemberEntity member = new MemberEntity();
+        member.setId(2L);
+        member.setName("test member");
+        member.setRecommendedCalories(2500D);
+
+        ScheduleForDayDto scheduleForDay = new ScheduleForDayDto();
+        scheduleForDay.setDate(LocalDate.of(2021, 12, 6));
+        scheduleForDay.setBreakfast(100L);
+        scheduleForDay.setSecondBreakfast(200L);
+        scheduleForDay.setLunch(100L);
+        scheduleForDay.setDinner(200L);
+        scheduleForDay.setSupper(100L);
+
+        ScheduleEntity scheduleEntity = new ScheduleEntity();
+        scheduleEntity.setId(5L);
+        scheduleEntity.setMemberId(2L);
+        scheduleEntity.setScheduleDate(LocalDate.of(2021, 12, 6));
+        scheduleEntity.setSchedule(ScheduleDtoMapper.convertToBytes(List.of(scheduleForDay)));
+
+        Mockito.lenient().when(mealRepository.findById(100L)).thenReturn(Optional.of(firstMeal));
+        Mockito.lenient().when(mealRepository.findById(200L)).thenReturn(Optional.of(secondMeal));
+        Mockito.lenient().when(memberRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(member));
+        Mockito.lenient().when(calculateProductAmountFactory.createCalculator()).thenReturn(new DefaultCalculateProductAmount());
+        Mockito.lenient().when(scheduleService.findByMember(Mockito.anyLong(), Mockito.anyLong())).thenReturn(Optional.of(scheduleEntity));
+        Mockito.lenient().when(scheduleRepository.findByMember(Mockito.anyLong(), Mockito.anyLong(), Mockito.any(Pageable.class))).thenReturn(List.of(scheduleEntity));
+
+        HashMap<ProductEntity.ProductTypeEnum, List<ProductWithAmountDto>> result = shoppingListService.getByMemberAndDay(List.of(2L), List.of(DayOfWeek.MONDAY), 1L);
+
+        assertEquals(1, result.keySet().size());
+        assertTrue(result.keySet().stream().anyMatch(key -> key == CEREALS));
+        assertEquals(1, result.get(CEREALS).size());
+        assertTrue(result.get(CEREALS).stream()
+                .anyMatch(product -> product.getName().equals("test product") && product.getAmount() == 1250));
     }
 
 }
