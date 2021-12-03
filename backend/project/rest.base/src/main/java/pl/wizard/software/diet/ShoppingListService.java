@@ -6,9 +6,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import pl.wizard.software.dto.*;
-import pl.wizard.software.mapper.ProductDtoMapper;
-import pl.wizard.software.diet.meals.MealDao;
 import pl.wizard.software.diet.meals.MealEntity;
 import pl.wizard.software.diet.meals.MealProductEntity;
 import pl.wizard.software.diet.products.ProductDao;
@@ -18,7 +15,10 @@ import pl.wizard.software.diet.shoppingList.ShoppingListDao;
 import pl.wizard.software.diet.shoppingList.ShoppingListEntity;
 import pl.wizard.software.diet.shoppingList.ShoppingListItemDao;
 import pl.wizard.software.diet.shoppingList.ShoppingListItemEntity;
+import pl.wizard.software.dto.*;
 import pl.wizard.software.login.AccountDao;
+import pl.wizard.software.mapper.ProductDtoMapper;
+import pl.wizard.software.mapper.ScheduleDtoMapper;
 
 import java.time.DayOfWeek;
 import java.util.*;
@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ShoppingListService {
 
-    private final MealDao mealRepository;
+    private final MealService mealService;
     private final ShoppingListDao shoppingListRepository;
     private final ShoppingListItemDao shoppingListItemRepository;
     private final ScheduleService scheduleService;
@@ -39,12 +39,7 @@ public class ShoppingListService {
     HashMap<ProductTypeEnum, List<ProductWithAmountDto>> getShoppingList(List<Long> ids) {
         HashMap<ProductTypeEnum, List<ProductWithAmountDto>> shoppingList = new HashMap<>();
         List<MealProductEntity> mealProducts = new ArrayList<>();
-        for (Long id : ids) {
-            MealEntity meal = mealRepository.findById(id)
-                    .orElseThrow(() -> new NoSuchElementException("Could not find meal with id " + id));
-            meal.getProducts()
-                    .forEach(mealProductEntity -> mealProducts.add(mealProductEntity));
-        }
+        addMealProductById(ids, mealProducts);
         List<MealProductEntity> uniqueProducts = makeProductsUnique(mealProducts);
         prepareShoppingList(shoppingList, uniqueProducts);
 
@@ -113,20 +108,13 @@ public class ShoppingListService {
     }
 
     public HashMap<ProductTypeEnum, List<ProductWithAmountDto>> getByMemberAndDay(List<Long> members, List<DayOfWeek> days, Long accountId) {
-        List<Long> mealIds = new ArrayList<>();
-        for (Long memberId : members) {
-            Optional<ScheduleForWeekDto> schedule = scheduleService.findByMember(accountId, memberId);
-            if (!schedule.isPresent()) {
-                log.error("Schedule for member with id = " + memberId + " does not exists");
-            } else {
-                for (ScheduleForDayDto mealsForDay : schedule.get().getSchedule()) {
-                    if (days.contains(DayOfWeek.from(mealsForDay.getDate()))) {
-                        mealIds.addAll(getMealIds(mealsForDay));
-                    }
-                }
-            }
-        }
-        return getShoppingList(mealIds);
+        HashMap<ProductTypeEnum, List<ProductWithAmountDto>> shoppingList = new HashMap<>();
+        List<MealProductEntity> mealProducts = new ArrayList<>();
+        addMealProductByMemberAndDay(members, days, accountId, mealProducts);
+        List<MealProductEntity> uniqueProducts = makeProductsUnique(mealProducts);
+        prepareShoppingList(shoppingList, uniqueProducts);
+
+        return shoppingList;
     }
 
     private List<Long> getMealIds(ScheduleForDayDto mealsForDay) {
@@ -183,5 +171,32 @@ public class ShoppingListService {
         result.setSpecialAmount(mealProductEntity.getSpecialAmount());
         result.setSpecialAmountUnit(mealProductEntity.getSpecialAmountUnit());
         return result;
+    }
+
+    private void addMealProductById(List<Long> ids, List<MealProductEntity> mealProducts) {
+        for (Long id : ids) {
+            MealEntity meal = mealService.findById(id);
+            meal.getProducts()
+                    .forEach(mealProductEntity -> mealProducts.add(mealProductEntity));
+        }
+    }
+
+    private void addMealProductByMemberAndDay(List<Long> members, List<DayOfWeek> days, Long accountId, List<MealProductEntity> mealProducts) {
+        for (Long memberId : members) {
+            List<Long> memberMealIds = new ArrayList<>();
+            ScheduleForWeekDto schedule = scheduleService.findByMember(accountId, memberId)
+                    .map(ScheduleDtoMapper::mapToScheduleDto)
+                    .orElseThrow(() -> new NoSuchElementException("Could not find schedule for member with id " + memberId));
+            for (ScheduleForDayDto scheduleForDay : schedule.getSchedule()) {
+                if (days.contains(DayOfWeek.from(scheduleForDay.getDate()))) {
+                    memberMealIds.addAll(getMealIds(scheduleForDay));
+                }
+            }
+            for (Long memberMealId : memberMealIds) {
+                MealEntity meal = mealService.findByIdAndMember(memberMealId, memberId);
+                meal.getProducts().stream()
+                        .map(mealProductEntity -> mealProducts.add(mealProductEntity));
+            }
+        }
     }
 }
