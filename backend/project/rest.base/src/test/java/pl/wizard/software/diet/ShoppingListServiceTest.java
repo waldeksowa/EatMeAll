@@ -29,7 +29,7 @@ import static pl.wizard.software.diet.products.ProductEntity.ProductTypeEnum.CER
 public class ShoppingListServiceTest {
 
     private ShoppingListService shoppingListService;
-    
+
     @Mock
     ShoppingListDao shoppingListRepository;
     @Mock
