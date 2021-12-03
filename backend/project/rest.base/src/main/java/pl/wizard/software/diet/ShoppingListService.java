@@ -11,6 +11,7 @@ import pl.wizard.software.diet.meals.MealProductEntity;
 import pl.wizard.software.diet.products.ProductDao;
 import pl.wizard.software.diet.products.ProductEntity;
 import pl.wizard.software.diet.products.ProductEntity.ProductTypeEnum;
+import pl.wizard.software.diet.schedules.ScheduleEntity;
 import pl.wizard.software.diet.shoppingList.ShoppingListDao;
 import pl.wizard.software.diet.shoppingList.ShoppingListEntity;
 import pl.wizard.software.diet.shoppingList.ShoppingListItemDao;
@@ -184,18 +185,21 @@ public class ShoppingListService {
     private void addMealProductByMemberAndDay(List<Long> members, List<DayOfWeek> days, Long accountId, List<MealProductEntity> mealProducts) {
         for (Long memberId : members) {
             List<Long> memberMealIds = new ArrayList<>();
-            ScheduleForWeekDto schedule = scheduleService.findByMember(accountId, memberId)
-                    .map(ScheduleDtoMapper::mapToScheduleDto)
+            ScheduleEntity schedule = scheduleService.findByMember(accountId, memberId)
                     .orElseThrow(() -> new NoSuchElementException("Could not find schedule for member with id " + memberId));
-            for (ScheduleForDayDto scheduleForDay : schedule.getSchedule()) {
+            ScheduleForWeekDto scheduleForWeek = ScheduleDtoMapper.mapToScheduleDto(schedule);
+            for (ScheduleForDayDto scheduleForDay : scheduleForWeek.getSchedule()) {
                 if (days.contains(DayOfWeek.from(scheduleForDay.getDate()))) {
                     memberMealIds.addAll(getMealIds(scheduleForDay));
                 }
             }
             for (Long memberMealId : memberMealIds) {
                 MealEntity meal = mealService.findByIdAndMember(memberMealId, memberId);
-                meal.getProducts().stream()
-                        .map(mealProductEntity -> mealProducts.add(mealProductEntity));
+                for (MealProductEntity mealProduct : meal.getProducts()) {
+                    mealProducts.add(mealProduct);
+                }
+//                meal.getProducts().stream()
+//                        .map(mealProductEntity -> mealProducts.add(mealProductEntity));
             }
         }
     }

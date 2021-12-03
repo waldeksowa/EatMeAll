@@ -115,7 +115,7 @@ public class MealServiceTest {
         ProductEntity product = new ProductEntity();
         product.setId(1L);
         product.setName("test product");
-        product.setCalorific(100D);
+        product.setCalorific(10000D);
         product.setProtein(100D);
         product.setFat(100D);
         product.setCarbohydrates(100D);
