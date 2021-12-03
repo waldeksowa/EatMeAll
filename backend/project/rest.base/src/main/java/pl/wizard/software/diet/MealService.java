@@ -117,9 +117,13 @@ public class MealService {
 
     public MealEntity customizeByCalories(double memberCalories, MealEntity mealEntity) {
         CalculateProductAmountIf amountCalculator = calculateProductAmountFactory.createCalculator();
-        mealEntity.getProducts().forEach(
-                mealProduct -> mealProduct.setAmount(amountCalculator.calculateProductAmount(mealProduct.getAmount(), mealEntity.getCalorific(), memberCalories))
-        );
+        for (MealProductEntity product : mealEntity.getProducts()) {
+            int newAmount = amountCalculator.calculateProductAmount(product.getAmount(), mealEntity.getCalorific(), memberCalories);
+            product.setAmount(newAmount);
+        }
+//                .forEach(
+//                mealProduct -> mealProduct.setAmount(amountCalculator.calculateProductAmount(mealProduct.getAmount(), mealEntity.getCalorific(), memberCalories))
+//        );
         recalculateMealMacros(mealEntity);
         return mealEntity;
     }

@@ -6,6 +6,9 @@ public class DefaultCalculateProductAmount implements CalculateProductAmountIf{
 
     @Override
     public int calculateProductAmount(int templateProductAmount, double templateMealCalories, double memberCalories) {
+        if (templateMealCalories == 0.0) {
+            throw new ArithmeticException("TemplateMealCalories should not be zero");
+        }
         double oneMealCalorific = memberCalories/MEALS_PER_DAY;
         return templateProductAmount <= 10 ?
                 templateProductAmount :
