@@ -10,8 +10,10 @@ public class DefaultCalculateProductAmount implements CalculateProductAmountIf{
             throw new ArithmeticException("TemplateMealCalories should not be zero");
         }
         double oneMealCalorific = memberCalories/MEALS_PER_DAY;
-        return templateProductAmount <= 10 ?
-                templateProductAmount :
-                (int) Math.round((oneMealCalorific/templateMealCalories)*templateProductAmount);
+        if (templateProductAmount <= 10) {
+            return templateProductAmount;
+        } else {
+            return (int) Math.round((oneMealCalorific/templateMealCalories)*templateProductAmount);
+        }
     }
 }
