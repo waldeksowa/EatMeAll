@@ -116,12 +116,20 @@ public class MealService {
     }
 
     public MealEntity customizeByCalories(double memberCalories, MealEntity mealEntity) {
+        MealEntity mealEntityToModify = copyOf(mealEntity);
+        mealEntityToModify.getProducts().clear();
         CalculateProductAmountIf amountCalculator = calculateProductAmountFactory.createCalculator();
-        mealEntity.getProducts().forEach(
-            mealProduct -> mealProduct.setAmount(amountCalculator.calculateProductAmount(mealProduct.getAmount(), mealEntity.getCalorific(), memberCalories))
-        );
-        recalculateMealMacros(mealEntity);
-        return mealEntity;
+        for (MealProductEntity mealProduct : mealEntity.getProducts()) {
+            MealProductEntity mealProductToModify = copyOf(mealProduct);
+            int customizedAmount = amountCalculator.calculateProductAmount(mealProduct.getAmount(), mealEntity.getCalorific(), memberCalories);
+            mealProductToModify.setAmount(customizedAmount);
+            mealEntityToModify.getProducts().add(mealProductToModify);
+        }
+//        mealEntity.getProducts().forEach(
+//            mealProduct -> mealProduct.setAmount(amountCalculator.calculateProductAmount(mealProduct.getAmount(), mealEntity.getCalorific(), memberCalories))
+//        );
+        recalculateMealMacros(mealEntityToModify);
+        return mealEntityToModify;
     }
 
     private void recalculateMealMacros(MealEntity mealEntity) {
@@ -141,5 +149,45 @@ public class MealService {
         mealEntity.setFat(new BigDecimal(fat).setScale(1, RoundingMode.HALF_UP).doubleValue());
         mealEntity.setCarbohydrates(new BigDecimal(carbohydrates).setScale(1, RoundingMode.HALF_UP).doubleValue());
         mealEntity.setRoughage(new BigDecimal(roughage).setScale(1, RoundingMode.HALF_UP).doubleValue());
+    }
+
+    private MealEntity copyOf(MealEntity mealEntity) {
+        MealEntity result = new MealEntity();
+        result.setId(mealEntity.getId());
+        result.setCreatedAt(mealEntity.getCreatedAt());
+        result.setUpdatedAt(mealEntity.getUpdatedAt());
+        result.setVersion(mealEntity.getVersion());
+        result.setName(mealEntity.getName());
+        result.setAuthor(mealEntity.getAuthor());
+        result.setDescription(mealEntity.getDescription());
+//        if (mealEntity.getMealTime() != null) {
+//            result.setMealTime(mealEntity.getMealTime());
+//        }
+        result.setPrepareTime(mealEntity.getPrepareTime());
+        if (mealEntity.getProducts() != null) {
+            result.setProducts(Set.copyOf(mealEntity.getProducts()));
+        }
+//        if (mealEntity.getSteps() != null) {
+//            result.setSteps(List.copyOf(mealEntity.getSteps()));
+//        }
+        result.setCalorific(mealEntity.getCalorific());
+        result.setProtein(mealEntity.getProtein());
+        result.setFat(mealEntity.getFat());
+        result.setCarbohydrates(mealEntity.getCarbohydrates());
+        result.setRoughage(mealEntity.getRoughage());
+        return result;
+    }
+
+    private MealProductEntity copyOf(MealProductEntity mealProductEntity) {
+        MealProductEntity result = new MealProductEntity();
+        result.setId(mealProductEntity.getId());
+        result.setCreatedAt(mealProductEntity.getCreatedAt());
+        result.setUpdatedAt(mealProductEntity.getUpdatedAt());
+        result.setVersion(mealProductEntity.getVersion());
+        result.setProduct(mealProductEntity.getProduct());
+        result.setAmount(mealProductEntity.getAmount());
+        result.setSpecialAmount(mealProductEntity.getSpecialAmount());
+        result.setSpecialAmountUnit(mealProductEntity.getSpecialAmountUnit());
+        return result;
     }
 }
