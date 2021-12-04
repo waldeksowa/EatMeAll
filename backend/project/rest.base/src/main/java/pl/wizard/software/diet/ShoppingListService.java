@@ -198,8 +198,8 @@ public class ShoppingListService {
                 for (MealProductEntity product : meal.getProducts()) {
                     mealProducts.add(product);
                 }
-//                meal.getProducts().stream()
-//                        .map(mealProductEntity -> mealProducts.add(mealProductEntity));
+//                meal.getProducts()
+//                        .forEach(mealProductEntity -> mealProducts.add(mealProductEntity));
             }
         }
         return mealProducts;
