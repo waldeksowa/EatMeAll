@@ -110,8 +110,7 @@ public class ShoppingListService {
 
     public HashMap<ProductTypeEnum, List<ProductWithAmountDto>> getByMemberAndDay(List<Long> members, List<DayOfWeek> days, Long accountId) {
         HashMap<ProductTypeEnum, List<ProductWithAmountDto>> shoppingList = new HashMap<>();
-        List<MealProductEntity> mealProducts = new ArrayList<>();
-        addMealProductByMemberAndDay(members, days, accountId, mealProducts);
+        List<MealProductEntity> mealProducts = addMealProductByMemberAndDay(members, days, accountId);
         List<MealProductEntity> uniqueProducts = makeProductsUnique(mealProducts);
         prepareShoppingList(shoppingList, uniqueProducts);
 
@@ -182,7 +181,8 @@ public class ShoppingListService {
         }
     }
 
-    private void addMealProductByMemberAndDay(List<Long> members, List<DayOfWeek> days, Long accountId, List<MealProductEntity> mealProducts) {
+    private List<MealProductEntity> addMealProductByMemberAndDay(List<Long> members, List<DayOfWeek> days, Long accountId) {
+        List<MealProductEntity> mealProducts = new ArrayList<>();
         for (Long memberId : members) {
             List<Long> memberMealIds = new ArrayList<>();
             ScheduleEntity schedule = scheduleService.findByMember(accountId, memberId)
@@ -195,9 +195,13 @@ public class ShoppingListService {
             }
             for (Long memberMealId : memberMealIds) {
                 MealEntity meal = mealService.findByIdAndMember(memberMealId, memberId);
-                meal.getProducts().stream()
-                        .map(mealProductEntity -> mealProducts.add(mealProductEntity));
+                for (MealProductEntity product : meal.getProducts()) {
+                    mealProducts.add(product);
+                }
+//                meal.getProducts().stream()
+//                        .map(mealProductEntity -> mealProducts.add(mealProductEntity));
             }
         }
+        return mealProducts;
     }
 }
