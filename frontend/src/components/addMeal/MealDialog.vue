@@ -125,10 +125,11 @@ export default {
     ...mapGetters("store", ["macrosName"]),
   },
   mounted() {
+    this.showLoading();
     this.fetchProducts();
   },
   methods: {
-    ...mapActions("store", ["notifyError"]),
+    ...mapActions("store", ["notifyError", "showLoading"]),
     fetchProducts() {
       fetch(`${this.productsUrl}`)
         .then((response) => response.json())

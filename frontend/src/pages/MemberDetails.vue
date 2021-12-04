@@ -204,7 +204,7 @@ export default {
         .then((result) => (this.memberData = result))
         .catch((error) => {
           console.log(error);
-          this.errorMesage("Ups... coś poszło nie tak");
+          this.errorMesage("Ups... pobrać danych o użytkowniku");
         });
     },
     postUpdatedData() {
@@ -240,7 +240,7 @@ export default {
         .then((result) => result)
         .catch((error) => {
           console.log(error);
-          this.errorMesage("Ups... coś poszło nie tak");
+          this.errorMesage("Ups... pojawił sie błąd podczas wysyłania danych");
         });
 
       this.isInputDisabled = true;
@@ -268,7 +268,7 @@ export default {
         .then((result) => result)
         .catch((error) => {
           console.log(error);
-          this.errorMesage("Ups... coś poszło nie tak");
+          this.errorMesage("Ups... nie udało sie usunąć kąta");
         });
     },
   },

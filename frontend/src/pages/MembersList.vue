@@ -71,7 +71,7 @@ export default {
         .then((result) => (this.membersAccounts = result))
         .catch((error) => {
           console.log(error);
-          this.errorMesage("Ups... coś poszło nie tak");
+          this.errorMesage("Ups... nie udało się pobrać danych o użytkowniku");
         });
     },
     goToMemberSite(aMemberIdToShowAccountDetail) {
@@ -97,7 +97,7 @@ export default {
         .then((result) => result)
         .catch((error) => {
           console.log(error);
-          this.errorMesage("Ups... coś poszło nie tak");
+          this.errorMesage("Ups... nie udało sie dodać nowego użytkownika");
         });
 
       this.$router.go(0);

@@ -1,5 +1,9 @@
 import { KILOCALORIES, CARBOHYDRATES, FATS, PROTEINS } from '../translate/common/macrosName.js'
 import { Notify } from "quasar";
+import {
+  Loading,
+  QSpinnerGears
+} from 'quasar'
 const state = {
   macrosName: {
     calorific: KILOCALORIES,
@@ -43,6 +47,15 @@ const actions = {
       message: `${e}`,
       classes: "full-width text-center bg-positive",
     });
+  },
+  showLoading({ commit }, e) {
+    Loading.show();
+
+    // hiding in 2s
+    this.timer = setTimeout(() => {
+      Loading.hide();
+      this.timer = void 0;
+    }, 2000);
   },
 }
 const getters = {

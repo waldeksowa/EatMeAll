@@ -36,7 +36,6 @@ import { mapActions } from "vuex";
 export default {
   data() {
     return {
-      loginUrl: LOGIN,
       login: "admin",
       password: "password",
     };
@@ -53,30 +52,29 @@ export default {
         "Content-Type": "application/json",
       };
 
-      try {
-        fetch(this.loginUrl, {
-          method: "POST",
-          body: `{
+      fetch(LOGIN, {
+        method: "POST",
+        body: `{
           "username":"${this.login.trim().toLowerCase()}",
           "password":"${this.password.trim().toLowerCase()}"
         }`,
-          headers: headersList,
+        headers: headersList,
+      })
+        .then((response) => {
+          if (response.ok) {
+            return response.json();
+          } else {
+            throw new Error();
+          }
         })
-          .then((response) => {
-            if (response.ok) {
-              return response.json();
-            } else {
-              throw new Error();
-            }
-          })
-          .then((data) => {
-            this.updateJwt(data.token);
-            this.redirectToForm("/plan");
-          });
-      } catch (e) {
-        console.log(e);
-        this.notifyError(e);
-      }
+        .then((data) => {
+          this.updateJwt(data.token);
+          this.redirectToForm("/plan");
+        })
+        .catch((e) => {
+          console.error(e);
+          this.notifyError(e);
+        });
     },
     notifyError(e) {
       Notify.create({

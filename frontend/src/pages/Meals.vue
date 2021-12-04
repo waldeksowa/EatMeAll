@@ -1,6 +1,6 @@
 <template>
   <q-page>
-    <div class="row justify-end">
+    <div v-if="membersAccounts.length" class="row justify-end">
       <div
         v-for="(account, index) in membersAccounts"
         :key="`member-${index}`"
@@ -8,7 +8,7 @@
           memberIdToShowSchedule === account.id ? 'bg-accent' : 'bg-white'
         "
         class="member-width"
-        @click="showUserSchedule(account.id)"
+        @click="renderScheduleForMember(account.id)"
       >
         <div class="q-my-sm">
           <center>
@@ -20,18 +20,23 @@
         </div>
       </div>
     </div>
+    <div v-else class="row justify-center">
+      <h5 class="text-center">Nie dodaleś mamberów</h5>
+    </div>
+
     <mealTable
-      @showDeatilDialog="showDeatilDialog($event)"
-      @openDialog="openDialog"
+      @showDialogToGenerateNewWeekSchedule="
+        showDialogToGenerateNewWeekSchedule()
+      "
       :mealsSchedule="mealsSchedule"
-      :isScheduleShow="isScheduleShow"
+      :isScheduleShow="isDialogToGenerateNewWeekSchedule"
     />
-    <q-dialog v-model="isDetailInfDialogShow">
+    <!-- <q-dialog v-model="isDetailInfDialogShow">
       <moreInfoDialog :selectedMeal="selectedMeal"></moreInfoDialog>
-    </q-dialog>
-    <q-dialog v-model="isScheduleShow">
+    </q-dialog> -->
+    <q-dialog v-model="isDialogToGenerateNewWeekSchedule">
       <createScheduleDialog
-        @fetchMemberSheduleData="fetchMemberSheduleData()"
+        @fetchRandomSheduleData="fetchRandomSheduleData()"
       ></createScheduleDialog>
     </q-dialog>
   </q-page>
@@ -40,19 +45,12 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 import { MEMBER } from "../EndpointAddresses";
-import {
-  RANDOMSCHEDULE,
-  SCHEDULE,
-  MEMBER_SCHEDULE,
-  MEALS,
-} from "../EndpointAddresses";
-import { date } from "quasar";
+import { RANDOMSCHEDULE, MEMBER_SCHEDULE, MEALS } from "../EndpointAddresses";
 export default {
   name: "PageIndex",
   data() {
     return {
-      isDetailInfDialogShow: false,
-      isScheduleShow: false,
+      isDialogToGenerateNewWeekSchedule: false,
       showMealDialog: false,
       selectedMeal: Object,
       mealsSchedule: [],
@@ -68,197 +66,11 @@ export default {
     this.fetchMemberSheduleData();
   },
   methods: {
-    ...mapActions("store", ["updateMemberIdToShowSchedule", "errorMesage"]),
-    fetchMembersAccountData() {
-      var myHeaders = new Headers();
-      myHeaders.append("Authorization", `Bearer ${this.jwt}`);
-
-      var requestOptions = {
-        method: "GET",
-        headers: myHeaders,
-        redirect: "follow",
-      };
-      fetch(MEMBER, requestOptions)
-        .then((response) => response.json())
-        .then((result) => (this.membersAccounts = result))
-        .catch((error) => {
-          this.errorMesage("Ups... Cos poszlo nie tak");
-          console.log(error);
-        });
-    },
-    openDialog() {
-      this.isScheduleShow = true;
-    },
-    showUserSchedule(aMemberId) {
-      this.updateMemberIdToShowSchedule(aMemberId);
-      this.fetchMemberSheduleData();
-    },
-
-
-    fetchMemberSheduleData() {
-      // var myHeaders = new Headers();
-      // myHeaders.append("Authorization", `Bearer ${this.jwt}`);
-
-      // var requestOptions = {
-      //   method: "GET",
-      //   headers: myHeaders,
-      //   redirect: "follow",
-      // };
-      // const url = `${MEMBER_SCHEDULE}${this.memberIdToShowSchedule}`;
-      // fetch(RANDOMSCHEDULE, requestOptions)
-      //   .then((response) => {
-      //     if (!response.ok) {
-      //       this.errorMesage("Ups... Cos poszlo nie tak");
-      //     }
-      //     return response.json();
-      //   })
-      //   .then((result) => {
-      //     console.log("~ random", result);
-      //     this.mealsSchedule = result;
-      //   })
-      //   .catch((error) => {
-      //     this.errorMesage("Ups... Cos poszlo nie tak");
-      //     console.log(error);
-      //   });
-
-      let a = {
-        createdAt: "2021-11-06T11:03:15.917+0000",
-        updatedAt: "2021-11-06T11:03:15.917+0000",
-        version: 0,
-        scheduleDate: "2021-09-24",
-        schedule: [
-          {
-            date: "2021-09-24",
-            breakfast: 1,
-            secondBreakfast: 1,
-            lunch: 1,
-            dinner: 1,
-            supper: 1,
-            prepareTime: 55,
-            calorific: 33.4,
-            protein: 1.1,
-            fat: 0.2,
-            carbohydrates: 7.1,
-            roughage: 0.4,
-          },
-          {
-            date: "2021-09-25",
-            breakfast: 1,
-            secondBreakfast: 1,
-            lunch: 1,
-            dinner: 1,
-            supper: 1,
-            prepareTime: 55,
-            calorific: 33.4,
-            protein: 1.1,
-            fat: 0.2,
-            carbohydrates: 7.1,
-            roughage: 0.4,
-          },
-          {
-            date: "2021-09-26",
-            breakfast: 1,
-            secondBreakfast: 1,
-            lunch: 1,
-            dinner: 1,
-            supper: 1,
-            prepareTime: 55,
-            calorific: 33.4,
-            protein: 1.1,
-            fat: 0.2,
-            carbohydrates: 7.1,
-            roughage: 0.4,
-          },
-          {
-            date: "2021-09-27",
-            breakfast: 1,
-            secondBreakfast: 1,
-            lunch: 1,
-            dinner: 1,
-            supper: 1,
-            prepareTime: 55,
-            calorific: 33.4,
-            protein: 1.1,
-            fat: 0.2,
-            carbohydrates: 7.1,
-            roughage: 0.4,
-          },
-          {
-            date: "2021-09-28",
-            breakfast: 1,
-            secondBreakfast: 1,
-            lunch: 1,
-            dinner: 1,
-            supper: 1,
-            prepareTime: 55,
-            calorific: 33.4,
-            protein: 1.1,
-            fat: 0.2,
-            carbohydrates: 7.1,
-            roughage: 0.4,
-          },
-          {
-            date: "2021-09-29",
-            breakfast: 1,
-            secondBreakfast: 1,
-            lunch: 1,
-            dinner: 1,
-            supper: 1,
-            prepareTime: 55,
-            calorific: 33.4,
-            protein: 1.1,
-            fat: 0.2,
-            carbohydrates: 7.1,
-            roughage: 0.4,
-          },
-          {
-            date: "2021-09-30",
-            breakfast: 1,
-            secondBreakfast: 1,
-            lunch: 1,
-            dinner: 1,
-            supper: 1,
-            prepareTime: 55,
-            calorific: 33.4,
-            protein: 1.1,
-            fat: 0.2,
-            carbohydrates: 7.1,
-            roughage: 0.4,
-          },
-        ],
-        memberId: 1,
-        id: 49,
-      };
-      this.parseMemberScheduleData(a);
-    },
-    async parseMemberScheduleData(aSchedule) {
-      let arr = [];
-
-      for (let i = 0; i < aSchedule.schedule.length; i++) {
-        arr.push({
-          date: aSchedule.schedule[i].date,
-          meals: {
-            breakfast: await this.fetchMealDetails(
-              aSchedule.schedule[i].breakfast
-            ),
-            secondbreakfast: await this.fetchMealDetails(
-              aSchedule.schedule[i].secondBreakfast
-            ),
-            dinner: await this.fetchMealDetails(aSchedule.schedule[i].dinner),
-            lunch: await this.fetchMealDetails(aSchedule.schedule[i].lunch),
-            supper: await this.fetchMealDetails(aSchedule.schedule[i].supper),
-          },
-          mealsId: {
-            breakfast: aSchedule.schedule[i].breakfast,
-            secondbreakfast: aSchedule.schedule[i].secondBreakfast,
-            dinner: aSchedule.schedule[i].dinner,
-            lunch: aSchedule.schedule[i].lunch,
-            supper: aSchedule.schedule[i].supper,
-          },
-        });
-      }
-      this.mealsSchedule = arr;
-    },
+    ...mapActions("store", [
+      "updateMemberIdToShowSchedule",
+      "errorMesage",
+      "showLoading",
+    ]),
     async fetchMealDetails(aId) {
       let requestOptions = {
         method: "GET",
@@ -272,13 +84,116 @@ export default {
         console.log(err);
       }
     },
-    showDeatilDialog(aMeal) {
-      this.selectedMeal = aMeal;
-      this.isDetailInfDialogShow = true;
+    fetchMembersAccountData() {
+      var myHeaders = new Headers();
+      myHeaders.append("Authorization", `Bearer ${this.jwt}`);
+
+      var requestOptions = {
+        method: "GET",
+        headers: myHeaders,
+        redirect: "follow",
+      };
+      fetch(MEMBER, requestOptions)
+        .then((response) => response.json())
+        .then((result) => (this.membersAccounts = result))
+        .catch((error) => {
+          this.errorMesage(
+            "Ups... Nie mogę pobrać danych o kątach użytkowników"
+          );
+          console.log(error);
+        });
+    },
+    fetchRandomSheduleData() {
+      this.showLoading();
+      var myHeaders = new Headers();
+      myHeaders.append("Authorization", `Bearer ${this.jwt}`);
+
+      var requestOptions = {
+        method: "GET",
+        headers: myHeaders,
+        redirect: "follow",
+      };
+      fetch(RANDOMSCHEDULE, requestOptions)
+        .then((response) => {
+          if (!response.ok) {
+            this.errorMesage("Ups... Nie mogę wylosować planu diety");
+          }
+          return response.json();
+        })
+        .then((result) => {
+          console.log("~ random", result);
+          this.parseMemberScheduleData(result);
+        })
+        .catch((error) => {
+          this.errorMesage("Ups... Nie mogę wylosować planu diety");
+          console.log(error);
+        });
+    },
+    fetchMemberSheduleData() {
+      this.showLoading();
+      var myHeaders = new Headers();
+      myHeaders.append("Authorization", `Bearer ${this.jwt}`);
+
+      var requestOptions = {
+        method: "GET",
+        headers: myHeaders,
+        redirect: "follow",
+      };
+      const url = `${MEMBER_SCHEDULE}${this.memberIdToShowSchedule}`;
+      fetch(url, requestOptions)
+        .then((response) => {
+          if (!response.ok) {
+            this.errorMesage(
+              "Ups... Nie mogę pobrać planu diety dla użytkownika"
+            );
+          }
+          return response.json();
+        })
+        .then((result) => {
+          this.parseMemberScheduleData(result);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    showDialogToGenerateNewWeekSchedule() {
+      this.isDialogToGenerateNewWeekSchedule = true;
+    },
+    renderScheduleForMember(aMemberId) {
+      this.updateMemberIdToShowSchedule(aMemberId);
+      this.fetchMemberSheduleData();
+    },
+    async parseMemberScheduleData(aSchedule) {
+      let arr = [];
+
+      for (let i = 0; i < aSchedule.schedule.length; i++) {
+        arr.push({
+          date: aSchedule.schedule[i].date,
+          meals: {
+            breakfast: await this.fetchMealDetails(
+              aSchedule.schedule[i].breakfast
+            ),
+            secondBreakfast: await this.fetchMealDetails(
+              aSchedule.schedule[i].secondBreakfast
+            ),
+            dinner: await this.fetchMealDetails(aSchedule.schedule[i].dinner),
+            lunch: await this.fetchMealDetails(aSchedule.schedule[i].lunch),
+            supper: await this.fetchMealDetails(aSchedule.schedule[i].supper),
+          },
+          mealsId: {
+            breakfast: aSchedule.schedule[i].breakfast,
+            secondBreakfast: aSchedule.schedule[i].secondBreakfast,
+            dinner: aSchedule.schedule[i].dinner,
+            lunch: aSchedule.schedule[i].lunch,
+            supper: aSchedule.schedule[i].supper,
+          },
+        });
+      }
+      this.mealsSchedule = arr;
     },
   },
   components: {
-    moreInfoDialog: () => import("../components/meals/MoreInfoDialog.vue"),
+    // moreInfoDialog: () => import("../components/meals/MoreInfoDialog.vue"),
     mealTable: () => import("../components/meals/MealTable.vue"),
     createScheduleDialog: () =>
       import("../components/meals/CreateNewSchedule.vue"),
