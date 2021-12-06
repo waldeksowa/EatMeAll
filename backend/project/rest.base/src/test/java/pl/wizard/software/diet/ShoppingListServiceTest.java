@@ -21,7 +21,7 @@ import pl.wizard.software.diet.shoppingList.ShoppingListItemDao;
 import pl.wizard.software.dto.ProductWithAmountDto;
 import pl.wizard.software.dto.ScheduleForDayDto;
 import pl.wizard.software.login.AccountDao;
-import pl.wizard.software.mapper.ScheduleDtoMapper;
+import pl.wizard.software.util.ByteConverter;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -196,7 +196,7 @@ public class ShoppingListServiceTest {
         scheduleEntity.setId(5L);
         scheduleEntity.setMemberId(2L);
         scheduleEntity.setScheduleDate(LocalDate.of(2021, 12, 6));
-        scheduleEntity.setSchedule(ScheduleDtoMapper.convertToBytes(List.of(scheduleForDay)));
+        scheduleEntity.setSchedule(ByteConverter.convertToBytes(List.of(scheduleForDay)));
 
         Mockito.lenient().when(mealRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(meal));
         Mockito.lenient().when(memberRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(member));
@@ -261,7 +261,7 @@ public class ShoppingListServiceTest {
         scheduleEntity.setId(5L);
         scheduleEntity.setMemberId(2L);
         scheduleEntity.setScheduleDate(LocalDate.of(2021, 12, 6));
-        scheduleEntity.setSchedule(ScheduleDtoMapper.convertToBytes(List.of(scheduleForDay)));
+        scheduleEntity.setSchedule(ByteConverter.convertToBytes(List.of(scheduleForDay)));
 
         Mockito.lenient().when(mealRepository.findById(100L)).thenReturn(Optional.of(firstMeal));
         Mockito.lenient().when(mealRepository.findById(200L)).thenReturn(Optional.of(secondMeal));

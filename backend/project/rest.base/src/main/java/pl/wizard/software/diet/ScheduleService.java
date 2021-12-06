@@ -16,7 +16,7 @@ import pl.wizard.software.dto.CreateScheduleDto;
 import pl.wizard.software.dto.CreateScheduleForDayDto;
 import pl.wizard.software.dto.ScheduleForDayDto;
 import pl.wizard.software.dto.ScheduleForWeekDto;
-import pl.wizard.software.mapper.ScheduleDtoMapper;
+import pl.wizard.software.util.ByteConverter;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -81,7 +81,7 @@ public class ScheduleService {
         ScheduleEntity scheduleEntity = ScheduleEntity.builder()
                 .memberId(schedule.getMemberId())
                 .scheduleDate(scheduleDate)
-                .schedule(ScheduleDtoMapper.convertToBytes(scheduleForDayDtos))
+                .schedule(ByteConverter.convertToBytes(scheduleForDayDtos))
                 .build();
 
         return scheduleRepository.save(scheduleEntity);
@@ -113,7 +113,7 @@ public class ScheduleService {
 
         scheduleToUpdate.setUpdatedAt(new Date());
         scheduleToUpdate.setMemberId(schedule.getMemberId());
-        scheduleToUpdate.setSchedule(ScheduleDtoMapper.convertToBytes(scheduleForDayDtos));
+        scheduleToUpdate.setSchedule(ByteConverter.convertToBytes(scheduleForDayDtos));
         return scheduleToUpdate;
     }
 
