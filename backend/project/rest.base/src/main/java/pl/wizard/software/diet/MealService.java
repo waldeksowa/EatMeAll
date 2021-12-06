@@ -11,6 +11,7 @@ import pl.wizard.software.diet.products.ProductDao;
 import pl.wizard.software.diet.products.ProductEntity;
 import pl.wizard.software.dto.CreateMealDto;
 import pl.wizard.software.dto.SimpleProductDto;
+import pl.wizard.software.util.EntityCopier;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -116,11 +117,11 @@ public class MealService {
     }
 
     public MealEntity customizeByCalories(double memberCalories, MealEntity mealEntity) {
-        MealEntity mealEntityToModify = copyOf(mealEntity);
+        MealEntity mealEntityToModify = EntityCopier.copyOf(mealEntity);
         mealEntityToModify.setProducts(new HashSet<>());
         CalculateProductAmountIf amountCalculator = calculateProductAmountFactory.createCalculator();
         for (MealProductEntity mealProduct : mealEntity.getProducts()) {
-            MealProductEntity mealProductToModify = copyOf(mealProduct);
+            MealProductEntity mealProductToModify = EntityCopier.copyOf(mealProduct);
             int customizedAmount = amountCalculator.calculateProductAmount(mealProduct.getAmount(), mealEntity.getCalorific(), memberCalories);
             mealProductToModify.setAmount(customizedAmount);
             mealEntityToModify.getProducts().add(mealProductToModify);
@@ -146,45 +147,5 @@ public class MealService {
         mealEntity.setFat(new BigDecimal(fat).setScale(1, RoundingMode.HALF_UP).doubleValue());
         mealEntity.setCarbohydrates(new BigDecimal(carbohydrates).setScale(1, RoundingMode.HALF_UP).doubleValue());
         mealEntity.setRoughage(new BigDecimal(roughage).setScale(1, RoundingMode.HALF_UP).doubleValue());
-    }
-
-    private MealEntity copyOf(MealEntity mealEntity) {
-        MealEntity result = new MealEntity();
-        result.setId(mealEntity.getId());
-        result.setCreatedAt(mealEntity.getCreatedAt());
-        result.setUpdatedAt(mealEntity.getUpdatedAt());
-        result.setVersion(mealEntity.getVersion());
-        result.setName(mealEntity.getName());
-        result.setAuthor(mealEntity.getAuthor());
-        result.setDescription(mealEntity.getDescription());
-        result.setPrepareTime(mealEntity.getPrepareTime());
-        if (mealEntity.getMealTime() != null) {
-            result.setMealTime(mealEntity.getMealTime());
-        }
-        if (mealEntity.getProducts() != null) {
-            result.setProducts(Set.copyOf(mealEntity.getProducts()));
-        }
-        if (mealEntity.getSteps() != null) {
-            result.setSteps(List.copyOf(mealEntity.getSteps()));
-        }
-        result.setCalorific(mealEntity.getCalorific());
-        result.setProtein(mealEntity.getProtein());
-        result.setFat(mealEntity.getFat());
-        result.setCarbohydrates(mealEntity.getCarbohydrates());
-        result.setRoughage(mealEntity.getRoughage());
-        return result;
-    }
-
-    private MealProductEntity copyOf(MealProductEntity mealProductEntity) {
-        MealProductEntity result = new MealProductEntity();
-        result.setId(mealProductEntity.getId());
-        result.setCreatedAt(mealProductEntity.getCreatedAt());
-        result.setUpdatedAt(mealProductEntity.getUpdatedAt());
-        result.setVersion(mealProductEntity.getVersion());
-        result.setProduct(mealProductEntity.getProduct());
-        result.setAmount(mealProductEntity.getAmount());
-        result.setSpecialAmount(mealProductEntity.getSpecialAmount());
-        result.setSpecialAmountUnit(mealProductEntity.getSpecialAmountUnit());
-        return result;
     }
 }
