@@ -40,8 +40,7 @@ public class ShoppingListService {
 
     HashMap<ProductTypeEnum, List<ProductWithAmountDto>> getShoppingList(List<Long> ids) {
         HashMap<ProductTypeEnum, List<ProductWithAmountDto>> shoppingList = new HashMap<>();
-        List<MealProductEntity> mealProducts = new ArrayList<>();
-        addMealProductById(ids, mealProducts);
+        List<MealProductEntity> mealProducts = addMealProductById(ids);
         List<MealProductEntity> uniqueProducts = makeProductsUnique(mealProducts);
         prepareShoppingList(shoppingList, uniqueProducts);
 
@@ -161,12 +160,14 @@ public class ShoppingListService {
         }
     }
 
-    private void addMealProductById(List<Long> ids, List<MealProductEntity> mealProducts) {
+    private List<MealProductEntity> addMealProductById(List<Long> ids) {
+        List<MealProductEntity> mealProducts = new ArrayList<>();
         for (Long id : ids) {
             MealEntity meal = mealService.findById(id);
             meal.getProducts()
                     .forEach(mealProductEntity -> mealProducts.add(mealProductEntity));
         }
+        return mealProducts;
     }
 
     private List<MealProductEntity> addMealProductByMemberAndDay(List<Long> members, List<DayOfWeek> days, Long accountId) {
