@@ -1,7 +1,6 @@
 package pl.wizard.software.diet;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -36,9 +35,9 @@ import static org.junit.Assert.assertTrue;
 import static pl.wizard.software.diet.products.ProductEntity.ProductTypeEnum.CEREALS;
 
 @RunWith(MockitoJUnitRunner.class)
-@Ignore
 public class ShoppingListServiceTest {
 
+    public static final double NOT_IMPORTANT = 100D;
     private ShoppingListService shoppingListService;
 
     @Mock
@@ -143,26 +142,26 @@ public class ShoppingListServiceTest {
     }
 
     @Test
-    public void shouldReturnShoppingListWithTwoProductsAndHalfAmountOfEachProductWhenHaveTwoTheSameMeals() {
+    public void shouldReturnShoppingListWithTwoProductsAndAmount2500OfEachProductWhenHaveFiveTheSameMeals() {
         ProductEntity firstProduct = new ProductEntity();
         firstProduct.setId(1L);
         firstProduct.setName("first product");
         firstProduct.setProductType(CEREALS);
-        firstProduct.setCalorific(100D);
-        firstProduct.setProtein(100D);
-        firstProduct.setFat(100D);
-        firstProduct.setCarbohydrates(100D);
-        firstProduct.setRoughage(100D);
+        firstProduct.setCalorific(NOT_IMPORTANT);
+        firstProduct.setProtein(NOT_IMPORTANT);
+        firstProduct.setFat(NOT_IMPORTANT);
+        firstProduct.setCarbohydrates(NOT_IMPORTANT);
+        firstProduct.setRoughage(NOT_IMPORTANT);
 
         ProductEntity secondProduct = new ProductEntity();
         secondProduct.setId(2L);
         secondProduct.setName("second product");
         secondProduct.setProductType(CEREALS);
-        secondProduct.setCalorific(100D);
-        secondProduct.setProtein(100D);
-        secondProduct.setFat(100D);
-        secondProduct.setCarbohydrates(100D);
-        secondProduct.setRoughage(100D);
+        secondProduct.setCalorific(NOT_IMPORTANT);
+        secondProduct.setProtein(NOT_IMPORTANT);
+        secondProduct.setFat(NOT_IMPORTANT);
+        secondProduct.setCarbohydrates(NOT_IMPORTANT);
+        secondProduct.setRoughage(NOT_IMPORTANT);
 
         MealProductEntity firstMealProduct = new MealProductEntity();
         firstMealProduct.setId(10L);
@@ -211,22 +210,22 @@ public class ShoppingListServiceTest {
         assertTrue(result.keySet().stream().anyMatch(key -> key == CEREALS));
         assertEquals(2, result.get(CEREALS).size());
         assertTrue(result.get(CEREALS).stream()
-                .anyMatch(product -> product.getName().equals("first product") && product.getAmount() == 1250));
+                .anyMatch(product -> product.getName().equals("first product") && product.getAmount() == 2500));
         assertTrue(result.get(CEREALS).stream()
-                .anyMatch(product -> product.getName().equals("second product") && product.getAmount() == 1250));
+                .anyMatch(product -> product.getName().equals("second product") && product.getAmount() == 2500));
     }
 
     @Test
-    public void shouldReturnShoppingListWithOneProductAndHalfAmountWhenHaveTwoMealsWithTheSameProduct() {
+    public void shouldReturnShoppingListWithOneProductAndAmount2500WhenHaveFiveMealsWithTheSameProduct() {
         ProductEntity testProduct = new ProductEntity();
         testProduct.setId(1L);
         testProduct.setName("test product");
         testProduct.setProductType(CEREALS);
-        testProduct.setCalorific(100D);
-        testProduct.setProtein(100D);
-        testProduct.setFat(100D);
-        testProduct.setCarbohydrates(100D);
-        testProduct.setRoughage(100D);
+        testProduct.setCalorific(NOT_IMPORTANT);
+        testProduct.setProtein(NOT_IMPORTANT);
+        testProduct.setFat(NOT_IMPORTANT);
+        testProduct.setCarbohydrates(NOT_IMPORTANT);
+        testProduct.setRoughage(NOT_IMPORTANT);
 
         MealProductEntity mealProduct = new MealProductEntity();
         mealProduct.setId(10L);
@@ -276,8 +275,8 @@ public class ShoppingListServiceTest {
         assertEquals(1, result.keySet().size());
         assertTrue(result.keySet().stream().anyMatch(key -> key == CEREALS));
         assertEquals(1, result.get(CEREALS).size());
-//        assertTrue(result.get(CEREALS).stream()
-//                .anyMatch(product -> product.getName().equals("test product") && product.getAmount() == 1250));
+        assertTrue(result.get(CEREALS).stream()
+                .anyMatch(product -> product.getName().equals("test product") && product.getAmount() == 2500));
     }
 
 }
