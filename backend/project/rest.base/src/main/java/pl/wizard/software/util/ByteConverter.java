@@ -7,6 +7,7 @@ import java.util.List;
 
 @Slf4j
 public class ByteConverter<T> {
+
     public static <T> byte[] convertToBytes(List<T> list) {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         try {
@@ -14,18 +15,18 @@ public class ByteConverter<T> {
             out.writeObject(list);
             return bos.toByteArray();
         } catch (IOException e) {
-            log.error("Error when serialize list ", e);
+            log.error("Error when serialize " + list.getClass().getName(), e);
         }
         return null;
     }
 
-    public static <T> List<T> convertFromBytes(byte[] trainings) {
-        ByteArrayInputStream bis = new ByteArrayInputStream(trainings);
+    public static <T> List<T> convertFromBytes(byte[] bytes) {
+        ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
         try {
             ObjectInputStream in = new ObjectInputStream(bis);
             return (List<T>)in.readObject();
         } catch (Exception e) {
-            log.error("Error when deserialize list", e);
+            log.error("Error when deserialize " + bytes.getClass().getName(), e);
         }
         return null;
     }
