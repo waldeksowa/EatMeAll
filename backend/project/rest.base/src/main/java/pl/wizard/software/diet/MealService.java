@@ -117,7 +117,7 @@ public class MealService {
 
     public MealEntity customizeByCalories(double memberCalories, MealEntity mealEntity) {
         MealEntity mealEntityToModify = copyOf(mealEntity);
-        mealEntityToModify.getProducts().clear();
+        mealEntityToModify.setProducts(new HashSet<>());
         CalculateProductAmountIf amountCalculator = calculateProductAmountFactory.createCalculator();
         for (MealProductEntity mealProduct : mealEntity.getProducts()) {
             MealProductEntity mealProductToModify = copyOf(mealProduct);
@@ -160,16 +160,16 @@ public class MealService {
         result.setName(mealEntity.getName());
         result.setAuthor(mealEntity.getAuthor());
         result.setDescription(mealEntity.getDescription());
-//        if (mealEntity.getMealTime() != null) {
-//            result.setMealTime(mealEntity.getMealTime());
-//        }
         result.setPrepareTime(mealEntity.getPrepareTime());
+        if (mealEntity.getMealTime() != null) {
+            result.setMealTime(mealEntity.getMealTime());
+        }
         if (mealEntity.getProducts() != null) {
             result.setProducts(Set.copyOf(mealEntity.getProducts()));
         }
-//        if (mealEntity.getSteps() != null) {
-//            result.setSteps(List.copyOf(mealEntity.getSteps()));
-//        }
+        if (mealEntity.getSteps() != null) {
+            result.setSteps(List.copyOf(mealEntity.getSteps()));
+        }
         result.setCalorific(mealEntity.getCalorific());
         result.setProtein(mealEntity.getProtein());
         result.setFat(mealEntity.getFat());

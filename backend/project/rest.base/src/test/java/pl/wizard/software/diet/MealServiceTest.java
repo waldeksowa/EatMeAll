@@ -1,7 +1,6 @@
 package pl.wizard.software.diet;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -21,7 +20,6 @@ import java.util.Set;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(MockitoJUnitRunner.class)
-@Ignore
 public class MealServiceTest {
 
     private MealService mealService;
