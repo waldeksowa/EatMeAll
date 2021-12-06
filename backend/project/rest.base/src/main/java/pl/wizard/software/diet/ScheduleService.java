@@ -139,8 +139,4 @@ public class ScheduleService {
                 .orElseThrow(() -> new NoSuchElementException("Could not find schedule with id " + scheduleId));
         scheduleRepository.deleteById(scheduleId);
     }
-
-    private Optional<ScheduleForWeekDto> getScheduleForWeekDto(Optional<ScheduleEntity> schedule) {
-        return schedule.map(ScheduleDtoMapper::mapToScheduleDto);
-    }
 }

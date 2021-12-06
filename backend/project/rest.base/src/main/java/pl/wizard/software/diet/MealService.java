@@ -125,9 +125,6 @@ public class MealService {
             mealProductToModify.setAmount(customizedAmount);
             mealEntityToModify.getProducts().add(mealProductToModify);
         }
-//        mealEntity.getProducts().forEach(
-//            mealProduct -> mealProduct.setAmount(amountCalculator.calculateProductAmount(mealProduct.getAmount(), mealEntity.getCalorific(), memberCalories))
-//        );
         recalculateMealMacros(mealEntityToModify);
         return mealEntityToModify;
     }
