@@ -79,7 +79,7 @@ public class ScheduleService {
         }
 
         ScheduleEntity scheduleEntity = ScheduleEntity.builder()
-                .memberId(schedule.getMemberId())
+                .member(member)
                 .scheduleDate(scheduleDate)
                 .schedule(ByteConverter.convertToBytes(scheduleForDayDtos))
                 .build();
@@ -112,7 +112,7 @@ public class ScheduleService {
         }
 
         scheduleToUpdate.setUpdatedAt(new Date());
-        scheduleToUpdate.setMemberId(schedule.getMemberId());
+        scheduleToUpdate.setMember(member);
         scheduleToUpdate.setSchedule(ByteConverter.convertToBytes(scheduleForDayDtos));
         return scheduleToUpdate;
     }

@@ -27,7 +27,7 @@ public class ScheduleDtoMapper {
                 .updatedAt(scheduleEntity.getUpdatedAt())
                 .version(scheduleEntity.getVersion())
                 .scheduleDate(scheduleEntity.getScheduleDate())
-                .memberId(scheduleEntity.getMemberId())
+                .memberId(scheduleEntity.getMember().getId())
                 .schedule(ByteConverter.convertFromBytes(scheduleEntity.getSchedule()))
                 .build();
     }

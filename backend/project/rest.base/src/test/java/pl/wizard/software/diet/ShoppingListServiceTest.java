@@ -194,7 +194,7 @@ public class ShoppingListServiceTest {
 
         ScheduleEntity scheduleEntity = new ScheduleEntity();
         scheduleEntity.setId(5L);
-        scheduleEntity.setMemberId(2L);
+        scheduleEntity.setMember(member);
         scheduleEntity.setScheduleDate(LocalDate.of(2021, 12, 6));
         scheduleEntity.setSchedule(ByteConverter.convertToBytes(List.of(scheduleForDay)));
 
@@ -259,7 +259,7 @@ public class ShoppingListServiceTest {
 
         ScheduleEntity scheduleEntity = new ScheduleEntity();
         scheduleEntity.setId(5L);
-        scheduleEntity.setMemberId(2L);
+        scheduleEntity.setMember(member);
         scheduleEntity.setScheduleDate(LocalDate.of(2021, 12, 6));
         scheduleEntity.setSchedule(ByteConverter.convertToBytes(List.of(scheduleForDay)));
 
