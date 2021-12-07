@@ -119,7 +119,7 @@ public class MealService {
     public MealEntity customizeByCalories(double memberCalories, MealEntity mealEntity) {
         MealEntity mealEntityToModify = EntityCopier.copyOf(mealEntity);
         mealEntityToModify.setProducts(new HashSet<>());
-        CalculateProductAmountIf amountCalculator = calculateProductAmountFactory.createCalculator();
+        CalculateProductAmountStrategyIf amountCalculator = calculateProductAmountFactory.createCalculator();
         for (MealProductEntity mealProduct : mealEntity.getProducts()) {
             MealProductEntity mealProductToModify = EntityCopier.copyOf(mealProduct);
             int customizedAmount = amountCalculator.calculateProductAmount(mealProduct.getAmount(), mealEntity.getCalorific(), memberCalories);

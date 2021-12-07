@@ -67,7 +67,7 @@ public class MealServiceTest {
 
         Mockito.lenient().when(mealRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(meal));
         Mockito.lenient().when(memberRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(member));
-        Mockito.lenient().when(calculateProductAmountFactory.createCalculator()).thenReturn(new DefaultCalculateProductAmount());
+        Mockito.lenient().when(calculateProductAmountFactory.createCalculator()).thenReturn(new DefaultCalculateProductAmountStrategy());
 
         MealEntity result = mealService.findByIdAndMember(100L, 2L);
 
@@ -103,7 +103,7 @@ public class MealServiceTest {
 
         Mockito.lenient().when(mealRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(meal));
         Mockito.lenient().when(memberRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(member));
-        Mockito.lenient().when(calculateProductAmountFactory.createCalculator()).thenReturn(new DefaultCalculateProductAmount());
+        Mockito.lenient().when(calculateProductAmountFactory.createCalculator()).thenReturn(new DefaultCalculateProductAmountStrategy());
 
         MealEntity result = mealService.findByIdAndMember(100L, 2L);
 
@@ -139,7 +139,7 @@ public class MealServiceTest {
 
         Mockito.lenient().when(mealRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(meal));
         Mockito.lenient().when(memberRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(member));
-        Mockito.lenient().when(calculateProductAmountFactory.createCalculator()).thenReturn(new DefaultCalculateProductAmount());
+        Mockito.lenient().when(calculateProductAmountFactory.createCalculator()).thenReturn(new DefaultCalculateProductAmountStrategy());
 
         MealEntity result = mealService.findByIdAndMember(100L, 2L);
 

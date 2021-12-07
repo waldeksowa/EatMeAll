@@ -12,7 +12,7 @@ import static org.junit.Assert.assertEquals;
 
 public class DefaultCalculateProductAmountTest {
 
-    private CalculateProductAmountIf amountCalculator;
+    private CalculateProductAmountStrategyIf amountCalculator;
 
     @Before
     public void init() {

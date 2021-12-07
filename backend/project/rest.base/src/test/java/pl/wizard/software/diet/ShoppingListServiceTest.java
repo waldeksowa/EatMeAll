@@ -200,7 +200,7 @@ public class ShoppingListServiceTest {
 
         Mockito.lenient().when(mealRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(meal));
         Mockito.lenient().when(memberRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(member));
-        Mockito.lenient().when(calculateProductAmountFactory.createCalculator()).thenReturn(new DefaultCalculateProductAmount());
+        Mockito.lenient().when(calculateProductAmountFactory.createCalculator()).thenReturn(new DefaultCalculateProductAmountStrategy());
         Mockito.lenient().when(scheduleService.findByMember(Mockito.anyLong(), Mockito.anyLong())).thenReturn(Optional.of(scheduleEntity));
         Mockito.lenient().when(scheduleRepository.findByMember(Mockito.anyLong(), Mockito.anyLong(), Mockito.any(Pageable.class))).thenReturn(List.of(scheduleEntity));
 
@@ -266,7 +266,7 @@ public class ShoppingListServiceTest {
         Mockito.lenient().when(mealRepository.findById(100L)).thenReturn(Optional.of(firstMeal));
         Mockito.lenient().when(mealRepository.findById(200L)).thenReturn(Optional.of(secondMeal));
         Mockito.lenient().when(memberRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(member));
-        Mockito.lenient().when(calculateProductAmountFactory.createCalculator()).thenReturn(new DefaultCalculateProductAmount());
+        Mockito.lenient().when(calculateProductAmountFactory.createCalculator()).thenReturn(new DefaultCalculateProductAmountStrategy());
         Mockito.lenient().when(scheduleService.findByMember(Mockito.anyLong(), Mockito.anyLong())).thenReturn(Optional.of(scheduleEntity));
         Mockito.lenient().when(scheduleRepository.findByMember(Mockito.anyLong(), Mockito.anyLong(), Mockito.any(Pageable.class))).thenReturn(List.of(scheduleEntity));
 
