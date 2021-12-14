@@ -183,7 +183,7 @@ public class ShoppingListService {
                 }
             }
             for (Long memberMealId : memberMealIds) {
-                MealEntity meal = mealService.findByIdAndMember(memberMealId, memberId);
+                MealEntity meal = mealService.findById(memberMealId);
                 meal.getProducts()
                         .forEach(mealProductEntity -> mealProducts.add(mealProductEntity));
             }

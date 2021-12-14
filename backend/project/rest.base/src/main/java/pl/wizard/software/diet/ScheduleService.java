@@ -70,11 +70,11 @@ public class ScheduleService {
         for (CreateScheduleForDayDto createScheduleForDayDto : schedule.getSchedule()) {
             ScheduleForDayDto scheduleForDayDto = new ScheduleForDayDto();
             scheduleForDayDto.setDate(createScheduleForDayDto.getDate());
-            addMeal(createScheduleForDayDto.getBreakfast(), BREAKFAST, member.getId(), scheduleForDayDto);
-            addMeal(createScheduleForDayDto.getSecondBreakfast(), SECOND_BREAKFAST, member.getId(), scheduleForDayDto);
-            addMeal(createScheduleForDayDto.getLunch(), LUNCH, member.getId(), scheduleForDayDto);
-            addMeal(createScheduleForDayDto.getDinner(), DINNER, member.getId(), scheduleForDayDto);
-            addMeal(createScheduleForDayDto.getSupper(), SUPPER, member.getId(), scheduleForDayDto);
+            addMeal(createScheduleForDayDto.getBreakfast(), BREAKFAST, scheduleForDayDto);
+            addMeal(createScheduleForDayDto.getSecondBreakfast(), SECOND_BREAKFAST, scheduleForDayDto);
+            addMeal(createScheduleForDayDto.getLunch(), LUNCH, scheduleForDayDto);
+            addMeal(createScheduleForDayDto.getDinner(), DINNER, scheduleForDayDto);
+            addMeal(createScheduleForDayDto.getSupper(), SUPPER, scheduleForDayDto);
             scheduleForDayDtos.add(scheduleForDayDto);
         }
 
@@ -87,8 +87,8 @@ public class ScheduleService {
         return scheduleRepository.save(scheduleEntity);
     }
 
-    private void addMeal(Long mealId, MealTimeEnum mealTime, Long memberId, ScheduleForDayDto scheduleForDayDto) {
-        MealEntity mealEntity = mealService.findByIdAndMember(mealId, memberId);
+    private void addMeal(Long mealId, MealTimeEnum mealTime, ScheduleForDayDto scheduleForDayDto) {
+        MealEntity mealEntity = mealService.findById(mealId);
         scheduleForDayDto.add(mealEntity, mealTime);
     }
 
@@ -103,11 +103,11 @@ public class ScheduleService {
         for (ScheduleForDayDto scheduleForDay : schedule.getSchedule()) {
             ScheduleForDayDto scheduleForDayDto = new ScheduleForDayDto();
             scheduleForDayDto.setDate(scheduleForDay.getDate());
-            addMeal(scheduleForDay.getBreakfast(), BREAKFAST, member.getId(), scheduleForDayDto);
-            addMeal(scheduleForDay.getSecondBreakfast(), SECOND_BREAKFAST, member.getId(), scheduleForDayDto);
-            addMeal(scheduleForDay.getLunch(), LUNCH, member.getId(), scheduleForDayDto);
-            addMeal(scheduleForDay.getDinner(), DINNER, member.getId(), scheduleForDayDto);
-            addMeal(scheduleForDay.getSupper(), SUPPER, member.getId(), scheduleForDayDto);
+            addMeal(scheduleForDay.getBreakfast(), BREAKFAST, scheduleForDayDto);
+            addMeal(scheduleForDay.getSecondBreakfast(), SECOND_BREAKFAST, scheduleForDayDto);
+            addMeal(scheduleForDay.getLunch(), LUNCH, scheduleForDayDto);
+            addMeal(scheduleForDay.getDinner(), DINNER, scheduleForDayDto);
+            addMeal(scheduleForDay.getSupper(), SUPPER, scheduleForDayDto);
             scheduleForDayDtos.add(scheduleForDayDto);
         }
 
