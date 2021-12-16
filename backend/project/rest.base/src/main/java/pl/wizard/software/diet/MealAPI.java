@@ -76,7 +76,7 @@ public class MealAPI {
         Long accountId = loginService.getAccountIdByTokenUUID(token)
                 .orElseThrow(() -> new AuthorizationFailedException(token));
 
-        return ResponseEntity.ok(mealService.save(id, meal));
+        return ResponseEntity.ok(mealService.update(id, meal));
     }
 
     @DeleteMapping("/{id}")

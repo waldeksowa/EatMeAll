@@ -6,6 +6,7 @@ import pl.wizard.software.dto.ScheduleForWeekDto;
 import pl.wizard.software.util.ByteConverter;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -13,10 +14,10 @@ public class ScheduleDtoMapper {
     private ScheduleDtoMapper() {
     }
 
-    public static List<ScheduleForWeekDto> mapToScheduleDtos(List<ScheduleEntity> schedules) {
+    public static Set<ScheduleForWeekDto> mapToScheduleDtos(List<ScheduleEntity> schedules) {
         return schedules.stream()
                 .map(schedule -> mapToScheduleDto(schedule))
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
 
     }
 

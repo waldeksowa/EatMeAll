@@ -37,7 +37,7 @@ public class MealService {
     }
 
     @Transactional
-    public MealEntity save(Long mealId, MealEntity meal) {
+    public MealEntity update(Long mealId, MealEntity meal) {
         MealEntity mealToUpdate = mealRepository.findById(mealId)
                 .orElseThrow(() -> new NoSuchElementException("Could not find meal with id " + mealId));
         mealToUpdate.setName(meal.getName());
