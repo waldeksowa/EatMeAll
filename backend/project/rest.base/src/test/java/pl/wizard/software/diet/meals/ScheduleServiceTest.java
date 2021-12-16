@@ -6,7 +6,9 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
+import pl.wizard.software.diet.MealService;
 import pl.wizard.software.diet.ScheduleService;
+import pl.wizard.software.diet.members.MemberDao;
 import pl.wizard.software.diet.products.ProductEntity;
 import pl.wizard.software.diet.schedules.ScheduleDao;
 import pl.wizard.software.dto.ScheduleForWeekDto;
@@ -25,13 +27,15 @@ public class ScheduleServiceTest {
     private ScheduleService scheduleService;
 
     @Mock
-    MealDao mealRepository;
-    @Mock
     ScheduleDao scheduleRepository;
+    @Mock
+    MemberDao memberRepository;
+    @Mock
+    MealService mealService;
 
     @Before
     public void init() {
-        scheduleService = new ScheduleService(mealRepository, scheduleRepository);
+        scheduleService = new ScheduleService(mealService, scheduleRepository, memberRepository);
     }
 
     @Test
@@ -62,7 +66,7 @@ public class ScheduleServiceTest {
         for (int i = 0; i < 35; i++) {
             mockList.add(meal);
         }
-        when(mealRepository.findRandomByMealTime(Mockito.anyInt(),Mockito.anyInt())).thenReturn(mockList);
+        when(mealService.findRandomByMealTime(Mockito.anyInt(),Mockito.anyInt())).thenReturn(mockList);
 
         //when
         ScheduleForWeekDto result = scheduleService.getScheduleByMealTime();
@@ -117,7 +121,7 @@ public class ScheduleServiceTest {
         for (int i = 0; i < 35; i++) {
             mockList.add(meal);
         }
-        when(mealRepository.findRandomByMealTime(Mockito.anyInt(),Mockito.anyInt())).thenReturn(mockList);
+        when(mealService.findRandomByMealTime(Mockito.anyInt(),Mockito.anyInt())).thenReturn(mockList);
 
         //when
         ScheduleForWeekDto result = scheduleService.getScheduleByMealTime();
@@ -240,11 +244,11 @@ public class ScheduleServiceTest {
         meal_supper.setMealTime(Set.of(MealTimeEnum.SUPPER));
         meal_supper.init();
 
-        when(mealRepository.findRandomByMealTime(1, 7)).thenReturn(new ArrayList<>(List.of(meal_breakfast)));
-        when(mealRepository.findRandomByMealTime(2, 7)).thenReturn(new ArrayList<>(List.of(meal_second_breakfast)));
-        when(mealRepository.findRandomByMealTime(3, 7)).thenReturn(new ArrayList<>(List.of(meal_lunch)));
-        when(mealRepository.findRandomByMealTime(4, 7)).thenReturn(new ArrayList<>(List.of(meal_dinner)));
-        when(mealRepository.findRandomByMealTime(5, 7)).thenReturn(new ArrayList<>(List.of(meal_supper)));
+        when(mealService.findRandomByMealTime(1, 7)).thenReturn(new ArrayList<>(List.of(meal_breakfast)));
+        when(mealService.findRandomByMealTime(2, 7)).thenReturn(new ArrayList<>(List.of(meal_second_breakfast)));
+        when(mealService.findRandomByMealTime(3, 7)).thenReturn(new ArrayList<>(List.of(meal_lunch)));
+        when(mealService.findRandomByMealTime(4, 7)).thenReturn(new ArrayList<>(List.of(meal_dinner)));
+        when(mealService.findRandomByMealTime(5, 7)).thenReturn(new ArrayList<>(List.of(meal_supper)));
 
         //when
         ScheduleForWeekDto result = scheduleService.getScheduleByMealTime();

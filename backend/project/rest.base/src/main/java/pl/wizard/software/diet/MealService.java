@@ -3,12 +3,13 @@ package pl.wizard.software.diet;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import pl.wizard.software.dto.CreateMealDto;
-import pl.wizard.software.dto.SimpleProductDto;
+import org.springframework.transaction.annotation.Transactional;
 import pl.wizard.software.diet.meals.*;
-import pl.wizard.software.diet.meals.MealTimeEnum;
+import pl.wizard.software.diet.members.MemberDao;
 import pl.wizard.software.diet.products.ProductDao;
 import pl.wizard.software.diet.products.ProductEntity;
+import pl.wizard.software.dto.CreateMealDto;
+import pl.wizard.software.dto.SimpleProductDto;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -19,20 +20,40 @@ import java.util.stream.Collectors;
 public class MealService {
     private final MealDao mealRepository;
     private final ProductDao productRepository;
+    private final MemberDao memberRepository;
 
     public List<MealEntity> findAll() {
         return mealRepository.findAll();
     }
 
-    public Optional<MealEntity> findById(Long id) {
-        return mealRepository.findById(id);
+    public MealEntity findById(Long id) {
+        MealEntity meal = mealRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Could not find meal with id " + id));
+        return meal;
     }
 
-    public MealEntity save(MealEntity stock) {
-        return mealRepository.save(stock);
+    public List<MealEntity> findRandomByMealTime(int mealTime, int amount) {
+        return mealRepository.findRandomByMealTime(mealTime, amount);
     }
 
+    @Transactional
+    public MealEntity update(Long mealId, MealEntity meal) {
+        MealEntity mealToUpdate = mealRepository.findById(mealId)
+                .orElseThrow(() -> new NoSuchElementException("Could not find meal with id " + mealId));
+        mealToUpdate.setName(meal.getName());
+        mealToUpdate.setAuthor(meal.getAuthor());
+        mealToUpdate.setMealTime(meal.getMealTime());
+        mealToUpdate.setPrepareTime(meal.getPrepareTime());
+        mealToUpdate.setSteps(meal.getSteps());
+        mealToUpdate.setDescription(meal.getDescription());
+        mealToUpdate.setProducts(meal.getProducts());
+        return mealToUpdate;
+    }
+
+    @Transactional
     public void deleteById(Long id) {
+        MealEntity mealToUpdate = mealRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Could not find meal with id " + id));
         mealRepository.deleteById(id);
     }
 
@@ -53,18 +74,14 @@ public class MealService {
     }
 
     private MealProductEntity convertToMealProduct(SimpleProductDto product) {
-        Optional<ProductEntity> prod = productRepository.findById(product.getId());
-        if (!prod.isPresent()) {
-            log.error("Product with Id " + product.getId() + " does not exists");
-            return null;
-        } else {
-            MealProductEntity mealProduct = new MealProductEntity();
-            mealProduct.setProduct(prod.get());
-            mealProduct.setAmount(product.getAmount());
-            mealProduct.setSpecialAmount(product.getSpecialAmount());
-            mealProduct.setSpecialAmountUnit(product.getSpecialAmountUnit());
-            return mealProduct;
-        }
+        ProductEntity prod = productRepository.findById(product.getId())
+                .orElseThrow(() -> new NoSuchElementException("Could not find product with id " + product.getId()));
+        MealProductEntity mealProduct = new MealProductEntity();
+        mealProduct.setProduct(prod);
+        mealProduct.setAmount(product.getAmount());
+        mealProduct.setSpecialAmount(product.getSpecialAmount());
+        mealProduct.setSpecialAmountUnit(product.getSpecialAmountUnit());
+        return mealProduct;
     }
 
     private StepEntity convertToStep(String step) {

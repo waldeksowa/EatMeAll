@@ -2,11 +2,9 @@ package pl.wizard.software.diet.schedules;
 
 import lombok.*;
 import pl.wizard.software.AbstractBaseEntity;
+import pl.wizard.software.diet.members.MemberEntity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Lob;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
@@ -22,5 +20,7 @@ public class ScheduleEntity extends AbstractBaseEntity {
     @Lob
     @Column(columnDefinition = "BLOB")
     private byte[] schedule;
-    private Long memberId;
+    @OneToOne
+    @JoinColumn(name = "member_id")
+    private MemberEntity member;
 }

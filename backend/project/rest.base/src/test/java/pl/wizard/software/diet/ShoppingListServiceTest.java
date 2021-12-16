@@ -6,15 +6,16 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
-import pl.wizard.software.dto.ProductWithAmountDto;
 import pl.wizard.software.diet.meals.MealDao;
 import pl.wizard.software.diet.meals.MealEntity;
 import pl.wizard.software.diet.meals.MealProductEntity;
+import pl.wizard.software.diet.members.MemberDao;
 import pl.wizard.software.diet.products.ProductDao;
 import pl.wizard.software.diet.products.ProductEntity;
 import pl.wizard.software.diet.schedules.ScheduleDao;
 import pl.wizard.software.diet.shoppingList.ShoppingListDao;
 import pl.wizard.software.diet.shoppingList.ShoppingListItemDao;
+import pl.wizard.software.dto.ProductWithAmountDto;
 import pl.wizard.software.login.AccountDao;
 
 import java.util.HashMap;
@@ -32,8 +33,6 @@ public class ShoppingListServiceTest {
     private ShoppingListService shoppingListService;
 
     @Mock
-    MealDao mealRepository;
-    @Mock
     ShoppingListDao shoppingListRepository;
     @Mock
     ScheduleDao scheduleRepository;
@@ -43,10 +42,19 @@ public class ShoppingListServiceTest {
     AccountDao accountRepository;
     @Mock
     ShoppingListItemDao shoppingListItemRepository;
+    @Mock
+    MemberDao memberRepository;
+    @Mock
+    MealDao mealRepository;
+    @Mock
+    ScheduleService scheduleService;
 
     @Before
     public void init() {
-        shoppingListService = new ShoppingListService(mealRepository, shoppingListRepository, shoppingListItemRepository, new ScheduleService(mealRepository, scheduleRepository), productRepository, accountRepository);
+        shoppingListService = new ShoppingListService(new MealService(mealRepository, productRepository, memberRepository),
+                                                        shoppingListRepository,
+                                                        shoppingListItemRepository,
+                                                        new ScheduleService(new MealService(mealRepository, productRepository, memberRepository), scheduleRepository,memberRepository), productRepository, accountRepository);
     }
 
     @Test
@@ -74,6 +82,7 @@ public class ShoppingListServiceTest {
         meal.setId(1L);
         meal.setName("test meal");
         meal.setProducts(Set.of(firstMealProduct, secondMealProduct));
+
 
         Mockito.lenient().when(mealRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(meal));
         //when
@@ -121,5 +130,4 @@ public class ShoppingListServiceTest {
         assertTrue(result.get(CEREALS).stream()
                 .anyMatch(prod -> prod.getName().equals("test product") && prod.getAmount() == 200));
     }
-
 }

@@ -6,23 +6,21 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import pl.wizard.software.diet.meals.MealDao;
 import pl.wizard.software.diet.meals.MealEntity;
 import pl.wizard.software.diet.meals.MealTimeEnum;
+import pl.wizard.software.diet.members.MemberDao;
+import pl.wizard.software.diet.members.MemberEntity;
 import pl.wizard.software.diet.schedules.ScheduleDao;
 import pl.wizard.software.diet.schedules.ScheduleEntity;
 import pl.wizard.software.dto.CreateScheduleDto;
 import pl.wizard.software.dto.CreateScheduleForDayDto;
 import pl.wizard.software.dto.ScheduleForDayDto;
 import pl.wizard.software.dto.ScheduleForWeekDto;
-import pl.wizard.software.mapper.ScheduleDtoMapper;
+import pl.wizard.software.util.ByteConverter;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import java.util.*;
 
 import static pl.wizard.software.diet.meals.MealTimeEnum.*;
 
@@ -33,8 +31,9 @@ import static pl.wizard.software.diet.meals.MealTimeEnum.*;
 public class ScheduleService {
 
     public static final int DAYS_IN_WEEK = 7;
-    private final MealDao mealRepository;
+    private final MealService mealService;
     private final ScheduleDao scheduleRepository;
+    private final MemberDao memberRepository;
 
     public ScheduleForWeekDto getScheduleByMealTime() {
         ScheduleForWeekDto schedule = new ScheduleForWeekDto();
@@ -45,7 +44,7 @@ public class ScheduleService {
             schedule.getSchedule().add(scheduleForDayDto);
         }
         for (int i = 1; i < values().length; i++) {
-            List<MealEntity> meals = mealRepository.findRandomByMealTime(values()[i].ordinal(), DAYS_IN_WEEK);
+            List<MealEntity> meals = mealService.findRandomByMealTime(values()[i].ordinal(), DAYS_IN_WEEK);
             for (DayOfWeek day : DayOfWeek.values()) {
                 Optional<MealEntity> meal = meals.stream().findFirst();
                 if (meal.isPresent()) {
@@ -57,7 +56,10 @@ public class ScheduleService {
         return schedule;
     }
 
-    public ScheduleForWeekDto createSchedule(CreateScheduleDto schedule) {
+    public ScheduleEntity createSchedule(CreateScheduleDto schedule) {
+        MemberEntity member = memberRepository.findById(schedule.getMemberId())
+                .orElseThrow(() -> new NoSuchElementException("Could not find member with id " + schedule.getMemberId()));
+
         LocalDate scheduleDate = schedule.getSchedule().stream()
                 .map(CreateScheduleForDayDto::getDate)
                 .sorted()
@@ -77,54 +79,64 @@ public class ScheduleService {
         }
 
         ScheduleEntity scheduleEntity = ScheduleEntity.builder()
-                .memberId(schedule.getMemberId())
+                .member(member)
                 .scheduleDate(scheduleDate)
-                .schedule(ScheduleDtoMapper.convertToBytes(scheduleForDayDtos))
+                .schedule(ByteConverter.convertToBytes(scheduleForDayDtos))
                 .build();
 
-        return ScheduleDtoMapper.mapToScheduleDto(scheduleRepository.save(scheduleEntity));
+        return scheduleRepository.save(scheduleEntity);
     }
 
     private void addMeal(Long mealId, MealTimeEnum mealTime, ScheduleForDayDto scheduleForDayDto) {
-        Optional<MealEntity> mealEntity = mealRepository.findById(mealId);
-        if (mealEntity.isEmpty()) {
-            log.error("Meal with id " + mealId + "does not exists");
-        } else {
-            scheduleForDayDto.add(mealEntity.get(), mealTime);
+        MealEntity mealEntity = mealService.findById(mealId);
+        scheduleForDayDto.add(mealEntity, mealTime);
+    }
+
+    @Transactional
+    public ScheduleEntity update(Long accountId, Long scheduleId, ScheduleForWeekDto schedule) {
+        ScheduleEntity scheduleToUpdate = findById(accountId, scheduleId)
+                .orElseThrow(() -> new NoSuchElementException("Could not find schedule with id " + scheduleId));
+        MemberEntity member = memberRepository.findById(schedule.getMemberId())
+                .orElseThrow(() -> new NoSuchElementException("Could not find member with id " + schedule.getMemberId()));
+
+        List<ScheduleForDayDto> scheduleForDayDtos = new ArrayList<>();
+        for (ScheduleForDayDto scheduleForDay : schedule.getSchedule()) {
+            ScheduleForDayDto scheduleForDayDto = new ScheduleForDayDto();
+            scheduleForDayDto.setDate(scheduleForDay.getDate());
+            addMeal(scheduleForDay.getBreakfast(), BREAKFAST, scheduleForDayDto);
+            addMeal(scheduleForDay.getSecondBreakfast(), SECOND_BREAKFAST, scheduleForDayDto);
+            addMeal(scheduleForDay.getLunch(), LUNCH, scheduleForDayDto);
+            addMeal(scheduleForDay.getDinner(), DINNER, scheduleForDayDto);
+            addMeal(scheduleForDay.getSupper(), SUPPER, scheduleForDayDto);
+            scheduleForDayDtos.add(scheduleForDayDto);
         }
+
+        scheduleToUpdate.setUpdatedAt(new Date());
+        scheduleToUpdate.setMember(member);
+        scheduleToUpdate.setSchedule(ByteConverter.convertToBytes(scheduleForDayDtos));
+        return scheduleToUpdate;
     }
 
     @Transactional
-    public List<ScheduleForWeekDto> findAll(Long accountId) {
-        return scheduleRepository.findAll(accountId).stream()
-                .map(ScheduleDtoMapper::mapToScheduleDto)
-                .collect(Collectors.toList());
+    public List<ScheduleEntity> findAll(Long accountId) {
+        return scheduleRepository.findAll(accountId);
     }
 
     @Transactional
-    public Optional<ScheduleForWeekDto> findById(Long accountId, Long scheduleId) {
-        Optional<ScheduleEntity> schedule = scheduleRepository.findById(accountId, scheduleId);
-        return getScheduleForWeekDto(schedule);
+    public Optional<ScheduleEntity> findById(Long accountId, Long scheduleId) {
+        return scheduleRepository.findById(accountId, scheduleId);
     }
 
     @Transactional
-    public Optional<ScheduleForWeekDto> findByMember(Long accountId, Long memberId) {
+    public Optional<ScheduleEntity> findByMember(Long accountId, Long memberId) {
         Pageable topOne = PageRequest.of(0, 1);
-        Optional<ScheduleEntity> schedule = scheduleRepository.findByMember(accountId, memberId, topOne).stream().findFirst();
-        return getScheduleForWeekDto(schedule);
+        return scheduleRepository.findByMember(accountId, memberId, topOne).stream().findFirst();
     }
 
-    public ScheduleForWeekDto save(ScheduleForWeekDto schedule) {
-        ScheduleEntity scheduleEntity = ScheduleDtoMapper.mapToScheduleEntity(schedule);
-        return ScheduleDtoMapper.mapToScheduleDto(scheduleRepository.save(scheduleEntity));
-    }
-
-    public void deleteById(Long scheduleId) {
+    @Transactional
+    public void deleteById(Long accountId, Long scheduleId) {
+        ScheduleEntity schedule = findById(accountId, scheduleId)
+                .orElseThrow(() -> new NoSuchElementException("Could not find schedule with id " + scheduleId));
         scheduleRepository.deleteById(scheduleId);
     }
-
-    private Optional<ScheduleForWeekDto> getScheduleForWeekDto(Optional<ScheduleEntity> schedule) {
-        return schedule.map(ScheduleDtoMapper::mapToScheduleDto);
-    }
-
 }

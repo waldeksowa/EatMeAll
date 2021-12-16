@@ -5,15 +5,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pl.wizard.software.diet.schedules.ScheduleEntity;
 import pl.wizard.software.dto.CreateScheduleDto;
 import pl.wizard.software.dto.ScheduleForWeekDto;
+import pl.wizard.software.exception.AuthorizationFailedException;
 import pl.wizard.software.login.LoginService;
+import pl.wizard.software.mapper.ScheduleDtoMapper;
 
 import javax.validation.Valid;
-import java.time.DayOfWeek;
 import java.util.Collection;
-import java.util.Map;
-import java.util.Optional;
+import java.util.NoSuchElementException;
 
 
 @RestController
@@ -27,93 +28,59 @@ public class ScheduleAPI {
 
     @GetMapping
     public ResponseEntity<Collection<ScheduleForWeekDto>> findAll(@RequestHeader("Authorization") String token) {
-        Optional<Long> accountId = loginService.getAccountIdByTokenUUID(token);
-        if (!accountId.isPresent()) {
-            log.error("Authorization token expired");
-            return ResponseEntity.badRequest().build();
-        }
+        Long accountId = loginService.getAccountIdByTokenUUID(token)
+                .orElseThrow(() -> new AuthorizationFailedException(token));
 
-        return ResponseEntity.ok(scheduleService.findAll(accountId.get()));
+        return ResponseEntity.ok(ScheduleDtoMapper.mapToScheduleDtos(scheduleService.findAll(accountId)));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ScheduleForWeekDto> findById(@RequestHeader("Authorization") String token, @PathVariable Long id) {
-        Optional<Long> accountId = loginService.getAccountIdByTokenUUID(token);
-        if (!accountId.isPresent()) {
-            log.error("Authorization token expired");
-            return ResponseEntity.badRequest().build();
-        }
+        Long accountId = loginService.getAccountIdByTokenUUID(token)
+                .orElseThrow(() -> new AuthorizationFailedException(token));
+        ScheduleEntity schedule = scheduleService.findById(accountId, id)
+                .orElseThrow(() -> new NoSuchElementException("Could not find schedule with id " + id));
 
-        Optional<ScheduleForWeekDto> stock = scheduleService.findById(accountId.get(), id);
-        if (!stock.isPresent()) {
-            log.error("Schedule with Id " + id + " does not exists");
-            ResponseEntity.badRequest().build();
-        }
-
-        return ResponseEntity.ok(stock.get());
+        return ResponseEntity.ok(ScheduleDtoMapper.mapToScheduleDto(schedule));
     }
 
     @GetMapping("/member/{id}")
     public ResponseEntity<ScheduleForWeekDto> findByMember(@RequestHeader("Authorization") String token, @PathVariable Long id) {
-        Optional<Long> accountId = loginService.getAccountIdByTokenUUID(token);
-        if (!accountId.isPresent()) {
-            log.error("Authorization token expired");
-            return ResponseEntity.badRequest().build();
-        }
+        Long accountId = loginService.getAccountIdByTokenUUID(token)
+                .orElseThrow(() -> new AuthorizationFailedException(token));
+        ScheduleEntity schedule = scheduleService.findByMember(accountId, id)
+                .orElseThrow(() -> new NoSuchElementException("Could not find schedule for member with id " + id));
 
-        Optional<ScheduleForWeekDto> schedule = scheduleService.findByMember(accountId.get(), id);
-        if (!schedule.isPresent()) {
-            log.error("Schedule for member with Id " + id + " does not exists");
-            return ResponseEntity.badRequest().build();
-        }
-
-        return ResponseEntity.ok(schedule.get());
+        return ResponseEntity.ok(ScheduleDtoMapper.mapToScheduleDto(schedule));
     }
 
     @GetMapping("/random")
-    public ResponseEntity<ScheduleForWeekDto> getSchedule() {
+    public ResponseEntity<ScheduleForWeekDto> findRandom() {
         return ResponseEntity.ok(scheduleService.getScheduleByMealTime());
     }
 
     @PostMapping
     public ResponseEntity create(@RequestHeader("Authorization") String token, @Valid @RequestBody CreateScheduleDto schedule) {
-        Optional<Long> accountId = loginService.getAccountIdByTokenUUID(token);
-        if (!accountId.isPresent()) {
-            log.error("Authorization token expired");
-            return ResponseEntity.badRequest().build();
-        }
+        Long accountId = loginService.getAccountIdByTokenUUID(token)
+                .orElseThrow(() -> new AuthorizationFailedException(token));
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(scheduleService.createSchedule(schedule));
+        return ResponseEntity.status(HttpStatus.CREATED).body(ScheduleDtoMapper.mapToScheduleDto(scheduleService.createSchedule(schedule)));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<ScheduleForWeekDto> update(@RequestHeader("Authorization") String token, @PathVariable Long id, @Valid @RequestBody ScheduleForWeekDto schedule) {
-        Optional<Long> accountId = loginService.getAccountIdByTokenUUID(token);
-        if (!accountId.isPresent()) {
-            log.error("Authorization token expired");
-            return ResponseEntity.badRequest().build();
-        }
-        if (!scheduleService.findById(accountId.get(), id).isPresent()) {
-            log.error("Schedule with id " + id + " does not exists");
-            return ResponseEntity.badRequest().build();
-        }
+        Long accountId = loginService.getAccountIdByTokenUUID(token)
+                .orElseThrow(() -> new AuthorizationFailedException(token));
 
-        return ResponseEntity.ok(scheduleService.save(schedule));
+        return ResponseEntity.ok(ScheduleDtoMapper.mapToScheduleDto(scheduleService.update(accountId, id, schedule)));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity delete(@RequestHeader("Authorization") String token, @PathVariable Long id) {
-        Optional<Long> accountId = loginService.getAccountIdByTokenUUID(token);
-        if (!accountId.isPresent()) {
-            log.error("Authorization token expired");
-            return ResponseEntity.badRequest().build();
-        }
-        if (!scheduleService.findById(accountId.get(), id).isPresent()) {
-            log.error("Schedule with id " + id + " does not exists");
-            return ResponseEntity.badRequest().build();
-        }
-        scheduleService.deleteById(id);
+        Long accountId = loginService.getAccountIdByTokenUUID(token)
+                .orElseThrow(() -> new AuthorizationFailedException(token));
 
+        scheduleService.deleteById(accountId, id);
         return ResponseEntity.ok().build();
     }
 }
