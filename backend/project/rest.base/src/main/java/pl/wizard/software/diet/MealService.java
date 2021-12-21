@@ -94,6 +94,10 @@ public class MealService {
         return mealRepository.findRandomByMealTime(mealTime.ordinal(), amount);
     }
 
+    public MealEntity findRandomByMealTime(MealTimeEnum mealTime) {
+        return mealRepository.findRandomByMealTime(mealTime.ordinal(), 1).get(0);
+    }
+
     public Map<SpecialAmountEnum, String> getSpecialAmountList() {
         Map<SpecialAmountEnum, String> specialAmountList = new HashMap<>();
         for (SpecialAmountEnum specialamount : SpecialAmountEnum.values()) {

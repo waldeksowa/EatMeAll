@@ -63,6 +63,12 @@ public class MealAPI {
         return ResponseEntity.ok(mealService.getSpecialAmountList());
     }
 
+    @GetMapping("/random")
+    public ResponseEntity<MealDto> getMealByMealTimeUsingQueryParam(@RequestParam(required = true, name="mealTime")  MealTimeEnum aMealTime) {
+        return ResponseEntity.ok(MealDtoMapper.mapToMealDto(mealService.findRandomByMealTime(aMealTime)));
+    }
+
+
     @PostMapping
     public ResponseEntity create(@RequestHeader("Authorization") String token, @Valid @RequestBody CreateMealDto meal) {
         Long accountId = loginService.getAccountIdByTokenUUID(token)
