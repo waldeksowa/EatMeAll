@@ -4,10 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import pl.wizard.software.diet.meals.MealProductEntity;
-import pl.wizard.software.diet.meals.MemberMealDao;
-import pl.wizard.software.diet.meals.MemberMealEntity;
-import pl.wizard.software.diet.meals.StepEntity;
+import pl.wizard.software.diet.meals.*;
 import pl.wizard.software.diet.members.MemberDao;
 import pl.wizard.software.diet.members.MemberEntity;
 import pl.wizard.software.diet.products.ProductDao;
@@ -25,6 +22,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class MemberMealService {
     private final MemberMealDao memberMealRepository;
+    private final MealDao mealRepository;
     private final ProductDao productRepository;
     private final MemberDao memberRepository;
 
@@ -62,6 +60,8 @@ public class MemberMealService {
     public MemberMealEntity createMeal(CreateMemberMealDto memberMealDto) {
         MemberEntity member = memberRepository.findById(memberMealDto.getMemberId())
                 .orElseThrow(() -> new NoSuchElementException("Could not find member with id " + memberMealDto.getMemberId()));
+        MealEntity meal = mealRepository.findById(memberMealDto.getMealId())
+                .orElseThrow(() -> new NoSuchElementException("Could not find meal with id " + memberMealDto.getMealId()));
         List<StepEntity> steps = memberMealDto.getSteps().stream().map(step -> convertToStep(step)).collect(Collectors.toList());
         Set<MealProductEntity> products = memberMealDto.getProducts().stream().map(product -> convertToMealProduct(product)).collect(Collectors.toSet());
         MemberMealEntity memberMeal = new MemberMealEntity();
@@ -73,6 +73,7 @@ public class MemberMealService {
         memberMeal.setProducts(products);
         memberMeal.setSteps(steps);
         memberMeal.setMember(member);
+        memberMeal.setMeal(meal);
 
         return memberMealRepository.save(memberMeal);
     }
