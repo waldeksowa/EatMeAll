@@ -9,8 +9,7 @@ import java.util.Date;
 
 @Data
 @MappedSuperclass
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class AbstractBaseEntity {
+public abstract class AbstractBaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE)
