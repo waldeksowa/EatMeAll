@@ -172,6 +172,7 @@ CREATE TABLE public.members
     version integer NOT NULL,
     name character varying(255) NOT NULL,
     age integer,
+    height integer,
     current_weight double precision NOT NULL,
     current_fat double precision,
     current_mussels double precision,
