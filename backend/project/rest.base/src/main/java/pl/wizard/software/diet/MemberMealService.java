@@ -34,14 +34,14 @@ public class MemberMealService {
 
     public MemberMealEntity findById(Long id) {
         MemberMealEntity meal = memberMealRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("Could not find meal with id " + id));
+                .orElseThrow(() -> new NoSuchElementException("Could not find member meal with id " + id));
         return meal;
     }
 
     @Transactional
     public MemberMealEntity update(Long mealId, MemberMealEntity meal) {
         MemberMealEntity mealToUpdate = memberMealRepository.findById(mealId)
-                .orElseThrow(() -> new NoSuchElementException("Could not find meal with id " + mealId));
+                .orElseThrow(() -> new NoSuchElementException("Could not find member meal with id " + mealId));
         mealToUpdate.setName(meal.getName());
         mealToUpdate.setAuthor(meal.getAuthor());
         mealToUpdate.setMealTime(meal.getMealTime());
@@ -53,9 +53,9 @@ public class MemberMealService {
     }
 
     @Transactional
-    public void deleteById(Long id) {
+    public void delete(Long id) {
         MemberMealEntity mealToDelete = memberMealRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("Could not find meal with id " + id));
+                .orElseThrow(() -> new NoSuchElementException("Could not find member meal with id " + id));
         memberMealRepository.deleteById(id);
     }
 
