@@ -64,17 +64,17 @@ public class MemberMealService {
                 .orElseThrow(() -> new NoSuchElementException("Could not find member with id " + memberMealDto.getMemberId()));
         List<StepEntity> steps = memberMealDto.getSteps().stream().map(step -> convertToStep(step)).collect(Collectors.toList());
         Set<MealProductEntity> products = memberMealDto.getProducts().stream().map(product -> convertToMealProduct(product)).collect(Collectors.toSet());
-        MemberMealEntity memberMealEntity = new MemberMealEntity();
-        memberMealEntity.setName(memberMealDto.getName());
-        memberMealEntity.setAuthor(memberMealDto.getAuthor());
-        memberMealEntity.setDescription(memberMealDto.getDescription());
-        memberMealEntity.setMealTime(memberMealDto.getMealTime());
-        memberMealEntity.setPrepareTime(memberMealDto.getPrepareTime());
-        memberMealEntity.setProducts(products);
-        memberMealEntity.setSteps(steps);
-        memberMealEntity.setMember(member);
+        MemberMealEntity memberMeal = new MemberMealEntity();
+        memberMeal.setName(memberMealDto.getName());
+        memberMeal.setAuthor(memberMealDto.getAuthor());
+        memberMeal.setDescription(memberMealDto.getDescription());
+        memberMeal.setMealTime(memberMealDto.getMealTime());
+        memberMeal.setPrepareTime(memberMealDto.getPrepareTime());
+        memberMeal.setProducts(products);
+        memberMeal.setSteps(steps);
+        memberMeal.setMember(member);
 
-        return memberMealRepository.save(memberMealEntity);
+        return memberMealRepository.save(memberMeal);
     }
 
     private MealProductEntity convertToMealProduct(SimpleProductDto product) {

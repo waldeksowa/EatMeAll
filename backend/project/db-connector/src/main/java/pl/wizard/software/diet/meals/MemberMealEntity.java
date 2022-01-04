@@ -19,4 +19,7 @@ public class MemberMealEntity extends MealEntity {
     @OneToOne
     @JoinColumn(name = "member_id")
     private MemberEntity member;
+    @OneToOne
+    @JoinColumn(name = "meal_id")
+    private MealEntity meal;
 }
