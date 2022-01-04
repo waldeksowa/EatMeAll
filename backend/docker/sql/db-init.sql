@@ -367,7 +367,6 @@ CREATE TABLE public.member_meals
     description character varying(255),
     name character varying(255),
     prepare_time integer,
-    meal_id bigint NOT NULL,
     member_id bigint,
     CONSTRAINT member_meals_pkey PRIMARY KEY (id),
     CONSTRAINT fk_member_meals_member_id FOREIGN KEY (member_id)
