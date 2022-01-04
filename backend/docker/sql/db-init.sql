@@ -356,6 +356,23 @@ CREATE TABLE public.training_plans (
 ALTER TABLE public.training_plans OWNER to eatmeall;
 
 
+CREATE TABLE public.member_meals
+(
+    meal_id bigint NOT NULL,
+    member_id bigint,
+    CONSTRAINT member_meals_pkey PRIMARY KEY (meal_id),
+    CONSTRAINT fk_member_meals_member_id FOREIGN KEY (member_id)
+        REFERENCES public.members (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT fk_member_meals_meal_id FOREIGN KEY (meal_id)
+            REFERENCES public.meals (id) MATCH SIMPLE
+            ON UPDATE NO ACTION
+            ON DELETE NO ACTION
+);
+
+ALTER TABLE public.member_meals OWNER to eatmeall;
+
 
 INSERT INTO public.products(
 	id, created_at, updated_at, version, calorific, carbohydrates, fat, name, protein, roughage, product_type)
