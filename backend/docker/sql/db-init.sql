@@ -368,7 +368,12 @@ CREATE TABLE public.member_meals
     name character varying(255),
     prepare_time integer,
     member_id bigint,
+    meal_id bigint,
     CONSTRAINT member_meals_pkey PRIMARY KEY (id),
+    CONSTRAINT fk_member_meals_meal_id FOREIGN KEY (meal_id)
+            REFERENCES public.meals (id) MATCH SIMPLE
+            ON UPDATE NO ACTION
+            ON DELETE NO ACTION,
     CONSTRAINT fk_member_meals_member_id FOREIGN KEY (member_id)
         REFERENCES public.members (id) MATCH SIMPLE
         ON UPDATE NO ACTION
