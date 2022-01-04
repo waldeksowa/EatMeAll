@@ -6,10 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import pl.wizard.software.diet.members.MemberEntity;
 
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "MEMBER_MEALS")
@@ -17,6 +14,7 @@ import javax.persistence.Table;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@PrimaryKeyJoinColumn(foreignKey = @ForeignKey(name = "meal_id"))
 public class MemberMealEntity extends MealEntity {
 
     @OneToOne
