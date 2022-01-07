@@ -14,7 +14,7 @@ import javax.persistence.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@PrimaryKeyJoinColumn(foreignKey=@ForeignKey(name = "meal_id"))
+//@PrimaryKeyJoinColumn(foreignKey=@ForeignKey(name = "meal_id"))
 public class MemberMealEntity extends MealEntity {
 
     @OneToOne
