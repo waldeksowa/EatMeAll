@@ -75,7 +75,7 @@ public class MemberMealService {
         memberMeal.setProducts(products);
         memberMeal.setSteps(steps);
         memberMeal.setMember(member);
-        memberMeal.setMeal(meal);
+        memberMeal.setParentMeal(meal);
 
         return memberMealRepository.save(memberMeal);
     }
