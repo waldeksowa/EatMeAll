@@ -57,13 +57,15 @@ public class MemberMealService {
         memberMealRepository.deleteById(id);
     }
 
-    public MemberMealEntity createMeal(CreateMemberMealDto memberMealDto) {
+    public MemberMealEntity create(CreateMemberMealDto memberMealDto) {
         MemberEntity member = memberRepository.findById(memberMealDto.getMemberId())
                 .orElseThrow(() -> new NoSuchElementException("Could not find member with id " + memberMealDto.getMemberId()));
         MealEntity meal = mealRepository.findById(memberMealDto.getMealId())
                 .orElseThrow(() -> new NoSuchElementException("Could not find meal with id " + memberMealDto.getMealId()));
-        List<StepEntity> steps = memberMealDto.getSteps().stream().map(step -> convertToStep(step)).collect(Collectors.toList());
-        Set<MealProductEntity> products = memberMealDto.getProducts().stream().map(product -> convertToMealProduct(product)).collect(Collectors.toSet());
+        List<StepEntity> steps = memberMealDto.getSteps().stream()
+                .map(step -> convertToStep(step)).collect(Collectors.toList());
+        Set<MealProductEntity> products = memberMealDto.getProducts().stream()
+                .map(product -> convertToMealProduct(product)).collect(Collectors.toSet());
         MemberMealEntity memberMeal = new MemberMealEntity();
         memberMeal.setName(memberMealDto.getName());
         memberMeal.setAuthor(memberMealDto.getAuthor());

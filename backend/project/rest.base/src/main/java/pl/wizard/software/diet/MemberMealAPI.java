@@ -45,7 +45,7 @@ public class MemberMealAPI {
         Long accountId = loginService.getAccountIdByTokenUUID(token)
                 .orElseThrow(() -> new AuthorizationFailedException(token));
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(memberMealService.createMeal(meal));
+        return ResponseEntity.status(HttpStatus.CREATED).body(memberMealService.create(meal));
     }
 
     @PutMapping("/{id}")

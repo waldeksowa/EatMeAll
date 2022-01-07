@@ -14,12 +14,13 @@ import javax.persistence.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@PrimaryKeyJoinColumn(foreignKey=@ForeignKey(name = "meal_id"))
 public class MemberMealEntity extends MealEntity {
 
     @OneToOne
     @JoinColumn(name = "member_id")
     private MemberEntity member;
     @OneToOne
-    @JoinColumn(name = "meal_id")
+    @JoinColumn(name = "parent_meal_id")
     private MealEntity meal;
 }
