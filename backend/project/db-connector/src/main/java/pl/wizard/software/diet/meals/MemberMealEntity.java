@@ -21,5 +21,5 @@ public class MemberMealEntity extends MealEntity {
     private MemberEntity member;
     @OneToOne
     @JoinColumn(name = "parent_meal_id")
-    private MealEntity meal;
+    private MealEntity parentMeal;
 }
