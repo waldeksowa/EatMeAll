@@ -359,10 +359,10 @@ ALTER TABLE public.training_plans OWNER to eatmeall;
 
 CREATE TABLE public.member_meals
 (
-    meal_id bigint NOT NULL,
+    id bigint NOT NULL,
     member_id bigint,
     parent_meal_id bigint,
-    CONSTRAINT member_meals_pkey PRIMARY KEY (meal_id),
+    CONSTRAINT member_meals_pkey PRIMARY KEY (id),
     CONSTRAINT fk_member_meals_parent_meal_id FOREIGN KEY (parent_meal_id)
             REFERENCES public.meals (id) MATCH SIMPLE
             ON UPDATE NO ACTION
