@@ -36,7 +36,7 @@ const actions = {
   updateMemberIdToShow({ commit }, payload) {
     commit('updateMemberIdToShow', payload)
   },
-  errorMesage({ commit }, e) {
+  notifyError({ commit }, e) {
     Notify.create({
       message: `⚠ ${e}`,
       classes: "full-width text-center bg-negative",

@@ -188,7 +188,7 @@ export default {
     ...mapGetters("store", ["memberIdToShowAccountDetail", "jwt"]),
   },
   methods: {
-    ...mapActions("store", ["errorMesage", "notifySucessful"]),
+    ...mapActions("store", ["notifyError", "notifySucessful"]),
     fetchMemberData() {
       var myHeaders = new Headers();
       myHeaders.append("Authorization", `Bearer ${this.jwt}`);
@@ -204,7 +204,7 @@ export default {
         .then((result) => (this.memberData = result))
         .catch((error) => {
           console.log(error);
-          this.errorMesage("Ups... pobrać danych o użytkowniku");
+          this.notifyError("Ups... pobrać danych o użytkowniku");
         });
     },
     postUpdatedData() {
@@ -240,7 +240,7 @@ export default {
         .then((result) => result)
         .catch((error) => {
           console.log(error);
-          this.errorMesage("Ups... pojawił sie błąd podczas wysyłania danych");
+          this.notifyError("Ups... pojawił sie błąd podczas wysyłania danych");
         });
 
       this.isInputDisabled = true;
@@ -268,7 +268,7 @@ export default {
         .then((result) => result)
         .catch((error) => {
           console.log(error);
-          this.errorMesage("Ups... nie udało sie usunąć kąta");
+          this.notifyError("Ups... nie udało sie usunąć kąta");
         });
     },
   },

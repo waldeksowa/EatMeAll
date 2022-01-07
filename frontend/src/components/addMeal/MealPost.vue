@@ -12,6 +12,7 @@
   </div>
 </template>
 <script>
+import { mapActions, mapGetters } from "vuex";
 import { Notify } from "quasar";
 import { MEALS } from "src/EndpointAddresses";
 export default {
@@ -21,19 +22,11 @@ export default {
       buttonWasClicked: false,
     };
   },
+  computed: {
+    ...mapGetters("store", ["jwt"]),
+  },
   methods: {
-    notifyError(e) {
-      Notify.create({
-        message: `⚠ ${e}`,
-        classes: "full-width text-center bg-negative",
-      });
-    },
-    notifySucessful(e) {
-      Notify.create({
-        message: `${e}`,
-        classes: "full-width text-center bg-positive",
-      });
-    },
+    ...mapActions("store", ["notifyError", "notifySucessful"]),
     checkMealData() {
       try {
         const errorMissingMealData = "Nie uzupełniles danych posiłku";
@@ -130,8 +123,13 @@ export default {
     post() {
       const [productsIdAndAmount, mealTiemArr, stepsArr] = this.checkForm();
       const sucessMessage = "Twój posiłek został dodany";
-      const errorMessage = "Upss... coś poszlo nie tak";
-      const requestData = {
+
+      fetch("http://localhost:8080/api/v2/meals", requestOptions)
+        .then((response) => response.text())
+        .then((result) => console.log(result))
+        .catch((error) => console.log("error", error));
+
+      const raw = JSON.stringify({
         name: this.props.recipeData.name,
         author: this.props.recipeData.author,
         description: this.props.recipeData.description,
@@ -139,24 +137,30 @@ export default {
         mealTime: mealTiemArr,
         steps: stepsArr,
         products: productsIdAndAmount,
-      };
+      });
 
-      const requestOptions = {
+      var myHeaders = new Headers();
+      myHeaders.append("Authorization", `Bearer ${this.jwt}`);
+      myHeaders.append("Content-Type", "application/json");
+
+      var requestOptions = {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(requestData),
+        headers: myHeaders,
+        redirect: "follow",
+        body: raw,
       };
 
-      try {
-        fetch(MEALS, requestOptions)
-          .then((r) => r.json())
-          .then((d) => (this.postId = d.id));
-        this.notifySucessful(sucessMessage);
-        this.restartFormData();
-      } catch (e) {
-        this.notifyError(errorMessage);
-        console.log(e);
-      }
+      fetch(MEALS, requestOptions)
+        .then((r) => r.json())
+        .then((d) => {
+          this.postId = d.id;
+          this.notifySucessful(sucessMessage);
+          this.restartFormData();
+        })
+        .catch((error) => {
+          console.error(error);
+          this.notifyError(error);
+        });
     },
   },
 };

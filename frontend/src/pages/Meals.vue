@@ -28,12 +28,11 @@
       @showDialogToGenerateNewWeekSchedule="
         showDialogToGenerateNewWeekSchedule()
       "
+      @replaceMeal="replaceMeal($event)"
       :mealsSchedule="mealsSchedule"
+      :isSaveChangesButtonShow="isSaveChangesButtonShow"
       :isScheduleShow="isDialogToGenerateNewWeekSchedule"
     />
-    <!-- <q-dialog v-model="isDetailInfDialogShow">
-      <moreInfoDialog :selectedMeal="selectedMeal"></moreInfoDialog>
-    </q-dialog> -->
     <q-dialog v-model="isDialogToGenerateNewWeekSchedule">
       <createScheduleDialog
         @fetchRandomSheduleData="fetchRandomSheduleData()"
@@ -51,10 +50,8 @@ export default {
   data() {
     return {
       isDialogToGenerateNewWeekSchedule: false,
-      showMealDialog: false,
-      selectedMeal: Object,
+      isSaveChangesButtonShow: false,
       mealsSchedule: [],
-      dataSelectedDialog: {},
       membersAccounts: [],
     };
   },
@@ -68,104 +65,11 @@ export default {
   methods: {
     ...mapActions("store", [
       "updateMemberIdToShowSchedule",
-      "errorMesage",
+      "notifyError",
       "showLoading",
     ]),
-    async fetchMealDetails(aId) {
-      let requestOptions = {
-        method: "GET",
-        redirect: "follow",
-      };
-      try {
-        let responce = await fetch(`${MEALS}${aId}`, requestOptions);
-        let result = await responce.json();
-        return result;
-      } catch (err) {
-        console.log(err);
-      }
-    },
-    fetchMembersAccountData() {
-      var myHeaders = new Headers();
-      myHeaders.append("Authorization", `Bearer ${this.jwt}`);
-
-      var requestOptions = {
-        method: "GET",
-        headers: myHeaders,
-        redirect: "follow",
-      };
-      fetch(MEMBER, requestOptions)
-        .then((response) => response.json())
-        .then((result) => (this.membersAccounts = result))
-        .catch((error) => {
-          this.errorMesage(
-            "Ups... Nie mogę pobrać danych o kątach użytkowników"
-          );
-          console.log(error);
-        });
-    },
-    fetchRandomSheduleData() {
-      this.showLoading();
-      var myHeaders = new Headers();
-      myHeaders.append("Authorization", `Bearer ${this.jwt}`);
-
-      var requestOptions = {
-        method: "GET",
-        headers: myHeaders,
-        redirect: "follow",
-      };
-      fetch(RANDOMSCHEDULE, requestOptions)
-        .then((response) => {
-          if (!response.ok) {
-            this.errorMesage("Ups... Nie mogę wylosować planu diety");
-          }
-          return response.json();
-        })
-        .then((result) => {
-          console.log("~ random", result);
-          this.parseMemberScheduleData(result);
-        })
-        .catch((error) => {
-          this.errorMesage("Ups... Nie mogę wylosować planu diety");
-          console.log(error);
-        });
-    },
-    fetchMemberSheduleData() {
-      this.showLoading();
-      var myHeaders = new Headers();
-      myHeaders.append("Authorization", `Bearer ${this.jwt}`);
-
-      var requestOptions = {
-        method: "GET",
-        headers: myHeaders,
-        redirect: "follow",
-      };
-      const url = `${MEMBER_SCHEDULE}${this.memberIdToShowSchedule}`;
-      fetch(url, requestOptions)
-        .then((response) => {
-          if (!response.ok) {
-            this.errorMesage(
-              "Ups... Nie mogę pobrać planu diety dla użytkownika"
-            );
-          }
-          return response.json();
-        })
-        .then((result) => {
-          this.parseMemberScheduleData(result);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
-    showDialogToGenerateNewWeekSchedule() {
-      this.isDialogToGenerateNewWeekSchedule = true;
-    },
-    renderScheduleForMember(aMemberId) {
-      this.updateMemberIdToShowSchedule(aMemberId);
-      this.fetchMemberSheduleData();
-    },
     async parseMemberScheduleData(aSchedule) {
       let arr = [];
-
       for (let i = 0; i < aSchedule.schedule.length; i++) {
         arr.push({
           date: aSchedule.schedule[i].date,
@@ -191,12 +95,113 @@ export default {
       }
       this.mealsSchedule = arr;
     },
+    async fetchMealDetails(aId) {
+      var myHeaders = new Headers();
+      myHeaders.append("Authorization", `Bearer ${this.jwt}`);
+      let requestOptions = {
+        method: "GET",
+        headers: myHeaders,
+        redirect: "follow",
+      };
+      try {
+        let responce = await fetch(`${MEALS}${aId}`, requestOptions);
+        let result = await responce.json();
+        return result;
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    fetchMembersAccountData() {
+      var myHeaders = new Headers();
+      myHeaders.append("Authorization", `Bearer ${this.jwt}`);
+
+      var requestOptions = {
+        method: "GET",
+        headers: myHeaders,
+        redirect: "follow",
+      };
+      fetch(MEMBER, requestOptions)
+        .then((response) => response.json())
+        .then((result) => (this.membersAccounts = result))
+        .catch((error) => {
+          this.notifyError(
+            "Ups... Nie mogę pobrać danych o kątach użytkowników"
+          );
+          console.log(error);
+        });
+    },
+    fetchRandomSheduleData() {
+      this.showLoading();
+      var myHeaders = new Headers();
+      myHeaders.append("Authorization", `Bearer ${this.jwt}`);
+
+      var requestOptions = {
+        method: "GET",
+        headers: myHeaders,
+        redirect: "follow",
+      };
+      fetch(RANDOMSCHEDULE, requestOptions)
+        .then((response) => {
+          if (!response.ok) {
+            console.log("~ response", response);
+            this.notifyError("Ups... Nie mogę wylosować planu diety");
+          }
+          return response.json();
+        })
+        .then((result) => {
+          console.log("~ random", result);
+          this.parseMemberScheduleData(result);
+        })
+        .catch((error) => {
+          this.notifyError("Ups... Nie mogę wylosować planu diety");
+          console.log(error);
+        });
+    },
+    fetchMemberSheduleData() {
+      this.showLoading();
+      var myHeaders = new Headers();
+      myHeaders.append("Authorization", `Bearer ${this.jwt}`);
+
+      var requestOptions = {
+        method: "GET",
+        headers: myHeaders,
+        redirect: "follow",
+      };
+      const url = `${MEMBER_SCHEDULE}${this.memberIdToShowSchedule}`;
+      fetch(url, requestOptions)
+        .then((response) => {
+          if (!response.ok) {
+            this.notifyError(
+              "Ups... Nie mogę pobrać planu diety dla użytkownika"
+            );
+          }
+          return response.json();
+        })
+        .then((result) => {
+          this.parseMemberScheduleData(result);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    replaceMeal(aData) {
+      const { id, clickedCardData: c } = aData;
+      this.mealsSchedule[c.day].mealsId[c.mealTime] = id;
+      this.isSaveChangesButtonShow = true;
+    },
+    showDialogToGenerateNewWeekSchedule() {
+      this.isDialogToGenerateNewWeekSchedule = true;
+    },
+    renderScheduleForMember(aMemberId) {
+      this.updateMemberIdToShowSchedule(aMemberId);
+      this.fetchMemberSheduleData();
+    },
   },
   components: {
     // moreInfoDialog: () => import("../components/meals/MoreInfoDialog.vue"),
-    mealTable: () => import("../components/meals/MealTable.vue"),
+    mealTable: () => import("../components/meals/mealTable/MealTable.vue"),
     createScheduleDialog: () =>
-      import("../components/meals/CreateNewSchedule.vue"),
+      import("../components/meals/dialogs/CreateNewSchedule.vue"),
   },
 };
 </script>

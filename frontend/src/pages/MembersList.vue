@@ -55,7 +55,7 @@ export default {
     ...mapGetters("store", ["jwt"]),
   },
   methods: {
-    ...mapActions("store", ["updateMemberIdToShow", "errorMesage"]),
+    ...mapActions("store", ["updateMemberIdToShow", "notifyError"]),
     fetchData() {
       var myHeaders = new Headers();
       myHeaders.append("Authorization", `Bearer ${this.jwt}`);
@@ -71,7 +71,7 @@ export default {
         .then((result) => (this.membersAccounts = result))
         .catch((error) => {
           console.log(error);
-          this.errorMesage("Ups... nie udało się pobrać danych o użytkowniku");
+          this.notifyError("Ups... nie udało się pobrać danych o użytkowniku");
         });
     },
     goToMemberSite(aMemberIdToShowAccountDetail) {
@@ -97,7 +97,7 @@ export default {
         .then((result) => result)
         .catch((error) => {
           console.log(error);
-          this.errorMesage("Ups... nie udało sie dodać nowego użytkownika");
+          this.notifyError("Ups... nie udało sie dodać nowego użytkownika");
         });
 
       this.$router.go(0);
