@@ -11,8 +11,7 @@ public interface MealDao extends JpaRepository<MealEntity, Long> {
                     " from meals m" +
                     " left join meal_time mt on m.id = mt.meal_entity_id" +
                     " left join member_meals mm on m.id = mm.id" +
-                    " where mm.id is null" +
-                    " and mt.meal_time = ?1" +
+                    " where mt.meal_time = ?1" +
                     " order by random()" +
                     " limit ?2", nativeQuery = true)
     public List<MealEntity> findRandomByMealTime(int mealTime, int amount);
