@@ -360,6 +360,13 @@ ALTER TABLE public.training_plans OWNER to eatmeall;
 CREATE TABLE public.member_meals
 (
     id bigint NOT NULL,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone,
+    version integer NOT NULL,
+    author character varying(255),
+    description character varying(255),
+    name character varying(255),
+    prepare_time integer,
     member_id bigint,
     parent_meal_id bigint,
     CONSTRAINT member_meals_pkey PRIMARY KEY (id),
