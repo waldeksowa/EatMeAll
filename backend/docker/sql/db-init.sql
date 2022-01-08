@@ -367,10 +367,6 @@ CREATE TABLE public.member_meals
             REFERENCES public.meals (id) MATCH SIMPLE
             ON UPDATE NO ACTION
             ON DELETE NO ACTION,
-    CONSTRAINT fk_member_meals_meal_id FOREIGN KEY (id)
-            REFERENCES public.meals (id) MATCH SIMPLE
-            ON UPDATE NO ACTION
-            ON DELETE NO ACTION,
     CONSTRAINT fk_member_meals_member_id FOREIGN KEY (member_id)
         REFERENCES public.members (id) MATCH SIMPLE
         ON UPDATE NO ACTION
