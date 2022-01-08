@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface MealDao extends JpaRepository<MealEntity, Long> {
 
-    @Query(value = "select m.* " +
+    @Query(value = "select *" +
                     " from meals m ", nativeQuery = true)
     public List<MealEntity> findRandomByMealTime(int mealTime, int amount);
 
