@@ -7,9 +7,11 @@ import java.util.List;
 
 public interface MealDao extends JpaRepository<MealEntity, Long> {
 
-    @Query(value = "select m.*, mm.*" +
+    @Query(value = "select m.*, mm.*, mb.*, ml.*" +
             " from meals m " +
-            " left outer join member_meals mm on m.id = mm.id ", nativeQuery = true)
+            " left outer join member_meals mm on m.id = mm.id " +
+            " left outer join members mb on mm.member_id = mb.id " +
+            " left outre join meals ml on mm.parent_meal_id = ml.id", nativeQuery = true)
     public List<MealEntity> findRandomByMealTime(int mealTime, int amount);
 
     @Query(value = "select m.* " +
