@@ -60,8 +60,8 @@ public class MemberMealService {
     public MemberMealEntity create(CreateMemberMealDto memberMealDto) {
         MemberEntity member = memberRepository.findById(memberMealDto.getMemberId())
                 .orElseThrow(() -> new NoSuchElementException("Could not find member with id " + memberMealDto.getMemberId()));
-        MealEntity meal = mealRepository.findById(memberMealDto.getMealId())
-                .orElseThrow(() -> new NoSuchElementException("Could not find meal with id " + memberMealDto.getMealId()));
+        MealEntity meal = mealRepository.findById(memberMealDto.getParentMealId())
+                .orElseThrow(() -> new NoSuchElementException("Could not find meal with id " + memberMealDto.getParentMealId()));
         List<StepEntity> steps = memberMealDto.getSteps().stream()
                 .map(step -> convertToStep(step)).collect(Collectors.toList());
         Set<MealProductEntity> products = memberMealDto.getProducts().stream()

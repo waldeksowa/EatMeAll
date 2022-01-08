@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.wizard.software.diet.meals.MealEntity;
 import pl.wizard.software.diet.meals.MealTimeEnum;
+import pl.wizard.software.diet.meals.MemberMealDao;
+import pl.wizard.software.diet.meals.MemberMealEntity;
 import pl.wizard.software.diet.members.MemberDao;
 import pl.wizard.software.diet.members.MemberEntity;
 import pl.wizard.software.diet.schedules.ScheduleDao;
@@ -34,24 +36,50 @@ public class ScheduleService {
     private final MealService mealService;
     private final ScheduleDao scheduleRepository;
     private final MemberDao memberRepository;
+    private final MemberMealDao memberMealRepository;
 
     public ScheduleForWeekDto getScheduleByMealTime() {
+        ScheduleForWeekDto schedule = initializeScheduleForWeekDto();
+        for (int i = 1; i < MealTimeEnum.values().length; i++) {
+            List<MealEntity> meals = mealService.findRandomByMealTime(MealTimeEnum.values()[i].ordinal(), DAYS_IN_WEEK);
+            for (DayOfWeek day : DayOfWeek.values()) {
+                Optional<MealEntity> meal = meals.stream().findFirst();
+                if (meal.isPresent()) {
+                    schedule.getSchedule().get(day.ordinal()).add(meal.get(), MealTimeEnum.values()[i]);
+                    meals.remove(meal.get());
+                }
+            }
+        }
+        return schedule;
+    }
+
+    public ScheduleForWeekDto getScheduleByMealTime(Long memberId) {
+        ScheduleForWeekDto schedule = initializeScheduleForWeekDto();
+        for (int i = 1; i < MealTimeEnum.values().length; i++) {
+            List<MealEntity> meals = mealService.findRandomByMealTime(MealTimeEnum.values()[i].ordinal(), DAYS_IN_WEEK);
+            for (DayOfWeek day : DayOfWeek.values()) {
+                Optional<MealEntity> meal = meals.stream().findFirst();
+                if (meal.isPresent()) {
+                    Optional<MemberMealEntity> memberMeal = memberMealRepository.findByMemberAndParentMeal(memberId, meal.get().getId());
+                    if (memberMeal.isPresent()) {
+                        schedule.getSchedule().get(day.ordinal()).add(memberMeal.get(), MealTimeEnum.values()[i]);
+                    } else {
+                        schedule.getSchedule().get(day.ordinal()).add(meal.get(), MealTimeEnum.values()[i]);
+                    }
+                    meals.remove(meal.get());
+                }
+            }
+        }
+        return schedule;
+    }
+
+    private ScheduleForWeekDto initializeScheduleForWeekDto() {
         ScheduleForWeekDto schedule = new ScheduleForWeekDto();
         LocalDate nextWeekMonday = LocalDate.now().minusDays(LocalDate.now().getDayOfWeek().ordinal()).plusDays(DAYS_IN_WEEK);
         for (DayOfWeek day : DayOfWeek.values()) {
             ScheduleForDayDto scheduleForDayDto = new ScheduleForDayDto();
             scheduleForDayDto.setDate(nextWeekMonday.plusDays(day.ordinal()));
             schedule.getSchedule().add(scheduleForDayDto);
-        }
-        for (int i = 1; i < values().length; i++) {
-            List<MealEntity> meals = mealService.findRandomByMealTime(values()[i].ordinal(), DAYS_IN_WEEK);
-            for (DayOfWeek day : DayOfWeek.values()) {
-                Optional<MealEntity> meal = meals.stream().findFirst();
-                if (meal.isPresent()) {
-                    schedule.getSchedule().get(day.ordinal()).add(meal.get(), values()[i]);
-                    meals.remove(meal.get());
-                }
-            }
         }
         return schedule;
     }

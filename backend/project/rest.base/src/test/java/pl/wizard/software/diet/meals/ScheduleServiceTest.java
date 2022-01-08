@@ -32,10 +32,12 @@ public class ScheduleServiceTest {
     MemberDao memberRepository;
     @Mock
     MealService mealService;
+    @Mock
+    MemberMealDao memberMealRepository;
 
     @Before
     public void init() {
-        scheduleService = new ScheduleService(mealService, scheduleRepository, memberRepository);
+        scheduleService = new ScheduleService(mealService, scheduleRepository, memberRepository, memberMealRepository);
     }
 
     @Test

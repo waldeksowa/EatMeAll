@@ -17,6 +17,6 @@ public class CreateMemberMealDto {
     private List<SimpleProductDto> products;
     private List<String> steps;
     private Long memberId;
-    private Long mealId;
+    private Long parentMealId;
 }
 
