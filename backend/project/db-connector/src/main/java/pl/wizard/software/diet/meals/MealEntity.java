@@ -11,7 +11,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "MEALS")
-@Inheritance(strategy = InheritanceType.JOINED)
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @Getter
 @Setter
 @Builder
