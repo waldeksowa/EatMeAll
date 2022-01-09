@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface MealDao extends JpaRepository<MealEntity, Long> {
 
-    @Query(value = "select ml.*, mt.*, st.*, mp.*, pr.*, mm.*, mb.*, sh.*, ep.*, epr.*, pml.*, pmt.*, pst.*, pmp.*, ppr.* " +
+    @Query(value = "select ml.*, mt.*, st.*, mp.*, pr.*, mm.*, mb.*, sh.*, ep.*, epr.*, pml.*, pmt.*, pst.*, pmp.*, ppr.*, 1 as clazz_ " +
             " from meals ml " +
             " left outer join meal_time mt on ml.id = mt.meal_entity_id " +
             " left outer join steps st on ml.id = st.meal_id " +
