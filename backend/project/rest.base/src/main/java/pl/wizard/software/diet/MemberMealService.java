@@ -3,7 +3,6 @@ package pl.wizard.software.diet;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import pl.wizard.software.diet.meals.*;
 import pl.wizard.software.diet.members.MemberDao;
 import pl.wizard.software.diet.members.MemberEntity;
@@ -25,37 +24,6 @@ public class MemberMealService {
     private final MealDao mealRepository;
     private final ProductDao productRepository;
     private final MemberDao memberRepository;
-
-    public List<MemberMealEntity> findAll() {
-        return memberMealRepository.findAll();
-    }
-
-    public MemberMealEntity findById(Long id) {
-        MemberMealEntity meal = memberMealRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("Could not find member meal with id " + id));
-        return meal;
-    }
-
-    @Transactional
-    public MemberMealEntity update(Long mealId, MemberMealEntity meal) {
-        MemberMealEntity mealToUpdate = memberMealRepository.findById(mealId)
-                .orElseThrow(() -> new NoSuchElementException("Could not find member meal with id " + mealId));
-        mealToUpdate.setName(meal.getName());
-        mealToUpdate.setAuthor(meal.getAuthor());
-        mealToUpdate.setMealTime(meal.getMealTime());
-        mealToUpdate.setPrepareTime(meal.getPrepareTime());
-        mealToUpdate.setSteps(meal.getSteps());
-        mealToUpdate.setDescription(meal.getDescription());
-        mealToUpdate.setProducts(meal.getProducts());
-        return mealToUpdate;
-    }
-
-    @Transactional
-    public void delete(Long id) {
-        MemberMealEntity mealToDelete = memberMealRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("Could not find member meal with id " + id));
-        memberMealRepository.deleteById(id);
-    }
 
     public MemberMealEntity create(CreateMemberMealDto memberMealDto) {
         MemberEntity member = memberRepository.findById(memberMealDto.getMemberId())
