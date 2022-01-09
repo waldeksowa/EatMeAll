@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import pl.wizard.software.dto.CreateMemberMealDto;
 import pl.wizard.software.exception.AuthorizationFailedException;
 import pl.wizard.software.login.LoginService;
+import pl.wizard.software.mapper.MemberMealDtoMapper;
 
 import javax.validation.Valid;
 
@@ -25,7 +26,6 @@ public class MemberMealAPI {
                 .orElseThrow(() -> new AuthorizationFailedException(token));
 
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(memberMealService.create(meal));
-//                .body(MemberMealDtoMapper.mapToMemberMealDto(memberMealService.create(meal)));
+                .body(MemberMealDtoMapper.mapToMemberMealDto(memberMealService.create(meal)));
     }
 }
