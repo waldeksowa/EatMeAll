@@ -49,11 +49,6 @@ public class ScheduleForDayDto implements Serializable {
     }
 
     private void recalculate(MealEntity mealEntity) {
-//        calorific += mealEntity.getCalorific();
-//        carbohydrates += mealEntity.getCarbohydrates();
-//        fat += mealEntity.getFat();
-//        protein += mealEntity.getProtein();
-//        roughage += mealEntity.getRoughage();
         calorific = new BigDecimal(calorific + mealEntity.getCalorific()).setScale(1, RoundingMode.HALF_UP).doubleValue();
         protein = new BigDecimal(protein + mealEntity.getProtein()).setScale(1, RoundingMode.HALF_UP).doubleValue();
         fat = new BigDecimal(fat + mealEntity.getFat()).setScale(1, RoundingMode.HALF_UP).doubleValue();
