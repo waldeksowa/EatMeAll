@@ -330,6 +330,4 @@ public class ScheduleServiceTest {
         assertEquals(member_meal_dinner.getId(), result.getSchedule().get(MONDAY.ordinal()).getDinner());
         assertEquals(meal_supper.getId(), result.getSchedule().get(MONDAY.ordinal()).getSupper());
     }
-    
-
 }
