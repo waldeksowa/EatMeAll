@@ -26,7 +26,7 @@ public class MemberMealService {
     private final MemberDao memberRepository;
 
     public MemberMealEntity create(CreateMemberMealDto memberMealDto) {
-        if (memberMealRepository.findByMemberAndParentMeal(memberMealDto.getMemberId(), memberMealDto.getParentMealId()).isPresent()) {
+        if (memberMealAlreadyExists(memberMealDto)) {
             throw new NoSuchElementException("Member already has meal with parent id = " + memberMealDto.getParentMealId());
         }
         MemberEntity member = memberRepository.findById(memberMealDto.getMemberId())
@@ -49,6 +49,10 @@ public class MemberMealService {
         memberMeal.setParentMeal(meal);
 
         return memberMealRepository.save(memberMeal);
+    }
+
+    private boolean memberMealAlreadyExists(CreateMemberMealDto memberMealDto) {
+        return memberMealRepository.findByMemberAndParentMeal(memberMealDto.getMemberId(), memberMealDto.getParentMealId()).isPresent();
     }
 
     private MealProductEntity convertToMealProduct(SimpleProductDto product) {
