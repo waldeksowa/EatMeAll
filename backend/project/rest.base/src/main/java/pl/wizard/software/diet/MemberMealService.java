@@ -26,6 +26,9 @@ public class MemberMealService {
     private final MemberDao memberRepository;
 
     public MemberMealEntity create(CreateMemberMealDto memberMealDto) {
+        if (memberMealRepository.findByMemberAndParentMeal(memberMealDto.getMemberId(), memberMealDto.getParentMealId()).isPresent()) {
+            throw new NoSuchElementException("Member already has meal with parent id = " + memberMealDto.getParentMealId());
+        }
         MemberEntity member = memberRepository.findById(memberMealDto.getMemberId())
                 .orElseThrow(() -> new NoSuchElementException("Could not find member with id " + memberMealDto.getMemberId()));
         MealEntity meal = mealRepository.findById(memberMealDto.getParentMealId())
