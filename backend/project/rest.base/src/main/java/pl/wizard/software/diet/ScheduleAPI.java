@@ -54,6 +54,14 @@ public class ScheduleAPI {
         return ResponseEntity.ok(ScheduleDtoMapper.mapToScheduleDto(schedule));
     }
 
+    @GetMapping("/member/{memberId}/random")
+    public ResponseEntity<ScheduleForWeekDto> findRandomByMember(@RequestHeader("Authorization") String token, @PathVariable Long memberId) {
+        Long accountId = loginService.getAccountIdByTokenUUID(token)
+                .orElseThrow(() -> new AuthorizationFailedException(token));
+
+        return ResponseEntity.ok(scheduleService.getScheduleByMealTime(memberId));
+    }
+
     @GetMapping("/random")
     public ResponseEntity<ScheduleForWeekDto> findRandom() {
         return ResponseEntity.ok(scheduleService.getScheduleByMealTime());

@@ -143,158 +143,6 @@
 					"name": "MEMBERS",
 					"item": [
 						{
-							"name": "EXCLUDED PRODUCTS",
-							"item": [
-								{
-									"name": "GET_BY_MEMBER",
-									"protocolProfileBehavior": {
-										"disableBodyPruning": true
-									},
-									"request": {
-										"method": "GET",
-										"header": [],
-										"body": {
-											"mode": "raw",
-											"raw": "",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "http://{{SERVER_URL}}/api/v2/excludedprods/member/22",
-											"protocol": "http",
-											"host": [
-												"{{SERVER_URL}}"
-											],
-											"path": [
-												"api",
-												"v2",
-												"excludedprods",
-												"member",
-												"22"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "GET_BY_ID",
-									"protocolProfileBehavior": {
-										"disableBodyPruning": true
-									},
-									"request": {
-										"method": "GET",
-										"header": [],
-										"body": {
-											"mode": "raw",
-											"raw": "",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "http://{{SERVER_URL}}/api/v2/excludedprods/22",
-											"protocol": "http",
-											"host": [
-												"{{SERVER_URL}}"
-											],
-											"path": [
-												"api",
-												"v2",
-												"excludedprods",
-												"22"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "ADD",
-									"request": {
-										"method": "POST",
-										"header": [],
-										"body": {
-											"mode": "raw",
-											"raw": "{\r\n    \"memberId\":23,\r\n    \"products\":[1,2,3]\r\n}",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "http://{{SERVER_URL}}/api/v2/excludedprods",
-											"protocol": "http",
-											"host": [
-												"{{SERVER_URL}}"
-											],
-											"path": [
-												"api",
-												"v2",
-												"excludedprods"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "REMOVE",
-									"request": {
-										"method": "DELETE",
-										"header": [],
-										"url": {
-											"raw": "http://{{SERVER_URL}}/api/v2/excludedprods/22",
-											"protocol": "http",
-											"host": [
-												"{{SERVER_URL}}"
-											],
-											"path": [
-												"api",
-												"v2",
-												"excludedprods",
-												"22"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "UPDATE",
-									"request": {
-										"method": "PUT",
-										"header": [],
-										"body": {
-											"mode": "raw",
-											"raw": "",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "http://{{SERVER_URL}}/api/v2/excludedprods/23",
-											"protocol": "http",
-											"host": [
-												"{{SERVER_URL}}"
-											],
-											"path": [
-												"api",
-												"v2",
-												"excludedprods",
-												"23"
-											]
-										}
-									},
-									"response": []
-								}
-							]
-						},
-						{
 							"name": "SCHEDULES",
 							"item": [
 								{
@@ -365,7 +213,7 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "http://{{SERVER_URL}}/api/v2/schedules/member/16",
+											"raw": "http://{{SERVER_URL}}/api/v2/schedules/member/6",
 											"protocol": "http",
 											"host": [
 												"{{SERVER_URL}}"
@@ -375,7 +223,30 @@
 												"v2",
 												"schedules",
 												"member",
-												"16"
+												"6"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "GET_RANDOM_FOR_MEMBER",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://{{SERVER_URL}}/api/v2/schedules/member/16/random",
+											"protocol": "http",
+											"host": [
+												"{{SERVER_URL}}"
+											],
+											"path": [
+												"api",
+												"v2",
+												"schedules",
+												"member",
+												"16",
+												"random"
 											]
 										}
 									},
@@ -388,7 +259,7 @@
 										"header": [],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n    \"schedule\": [\r\n        {\r\n            \"date\": \"2021-12-06\",\r\n            \"breakfast\": 1,\r\n            \"secondBreakfast\": 1,\r\n            \"lunch\": 1,\r\n            \"dinner\": 1,\r\n            \"supper\": 1\r\n        }\r\n    ],\r\n    \"memberId\": 6\r\n}",
+											"raw": "{\r\n    \"schedule\": [\r\n        {\r\n            \"date\": \"2021-12-06\",\r\n            \"breakfast\": 1,\r\n            \"secondBreakfast\": 1,\r\n            \"lunch\": 1,\r\n            \"dinner\": 1,\r\n            \"supper\": 1\r\n        }\r\n    ],\r\n    \"memberId\": 11\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -632,6 +503,192 @@
 												"v2",
 												"trainingplans",
 												"14"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "MEMBER_MEALS",
+							"item": [
+								{
+									"name": "ADD",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"name\": \"test member meal\",\r\n    \"author\": \"me\",\r\n    \"description\": \"new\",\r\n    \"mealTime\": [\"BREAKFAST\",\"SECOND_BREAKFAST\"],\r\n    \"prepareTime\": 55,\r\n    \"products\": [\r\n        {\r\n            \"id\": 32,\r\n            \"amount\": 100\r\n        },\r\n        {\r\n            \"id\": 33,\r\n            \"amount\": 100\r\n        }\r\n    ],\r\n    \"steps\": [\r\n        \"first step\",\r\n        \"second step\"\r\n    ],\r\n    \"memberId\": 11,\r\n    \"parentMealId\": 1\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "http://{{SERVER_URL}}/api/v2/membermeals",
+											"protocol": "http",
+											"host": [
+												"{{SERVER_URL}}"
+											],
+											"path": [
+												"api",
+												"v2",
+												"membermeals"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "EXCLUDED PRODUCTS",
+							"item": [
+								{
+									"name": "GET_BY_MEMBER",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"method": "GET",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "http://{{SERVER_URL}}/api/v2/excludedprods/member/22",
+											"protocol": "http",
+											"host": [
+												"{{SERVER_URL}}"
+											],
+											"path": [
+												"api",
+												"v2",
+												"excludedprods",
+												"member",
+												"22"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "GET_BY_ID",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"method": "GET",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "http://{{SERVER_URL}}/api/v2/excludedprods/22",
+											"protocol": "http",
+											"host": [
+												"{{SERVER_URL}}"
+											],
+											"path": [
+												"api",
+												"v2",
+												"excludedprods",
+												"22"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "ADD",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"memberId\":23,\r\n    \"products\":[1,2,3]\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "http://{{SERVER_URL}}/api/v2/excludedprods",
+											"protocol": "http",
+											"host": [
+												"{{SERVER_URL}}"
+											],
+											"path": [
+												"api",
+												"v2",
+												"excludedprods"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "REMOVE",
+									"request": {
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "http://{{SERVER_URL}}/api/v2/excludedprods/22",
+											"protocol": "http",
+											"host": [
+												"{{SERVER_URL}}"
+											],
+											"path": [
+												"api",
+												"v2",
+												"excludedprods",
+												"22"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "UPDATE",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "http://{{SERVER_URL}}/api/v2/excludedprods/23",
+											"protocol": "http",
+											"host": [
+												"{{SERVER_URL}}"
+											],
+											"path": [
+												"api",
+												"v2",
+												"excludedprods",
+												"23"
 											]
 										}
 									},

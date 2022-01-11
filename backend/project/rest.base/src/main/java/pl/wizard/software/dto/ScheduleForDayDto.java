@@ -9,6 +9,8 @@ import pl.wizard.software.diet.meals.MealEntity;
 import pl.wizard.software.diet.meals.MealTimeEnum;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 
 import static pl.wizard.software.diet.meals.MealTimeEnum.*;
@@ -47,10 +49,10 @@ public class ScheduleForDayDto implements Serializable {
     }
 
     private void recalculate(MealEntity mealEntity) {
-        calorific += mealEntity.getCalorific();
-        carbohydrates += mealEntity.getCarbohydrates();
-        fat += mealEntity.getFat();
-        protein += mealEntity.getProtein();
-        roughage += mealEntity.getRoughage();
+        calorific = new BigDecimal(calorific + mealEntity.getCalorific()).setScale(1, RoundingMode.HALF_UP).doubleValue();
+        protein = new BigDecimal(protein + mealEntity.getProtein()).setScale(1, RoundingMode.HALF_UP).doubleValue();
+        fat = new BigDecimal(fat + mealEntity.getFat()).setScale(1, RoundingMode.HALF_UP).doubleValue();
+        carbohydrates = new BigDecimal(carbohydrates + mealEntity.getCarbohydrates()).setScale(1, RoundingMode.HALF_UP).doubleValue();
+        roughage = new BigDecimal(roughage + mealEntity.getRoughage()).setScale(1, RoundingMode.HALF_UP).doubleValue();
     }
 }
