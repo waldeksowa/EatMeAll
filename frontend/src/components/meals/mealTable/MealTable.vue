@@ -67,7 +67,7 @@ export default {
     MealCard,
     ErrorMessageWhenScheduleIsNotCreated,
   },
-  props: ["mealsSchedule", "isSaveChangesButtonShow"],
+  props: ["mealsSchedule", "isSaveChangesButtonShow", "scheduleId"],
   data() {
     return {
       clickedCard: null,
@@ -95,20 +95,25 @@ export default {
       var raw = JSON.stringify({
         schedule: this.parseMealScheduleToPost(),
         memberId: this.memberIdToShowSchedule,
+        id: this.scheduleId,
       });
+
       var requestOptions = {
-        method: "POST",
+        method: "PUT",
         headers: myHeaders,
         body: raw,
         redirect: "follow",
       };
 
-      fetch(SCHEDULE, requestOptions)
+      fetch(SCHEDULE + this.scheduleId, requestOptions)
         .then((response) => response.json())
-        .then((result) => console.log(result))
+        .then((result) => {
+          console.log("~ result", result);
+          this.$router.go();
+        })
         .catch((error) => {
           console.error(error);
-          this.notifyError(error.messag);
+          this.notifyError(error.message);
         });
     },
     changeClickedCard(aCol, aMealTime) {
@@ -122,6 +127,7 @@ export default {
       this.showMessageToGenerateNewSchedule = false;
     },
     replaceMeal(aData) {
+      console.log("~ aData", aData);
       console.log("~ this.clickedCard", this.clickedCard);
       const clicked = { ...this.clickedCard };
       this.$emit("replaceMeal", {

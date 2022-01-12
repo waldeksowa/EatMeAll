@@ -32,6 +32,7 @@
       :mealsSchedule="mealsSchedule"
       :isSaveChangesButtonShow="isSaveChangesButtonShow"
       :isScheduleShow="isDialogToGenerateNewWeekSchedule"
+      :scheduleId="scheduleId"
     />
     <q-dialog v-model="isDialogToGenerateNewWeekSchedule">
       <createScheduleDialog
@@ -51,6 +52,7 @@ export default {
     return {
       isDialogToGenerateNewWeekSchedule: false,
       isSaveChangesButtonShow: false,
+      scheduleId: null,
       mealsSchedule: [],
       membersAccounts: [],
     };
@@ -69,6 +71,7 @@ export default {
       "showLoading",
     ]),
     async parseMemberScheduleData(aSchedule) {
+      this.scheduleId = aSchedule.id;
       let arr = [];
       for (let i = 0; i < aSchedule.schedule.length; i++) {
         arr.push({
