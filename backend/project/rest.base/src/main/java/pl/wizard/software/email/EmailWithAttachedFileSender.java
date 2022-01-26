@@ -13,13 +13,13 @@ public abstract class EmailWithAttachedFileSender {
         sendEmailWithAttachedFile(file);
     }
 
-    ShoppingListFileData parse(ShoppingListDto shoppingList) {
+    protected ShoppingListFileData parse(ShoppingListDto shoppingList) {
         return ShoppingListFileDataMapper.mapToFileData(shoppingList);
     }
 
     public abstract File saveToFile(ShoppingListFileData fileData);
 
-    void sendEmailWithAttachedFile(File file) {
-        
+    protected void sendEmailWithAttachedFile(File file) {
+
     }
 }
