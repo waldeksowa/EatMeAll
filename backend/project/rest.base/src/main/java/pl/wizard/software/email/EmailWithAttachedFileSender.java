@@ -1,24 +1,25 @@
 package pl.wizard.software.email;
 
 import pl.wizard.software.dto.ShoppingListDto;
+import pl.wizard.software.mapper.ShoppingListFileDataMapper;
 
-import java.io.FileOutputStream;
+import java.io.File;
 
 public abstract class EmailWithAttachedFileSender {
 
     public void send(ShoppingListDto shoppingList) {
-        FileData fileData = parse(shoppingList);
-        FileOutputStream file = saveToFile(fileData);
+        ShoppingListFileData fileData = parse(shoppingList);
+        File file = saveToFile(fileData);
         sendEmailWithAttachedFile(file);
     }
 
-    FileData parse(ShoppingListDto shoppingList) {
-        return null;
+    ShoppingListFileData parse(ShoppingListDto shoppingList) {
+        return ShoppingListFileDataMapper.mapToFileData(shoppingList);
     }
 
-    public abstract FileOutputStream saveToFile(FileData fileData);
+    public abstract File saveToFile(ShoppingListFileData fileData);
 
-    void sendEmailWithAttachedFile(FileOutputStream file) {
-
+    void sendEmailWithAttachedFile(File file) {
+        
     }
 }
