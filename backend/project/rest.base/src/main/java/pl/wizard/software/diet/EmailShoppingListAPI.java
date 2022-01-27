@@ -3,13 +3,12 @@ package pl.wizard.software.diet;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import pl.wizard.software.dto.ShoppingListDto;
+import pl.wizard.software.exception.AuthorizationFailedException;
 import pl.wizard.software.login.LoginService;
 
-import java.util.Optional;
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/v2/emails")
@@ -20,13 +19,25 @@ public class EmailShoppingListAPI {
     private final LoginService loginService;
     private final EmailShoppingListService emailShoppingListService;
 
-    @GetMapping
-    public ResponseEntity sendEmail(@RequestHeader("Authorization") String token) {
-        Optional<Long> accountId = loginService.getAccountIdByTokenUUID(token);
-        if (!accountId.isPresent()) {
-            log.error("Authorization token expired");
-            return ResponseEntity.badRequest().build();
-        }
+    @PostMapping("/pdf")
+    public ResponseEntity sendEmailWithPdf(@RequestHeader("Authorization") String token,
+                                    @RequestParam(required = true) String recipient,
+                                    @Valid @RequestBody ShoppingListDto shoppingList) {
+        Long accountId = loginService.getAccountIdByTokenUUID(token)
+                .orElseThrow(() -> new AuthorizationFailedException(token));
+
+        emailShoppingListService.sendEmail();
+
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/excel")
+    public ResponseEntity sendEmailWithExcel(@RequestHeader("Authorization") String token,
+                                    @RequestParam(required = true) String recipient,
+                                    @Valid @RequestBody ShoppingListDto shoppingList) {
+        Long accountId = loginService.getAccountIdByTokenUUID(token)
+                .orElseThrow(() -> new AuthorizationFailedException(token));
+
         emailShoppingListService.sendEmail();
 
         return ResponseEntity.ok().build();

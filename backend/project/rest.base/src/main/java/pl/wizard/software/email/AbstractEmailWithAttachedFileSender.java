@@ -7,7 +7,7 @@ import java.io.File;
 
 public abstract class AbstractEmailWithAttachedFileSender {
 
-    public static final String MESSAGE_PREFIX = "Shopping list from ";
+    public static final String MESSAGE_BODY_PREFIX = "Shopping list from ";
     private ShoppingListFileData fileData;
 
     public void send(ShoppingListDto shoppingList, String recipient) {
@@ -23,7 +23,7 @@ public abstract class AbstractEmailWithAttachedFileSender {
     public abstract File saveToFile(ShoppingListFileData fileData);
 
     protected void sendEmailWithAttachedFile(String recipient, File file) {
-        String messageBody = MESSAGE_PREFIX + fileData.getShoppingListDate().toString();
+        String messageBody = MESSAGE_BODY_PREFIX + fileData.getShoppingListDate().toString();
         EmailSender emailSender = new EmailSender();
         emailSender.send(recipient, messageBody, file);
     }
