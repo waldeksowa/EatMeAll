@@ -9,7 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Properties;
 
-class EmailSender {
+public class EmailSender {
 
     public static final String SMTP_HOST = "smtp.dpoczta.pl";
     public static final String SMTP_PROTOCOL = "smtp";
