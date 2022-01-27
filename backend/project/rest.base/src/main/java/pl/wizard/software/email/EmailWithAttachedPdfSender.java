@@ -10,6 +10,6 @@ public class EmailWithAttachedPdfSender extends AbstractEmailWithAttachedFileSen
 
     @Override
     public File saveToFile(ShoppingListFileData fileData) {
-        
+        return null;
     }
 }
