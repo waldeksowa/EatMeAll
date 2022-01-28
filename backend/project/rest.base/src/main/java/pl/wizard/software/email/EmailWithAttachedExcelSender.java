@@ -14,7 +14,7 @@ public class EmailWithAttachedExcelSender extends AbstractEmailWithAttachedFileS
         LocalDate localDate = LocalDate.parse(new SimpleDateFormat("yyyy-MM-dd").format(fileData.getShoppingListDate()));
         String fileName = FILE_NAME_PREFIX + localDate.toString() + ".pdf";
 
-        
+
 
         return null;
     }
