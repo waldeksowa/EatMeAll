@@ -15,6 +15,10 @@ import java.util.stream.Stream;
 public class EmailWithAttachedPdfSender extends AbstractEmailWithAttachedFileSender {
 
     public static final String FILE_NAME_PREFIX = "Shopping list from ";
+    public static final String FIRST_COLUMN_HEADER = "Product";
+    public static final String SECOND_COLUMN_HEADER = "Amount";
+    public static final String THIRD_COLUMN_HEADER = "Special Amount";
+    public static final String FOURTH_COLUMN_HEADER = "Buyed";
 
     public EmailWithAttachedPdfSender() {
         super();
@@ -30,7 +34,6 @@ public class EmailWithAttachedPdfSender extends AbstractEmailWithAttachedFileSen
             Document document = new Document();
             PdfWriter.getInstance(document, outputStream);
             document.open();
-//            document.addTitle(fileName);
 
             PdfPTable table = new PdfPTable(4);
             addTableHeader(table);
@@ -46,11 +49,10 @@ public class EmailWithAttachedPdfSender extends AbstractEmailWithAttachedFileSen
     }
 
     private void addTableHeader(PdfPTable table) {
-        Stream.of("Product", "Amount", "Special Amount", "Buyed")
+        Stream.of(FIRST_COLUMN_HEADER, SECOND_COLUMN_HEADER, THIRD_COLUMN_HEADER, FOURTH_COLUMN_HEADER)
                 .forEach(columnTitle -> {
                     PdfPCell header = new PdfPCell();
                     header.setBackgroundColor(BaseColor.LIGHT_GRAY);
-                    header.setBorderWidth(2);
                     header.setPhrase(new Phrase(columnTitle));
                     table.addCell(header);
                 });
