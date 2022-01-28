@@ -27,9 +27,9 @@ public class ShoppingListFileDataMapper {
     private static ShoppingListRow mapToFileRow(ShoppingListItemDto item) {
         return ShoppingListRow.builder()
                 .productName(item.getProductName())
-                .amount(item.getAmount())
-                .specialAmount(item.getSpecialAmount())
-                .isBuyed(item.isBuyed())
+                .amount(String.valueOf(item.getAmount()))
+                .specialAmount(String.valueOf(item.getSpecialAmount()))
+                .isBuyed(String.valueOf(item.isBuyed()))
                 .build();
     }
 }

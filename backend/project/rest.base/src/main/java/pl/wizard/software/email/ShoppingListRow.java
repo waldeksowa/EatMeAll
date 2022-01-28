@@ -1,11 +1,13 @@
 package pl.wizard.software.email;
 
 import lombok.Builder;
+import lombok.Getter;
 
+@Getter
 @Builder
 public class ShoppingListRow {
     private String productName;
-    private int amount;
-    private int specialAmount;
-    private boolean isBuyed;
+    private String amount;
+    private String specialAmount;
+    private String isBuyed;
 }
