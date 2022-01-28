@@ -15,8 +15,6 @@ import static pl.wizard.software.email.DocumentSettings.*;
 
 public class EmailWithAttachedExcelSender extends AbstractEmailWithAttachedFileSender {
 
-    public static final String FILE_NAME_PREFIX = "Shopping list from ";
-
     @Override
     public File saveToFile(ShoppingListFileData fileData) throws FileNotFoundException {
         LocalDate localDate = LocalDate.parse(new SimpleDateFormat("yyyy-MM-dd").format(fileData.getShoppingListDate()));

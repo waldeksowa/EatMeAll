@@ -8,7 +8,6 @@ import pl.wizard.software.email.EmailWithAttachedExcelSender;
 import pl.wizard.software.email.EmailWithAttachedPdfSender;
 
 @Service
-@Slf4j
 @RequiredArgsConstructor
 public class EmailShoppingListService {
 
