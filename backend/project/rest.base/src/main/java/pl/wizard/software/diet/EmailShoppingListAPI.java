@@ -26,8 +26,7 @@ public class EmailShoppingListAPI {
         Long accountId = loginService.getAccountIdByTokenUUID(token)
                 .orElseThrow(() -> new AuthorizationFailedException(token));
 
-        emailShoppingListService.sendEmail();
-
+        emailShoppingListService.sendEmailWithPdf(shoppingList, recipient);
         return ResponseEntity.ok().build();
     }
 
