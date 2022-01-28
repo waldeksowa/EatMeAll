@@ -1,6 +1,9 @@
 package pl.wizard.software.email;
 
-import com.itextpdf.text.*;
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
@@ -12,13 +15,9 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.stream.Stream;
 
-public class EmailWithAttachedPdfSender extends AbstractEmailWithAttachedFileSender {
+import static pl.wizard.software.email.DocumentSettings.*;
 
-    public static final String FILE_NAME_PREFIX = "Shopping list from ";
-    public static final String FIRST_COLUMN_HEADER = "Product";
-    public static final String SECOND_COLUMN_HEADER = "Amount";
-    public static final String THIRD_COLUMN_HEADER = "Special Amount";
-    public static final String FOURTH_COLUMN_HEADER = "Bought";
+public class EmailWithAttachedPdfSender extends AbstractEmailWithAttachedFileSender {
 
     public EmailWithAttachedPdfSender() {
         super();
@@ -35,7 +34,7 @@ public class EmailWithAttachedPdfSender extends AbstractEmailWithAttachedFileSen
             PdfWriter.getInstance(document, outputStream);
             document.open();
 
-            PdfPTable table = new PdfPTable(4);
+            PdfPTable table = new PdfPTable(NUMBER_OF_COLUMNS);
             addTableHeader(table);
             addTableRows(table, fileData);
 
