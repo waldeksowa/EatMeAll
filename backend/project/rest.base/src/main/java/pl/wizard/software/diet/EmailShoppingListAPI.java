@@ -36,7 +36,7 @@ public class EmailShoppingListAPI {
                                     @Valid @RequestBody ShoppingListDto shoppingList) {
         Long accountId = loginService.getAccountIdByTokenUUID(token)
                 .orElseThrow(() -> new AuthorizationFailedException(token));
-        
+
         emailShoppingListService.sendEmailWithExcel(shoppingList, recipient);
         return ResponseEntity.ok().build();
     }
