@@ -58,11 +58,11 @@ public class EmailSender {
         message.setSubject(EMAIL_SUBJECT);
         MimeBodyPart mimeBodyPart = new MimeBodyPart();
         mimeBodyPart.setContent(messageBody, MESSAGE_TYPE);
-//        MimeBodyPart attachmentBodyPart = new MimeBodyPart();
-//        attachmentBodyPart.attachFile(file);
+        MimeBodyPart attachmentBodyPart = new MimeBodyPart();
+        attachmentBodyPart.attachFile(file);
         Multipart multipart = new MimeMultipart();
         multipart.addBodyPart(mimeBodyPart);
-//        multipart.addBodyPart(attachmentBodyPart);
+        multipart.addBodyPart(attachmentBodyPart);
         message.setContent(multipart);
         return message;
     }

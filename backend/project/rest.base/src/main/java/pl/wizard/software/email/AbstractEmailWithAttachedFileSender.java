@@ -4,6 +4,7 @@ import pl.wizard.software.dto.ShoppingListDto;
 import pl.wizard.software.mapper.ShoppingListFileDataMapper;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 
 public abstract class AbstractEmailWithAttachedFileSender {
 
@@ -12,7 +13,12 @@ public abstract class AbstractEmailWithAttachedFileSender {
 
     public void send(ShoppingListDto shoppingList, String recipient) {
         fileData = parse(shoppingList);
-        File file = saveToFile(fileData);
+        File file = null;
+        try {
+            file = saveToFile(fileData);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
         sendEmailWithAttachedFile(recipient, file);
     }
 
@@ -20,7 +26,7 @@ public abstract class AbstractEmailWithAttachedFileSender {
         return ShoppingListFileDataMapper.mapToFileData(shoppingList);
     }
 
-    public abstract File saveToFile(ShoppingListFileData fileData);
+    public abstract File saveToFile(ShoppingListFileData fileData) throws FileNotFoundException;
 
     protected void sendEmailWithAttachedFile(String recipient, File file) {
         String messageBody = MESSAGE_BODY_PREFIX + fileData.getShoppingListDate().toString();
