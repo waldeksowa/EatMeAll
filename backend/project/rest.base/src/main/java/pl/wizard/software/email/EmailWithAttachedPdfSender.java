@@ -14,7 +14,7 @@ import java.util.stream.Stream;
 
 public class EmailWithAttachedPdfSender extends AbstractEmailWithAttachedFileSender {
 
-    public static final String FILE_NAME_PREFIX = "Shopping list from: ";
+    public static final String FILE_NAME_PREFIX = "Shopping list from ";
 
     public EmailWithAttachedPdfSender() {
         super();
@@ -30,7 +30,7 @@ public class EmailWithAttachedPdfSender extends AbstractEmailWithAttachedFileSen
             Document document = new Document();
             PdfWriter.getInstance(document, outputStream);
             document.open();
-            document.addTitle(fileName);
+//            document.addTitle(fileName);
 
             PdfPTable table = new PdfPTable(4);
             addTableHeader(table);
@@ -62,7 +62,7 @@ public class EmailWithAttachedPdfSender extends AbstractEmailWithAttachedFileSen
                     table.addCell(row.getProductName());
                     table.addCell(row.getAmount());
                     table.addCell(row.getSpecialAmount());
-                    table.addCell(row.getIsBuyed());
+                    table.addCell(row.getBought());
                 });
     }
 }

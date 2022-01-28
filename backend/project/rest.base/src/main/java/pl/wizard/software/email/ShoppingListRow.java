@@ -9,5 +9,5 @@ public class ShoppingListRow {
     private String productName;
     private String amount;
     private String specialAmount;
-    private String isBuyed;
+    private String bought;
 }

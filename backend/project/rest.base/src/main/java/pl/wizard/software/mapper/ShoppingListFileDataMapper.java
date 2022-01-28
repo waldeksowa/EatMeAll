@@ -29,7 +29,11 @@ public class ShoppingListFileDataMapper {
                 .productName(item.getProductName())
                 .amount(String.valueOf(item.getAmount()))
                 .specialAmount(String.valueOf(item.getSpecialAmount()))
-                .isBuyed(String.valueOf(item.isBuyed()))
+                .bought(booleanToString(item.isBuyed()))
                 .build();
+    }
+
+    private static String booleanToString(boolean b) {
+        return  b ? "yes" : "no";
     }
 }

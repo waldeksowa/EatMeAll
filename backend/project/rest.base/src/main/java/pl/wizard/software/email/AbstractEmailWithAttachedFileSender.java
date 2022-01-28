@@ -5,6 +5,8 @@ import pl.wizard.software.mapper.ShoppingListFileDataMapper;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 
 public abstract class AbstractEmailWithAttachedFileSender {
 
@@ -29,7 +31,8 @@ public abstract class AbstractEmailWithAttachedFileSender {
     public abstract File saveToFile(ShoppingListFileData fileData) throws FileNotFoundException;
 
     protected void sendEmailWithAttachedFile(String recipient, File file) {
-        String messageBody = MESSAGE_BODY_PREFIX + fileData.getShoppingListDate().toString();
+        LocalDate localDate = LocalDate.parse(new SimpleDateFormat("yyyy-MM-dd").format(fileData.getShoppingListDate()));
+        String messageBody = MESSAGE_BODY_PREFIX + localDate.toString();
         EmailSender emailSender = new EmailSender();
         emailSender.send(recipient, messageBody, file);
     }
