@@ -11,7 +11,7 @@ import pl.wizard.software.login.LoginService;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/v2/emails")
+@RequestMapping("/v2/shoppinglistemails")
 @Slf4j
 @RequiredArgsConstructor
 public class EmailShoppingListAPI {
