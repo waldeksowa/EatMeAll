@@ -20,7 +20,7 @@ public class EmailShoppingListAPI {
     private final EmailShoppingListService emailShoppingListService;
 
     @PostMapping("/pdf")
-    public ResponseEntity sendEmailWithPdf(@RequestHeader("Authorization") String token,
+    public ResponseEntity sendEmailWithAttachedPdf(@RequestHeader("Authorization") String token,
                                     @RequestParam(required = true) String recipient,
                                     @Valid @RequestBody ShoppingListDto shoppingList) {
         Long accountId = loginService.getAccountIdByTokenUUID(token)
@@ -31,7 +31,7 @@ public class EmailShoppingListAPI {
     }
 
     @PostMapping("/excel")
-    public ResponseEntity sendEmailWithExcel(@RequestHeader("Authorization") String token,
+    public ResponseEntity sendEmailWithAttachedExcel(@RequestHeader("Authorization") String token,
                                     @RequestParam(required = true) String recipient,
                                     @Valid @RequestBody ShoppingListDto shoppingList) {
         Long accountId = loginService.getAccountIdByTokenUUID(token)
