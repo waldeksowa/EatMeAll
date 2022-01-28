@@ -18,7 +18,7 @@ public class EmailWithAttachedPdfSender extends AbstractEmailWithAttachedFileSen
     public static final String FIRST_COLUMN_HEADER = "Product";
     public static final String SECOND_COLUMN_HEADER = "Amount";
     public static final String THIRD_COLUMN_HEADER = "Special Amount";
-    public static final String FOURTH_COLUMN_HEADER = "Buyed";
+    public static final String FOURTH_COLUMN_HEADER = "Bought";
 
     public EmailWithAttachedPdfSender() {
         super();
