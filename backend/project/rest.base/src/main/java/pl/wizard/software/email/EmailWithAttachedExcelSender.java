@@ -51,7 +51,7 @@ public class EmailWithAttachedExcelSender extends AbstractEmailWithAttachedFileS
 
         XSSFFont font = ((XSSFWorkbook) workbook).createFont();
         font.setFontName("Arial");
-        font.setFontHeightInPoints((short) 13);
+        font.setFontHeightInPoints((short) 12);
         font.setBold(true);
         headerStyle.setFont(font);
 
