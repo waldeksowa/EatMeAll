@@ -9,7 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Properties;
 
-public class EmailSender {
+class EmailSender {
 
     public static final String SMTP_HOST = "smtp.dpoczta.pl";
     public static final String SMTP_PROTOCOL = "smtp";
@@ -20,7 +20,7 @@ public class EmailSender {
     public static final String EMAIL_SUBJECT = "This is your shopping list";
     public static final String MESSAGE_TYPE = "text/html; charset=utf-8";
 
-    public void send(String recipient, String messageBody, File file) {
+    void send(String recipient, String messageBody, File file) {
         Properties props = setProperties();
         Session session = getSession(props);
         try {
