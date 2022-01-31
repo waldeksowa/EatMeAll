@@ -3,6 +3,8 @@ package pl.wizard.software.email;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -13,7 +15,13 @@ import java.time.LocalDate;
 
 import static pl.wizard.software.email.ShoppingListDocumentSettings.*;
 
+@Component
 public class ShoppingListAsExcelSender extends AbstractShoppingListSender {
+
+    @Autowired
+    public ShoppingListAsExcelSender(EmailSenderService emailSenderService) {
+        super(emailSenderService);
+    }
 
     @Override
     public File saveToFile(ShoppingListFileData fileData) throws FileNotFoundException {

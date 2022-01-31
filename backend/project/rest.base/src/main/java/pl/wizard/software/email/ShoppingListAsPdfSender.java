@@ -7,6 +7,8 @@ import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -17,10 +19,12 @@ import java.util.stream.Stream;
 
 import static pl.wizard.software.email.ShoppingListDocumentSettings.*;
 
+@Component
 public class ShoppingListAsPdfSender extends AbstractShoppingListSender {
 
-    public ShoppingListAsPdfSender() {
-        super();
+    @Autowired
+    public ShoppingListAsPdfSender(EmailSenderService emailSenderService) {
+        super(emailSenderService);
     }
 
     @Override

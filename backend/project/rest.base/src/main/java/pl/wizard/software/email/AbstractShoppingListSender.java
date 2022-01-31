@@ -1,7 +1,5 @@
 package pl.wizard.software.email;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import pl.wizard.software.dto.ShoppingListDto;
 import pl.wizard.software.mapper.ShoppingListFileDataMapper;
 
@@ -10,13 +8,21 @@ import java.io.FileNotFoundException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 
-@RequiredArgsConstructor
+
 public abstract class AbstractShoppingListSender {
 
     public static final String MESSAGE_BODY_PREFIX = "Shopping list from ";
     private ShoppingListFileData fileData;
-    @Autowired
-    private EmailSenderService emailSenderService;
+    private final EmailSenderService emailSenderService;
+
+    public AbstractShoppingListSender(EmailSenderService emailSenderService) {
+        this(new ShoppingListFileData(), emailSenderService);
+    }
+
+    public AbstractShoppingListSender(ShoppingListFileData fileData, EmailSenderService emailSenderService) {
+        this.fileData = fileData;
+        this.emailSenderService = emailSenderService;
+    }
 
     public void send(ShoppingListDto shoppingList, String emailTo) {
         fileData = parse(shoppingList);
