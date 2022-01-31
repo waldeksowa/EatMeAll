@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.wizard.software.dto.ShoppingListDto;
+import pl.wizard.software.email.NewEmailSender;
 import pl.wizard.software.exception.AuthorizationFailedException;
 import pl.wizard.software.login.LoginService;
 
@@ -18,6 +19,13 @@ public class EmailShoppingListAPI {
 
     private final LoginService loginService;
     private final EmailShoppingListService emailShoppingListService;
+    private final NewEmailSender newEmailSender;
+
+
+    @GetMapping
+    public void testMail() {
+        newEmailSender.sendEmail("waldek@szkola-dobrego-kodu.pl", "test mail", "test message");
+    }
 
     @PostMapping("/pdf")
     public ResponseEntity sendEmailWithAttachedPdf(@RequestHeader("Authorization") String token,
