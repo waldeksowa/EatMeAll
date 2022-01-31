@@ -1,23 +1,22 @@
 package pl.wizard.software.diet;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import pl.wizard.software.dto.ShoppingListDto;
-import pl.wizard.software.email.EmailWithAttachedExcelSender;
-import pl.wizard.software.email.EmailWithAttachedPdfSender;
+import pl.wizard.software.email.ShoppingListAsExcelSender;
+import pl.wizard.software.email.ShoppingListAsPdfSender;
 
 @Service
 @RequiredArgsConstructor
-public class EmailShoppingListService {
+public class ShoppingListEmailService {
 
     public void sendEmailWithPdf(ShoppingListDto shoppingList, String recipient) {
-        EmailWithAttachedPdfSender emailPdf = new EmailWithAttachedPdfSender();
+        ShoppingListAsPdfSender emailPdf = new ShoppingListAsPdfSender();
         emailPdf.send(shoppingList, recipient);
     }
 
     public void sendEmailWithExcel(ShoppingListDto shoppingList, String recipient) {
-        EmailWithAttachedExcelSender emailExcel = new EmailWithAttachedExcelSender();
+        ShoppingListAsExcelSender emailExcel = new ShoppingListAsExcelSender();
         emailExcel.send(shoppingList, recipient);
     }
 }

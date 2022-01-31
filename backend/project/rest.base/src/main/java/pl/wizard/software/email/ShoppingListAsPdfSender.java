@@ -15,11 +15,11 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.stream.Stream;
 
-import static pl.wizard.software.email.DocumentSettings.*;
+import static pl.wizard.software.email.ShoppingListDocumentSettings.*;
 
-public class EmailWithAttachedPdfSender extends AbstractEmailWithAttachedFileSender {
+public class ShoppingListAsPdfSender extends AbstractShoppingListSender {
 
-    public EmailWithAttachedPdfSender() {
+    public ShoppingListAsPdfSender() {
         super();
     }
 

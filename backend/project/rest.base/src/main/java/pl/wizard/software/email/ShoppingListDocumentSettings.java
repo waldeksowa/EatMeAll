@@ -1,6 +1,6 @@
 package pl.wizard.software.email;
 
-public class DocumentSettings {
+public class ShoppingListDocumentSettings {
     public static final String FILE_NAME_PREFIX = "Shopping list from ";
     public static final String FIRST_COLUMN_HEADER = "Product";
     public static final String SECOND_COLUMN_HEADER = "Amount";

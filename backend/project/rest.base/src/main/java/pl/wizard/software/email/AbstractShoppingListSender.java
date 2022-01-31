@@ -1,5 +1,7 @@
 package pl.wizard.software.email;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import pl.wizard.software.dto.ShoppingListDto;
 import pl.wizard.software.mapper.ShoppingListFileDataMapper;
 
@@ -8,12 +10,15 @@ import java.io.FileNotFoundException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 
-public abstract class AbstractEmailWithAttachedFileSender {
+@RequiredArgsConstructor
+public abstract class AbstractShoppingListSender {
 
     public static final String MESSAGE_BODY_PREFIX = "Shopping list from ";
     private ShoppingListFileData fileData;
+    @Autowired
+    private EmailSenderService emailSenderService;
 
-    public void send(ShoppingListDto shoppingList, String recipient) {
+    public void send(ShoppingListDto shoppingList, String emailTo) {
         fileData = parse(shoppingList);
         File file = null;
         try {
@@ -21,7 +26,7 @@ public abstract class AbstractEmailWithAttachedFileSender {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        sendEmailWithAttachedFile(recipient, file);
+        sendEmailWithAttachedFile(emailTo, file);
     }
 
     protected ShoppingListFileData parse(ShoppingListDto shoppingList) {
@@ -30,10 +35,10 @@ public abstract class AbstractEmailWithAttachedFileSender {
 
     public abstract File saveToFile(ShoppingListFileData fileData) throws FileNotFoundException;
 
-    protected void sendEmailWithAttachedFile(String recipient, File file) {
+    protected void sendEmailWithAttachedFile(String emailTo, File file) {
         LocalDate localDate = LocalDate.parse(new SimpleDateFormat("yyyy-MM-dd").format(fileData.getShoppingListDate()));
-        String messageBody = MESSAGE_BODY_PREFIX + localDate.toString();
-        EmailSender emailSender = new EmailSender();
-        emailSender.send(recipient, messageBody, file);
+        String subject = MESSAGE_BODY_PREFIX + localDate.toString();
+        String messageBody = subject;
+        emailSenderService.send(emailTo, subject, messageBody, file);
     }
 }

@@ -11,9 +11,9 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 
-import static pl.wizard.software.email.DocumentSettings.*;
+import static pl.wizard.software.email.ShoppingListDocumentSettings.*;
 
-public class EmailWithAttachedExcelSender extends AbstractEmailWithAttachedFileSender {
+public class ShoppingListAsExcelSender extends AbstractShoppingListSender {
 
     @Override
     public File saveToFile(ShoppingListFileData fileData) throws FileNotFoundException {
