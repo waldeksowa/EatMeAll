@@ -520,7 +520,7 @@
 										"header": [],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n    \"name\": \"test member meal\",\r\n    \"author\": \"me\",\r\n    \"description\": \"new\",\r\n    \"mealTime\": [\"BREAKFAST\",\"SECOND_BREAKFAST\"],\r\n    \"prepareTime\": 55,\r\n    \"products\": [\r\n        {\r\n            \"id\": 32,\r\n            \"amount\": 100\r\n        },\r\n        {\r\n            \"id\": 33,\r\n            \"amount\": 100\r\n        }\r\n    ],\r\n    \"steps\": [\r\n        \"first step\",\r\n        \"second step\"\r\n    ],\r\n    \"memberId\": 11,\r\n    \"parentMealId\": 1\r\n}",
+											"raw": "{\r\n    \"name\": \"2 test member meal\",\r\n    \"author\": \"me\",\r\n    \"description\": \"new\",\r\n    \"mealTime\": [\"BREAKFAST\",\"SECOND_BREAKFAST\"],\r\n    \"prepareTime\": 55,\r\n    \"products\": [\r\n        {\r\n            \"id\": 32,\r\n            \"amount\": 50\r\n        },\r\n        {\r\n            \"id\": 33,\r\n            \"amount\": 50\r\n        }\r\n    ],\r\n    \"steps\": [\r\n        \"first step\",\r\n        \"second step\"\r\n    ],\r\n    \"memberId\": 16,\r\n    \"parentMealId\": 6\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -1185,7 +1185,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"name\": \"test meal\",\r\n    \"author\": \"me\",\r\n    \"description\": \"new\",\r\n    \"mealTime\": [\"BREAKFAST\",\"SECOND_BREAKFAST\"],\r\n    \"prepareTime\": 55,\r\n    \"products\": [\r\n        {\r\n            \"id\": 32,\r\n            \"amount\": 100\r\n        },\r\n        {\r\n            \"id\": 33,\r\n            \"amount\": 100\r\n        }\r\n    ],\r\n    \"steps\": [\r\n        \"first step\",\r\n        \"second step\"\r\n    ]\r\n}",
+									"raw": "{\r\n    \"name\": \"5 test meal\",\r\n    \"author\": \"me\",\r\n    \"description\": \"new\",\r\n    \"mealTime\": [\"BREAKFAST\",\"SECOND_BREAKFAST\"],\r\n    \"prepareTime\": 55,\r\n    \"products\": [\r\n        {\r\n            \"id\": 32,\r\n            \"amount\": 100\r\n        },\r\n        {\r\n            \"id\": 33,\r\n            \"amount\": 100\r\n        }\r\n    ],\r\n    \"steps\": [\r\n        \"first step\",\r\n        \"second step\"\r\n    ]\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1446,6 +1446,83 @@
 										"v2",
 										"shoppinglist",
 										"23"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "EMAILS",
+					"item": [
+						{
+							"name": "SEND PDF",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": 43,\r\n    \"createdAt\": \"2022-01-28T10:58:48.364+0000\",\r\n    \"updatedAt\": \"2022-01-28T10:58:48.364+0000\",\r\n    \"version\": 0,\r\n    \"accountId\": 1,\r\n    \"shoppingListDate\": \"2022-01-28T00:00:00.000+0000\",\r\n    \"items\": [\r\n        {\r\n            \"id\": 44,\r\n            \"createdAt\": \"2022-01-28T10:58:48.369+0000\",\r\n            \"updatedAt\": \"2022-01-28T10:58:48.369+0000\",\r\n            \"version\": 0,\r\n            \"productId\": 1,\r\n            \"productName\": \"Bagietki francuskie\",\r\n            \"amount\": 100,\r\n            \"specialAmount\": 0,\r\n            \"buyed\": false\r\n        },\r\n        {\r\n            \"id\": 45,\r\n            \"createdAt\": \"2022-01-28T10:58:48.373+0000\",\r\n            \"updatedAt\": \"2022-01-28T10:58:48.373+0000\",\r\n            \"version\": 0,\r\n            \"productId\": 6,\r\n            \"productName\": \"Bułki mieszane, z cebulą\",\r\n            \"amount\": 0,\r\n            \"specialAmount\": 200,\r\n            \"buyed\": false\r\n        }\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://{{SERVER_URL}}/api/v2/shoppinglistemails/pdf?recipient=waldek@szkola-dobrego-kodu.pl",
+									"protocol": "http",
+									"host": [
+										"{{SERVER_URL}}"
+									],
+									"path": [
+										"api",
+										"v2",
+										"shoppinglistemails",
+										"pdf"
+									],
+									"query": [
+										{
+											"key": "recipient",
+											"value": "waldek@szkola-dobrego-kodu.pl"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "SEND EXCEL",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": 43,\r\n    \"createdAt\": \"2022-01-28T10:58:48.364+0000\",\r\n    \"updatedAt\": \"2022-01-28T10:58:48.364+0000\",\r\n    \"version\": 0,\r\n    \"accountId\": 1,\r\n    \"shoppingListDate\": \"2022-01-28T00:00:00.000+0000\",\r\n    \"items\": [\r\n        {\r\n            \"id\": 44,\r\n            \"createdAt\": \"2022-01-28T10:58:48.369+0000\",\r\n            \"updatedAt\": \"2022-01-28T10:58:48.369+0000\",\r\n            \"version\": 0,\r\n            \"productId\": 1,\r\n            \"productName\": \"Bagietki francuskie\",\r\n            \"amount\": 100,\r\n            \"specialAmount\": 0,\r\n            \"buyed\": false\r\n        },\r\n        {\r\n            \"id\": 45,\r\n            \"createdAt\": \"2022-01-28T10:58:48.373+0000\",\r\n            \"updatedAt\": \"2022-01-28T10:58:48.373+0000\",\r\n            \"version\": 0,\r\n            \"productId\": 6,\r\n            \"productName\": \"Bułki mieszane, z cebulą\",\r\n            \"amount\": 0,\r\n            \"specialAmount\": 200,\r\n            \"buyed\": false\r\n        }\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://{{SERVER_URL}}/api/v2/shoppinglistemails/excel?recipient=waldek@szkola-dobrego-kodu.pl",
+									"protocol": "http",
+									"host": [
+										"{{SERVER_URL}}"
+									],
+									"path": [
+										"api",
+										"v2",
+										"shoppinglistemails",
+										"excel"
+									],
+									"query": [
+										{
+											"key": "recipient",
+											"value": "waldek@szkola-dobrego-kodu.pl"
+										}
 									]
 								}
 							},
