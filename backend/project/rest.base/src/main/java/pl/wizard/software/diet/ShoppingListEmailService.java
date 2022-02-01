@@ -19,13 +19,11 @@ public class ShoppingListEmailService {
 
     public void sendEmailWithPdf(ShoppingListDto shoppingList, String recipient) {
         ShoppingListAsPdfSender emailPdf = context.getBean(ShoppingListAsPdfSender.class, emailSenderService);
-//        ShoppingListAsPdfSender emailPdf = new ShoppingListAsPdfSender(emailSenderService);
         emailPdf.send(shoppingList, recipient);
     }
 
     public void sendEmailWithExcel(ShoppingListDto shoppingList, String recipient) {
         ShoppingListAsExcelSender emailExcel = context.getBean(ShoppingListAsExcelSender.class, emailSenderService);
-//        ShoppingListAsExcelSender emailExcel = new ShoppingListAsExcelSender(emailSenderService);
         emailExcel.send(shoppingList, recipient);
     }
 }
