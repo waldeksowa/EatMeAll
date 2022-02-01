@@ -22,7 +22,6 @@ import static pl.wizard.software.email.ShoppingListDocumentSettings.*;
 @Component
 public class ShoppingListAsPdfSender extends AbstractShoppingListSender {
 
-    @Autowired
     public ShoppingListAsPdfSender(EmailSenderService emailSenderService) {
         super(emailSenderService);
     }

@@ -18,7 +18,6 @@ import static pl.wizard.software.email.ShoppingListDocumentSettings.*;
 @Component
 public class ShoppingListAsExcelSender extends AbstractShoppingListSender {
 
-    @Autowired
     public ShoppingListAsExcelSender(EmailSenderService emailSenderService) {
         super(emailSenderService);
     }
