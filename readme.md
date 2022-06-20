@@ -5,7 +5,7 @@ Go to backend project (`cd backend/project`) and compile via maven
 mvn clean install
 ```
 
-In main product directory (where `docker-compose.yml` exists) run
+In main directory (where `docker-compose.yml` exists) run
 ```sh
 docker-compose up
 ```
@@ -23,7 +23,8 @@ To upgrade your backend service you can use deploy profile in maven, without res
 mvn clean install -Pdeploy
 ```
 
-To debug backend wildfly service you can create remote launcher to adress localhost:8787
+To debug backend wildfly service you can create remote launcher to address localhost:8787
+Postman API collection is available in main directory (`EatMeAll.postman_collection.json`)
 
 ### Finally open Postman and check GET request http://localhost:8080/api/v1/products
-### Frontend application is avaliable in http://localhost
+### Frontend application is available in http://localhost
