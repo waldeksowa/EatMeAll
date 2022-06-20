@@ -24,6 +24,7 @@ mvn clean install -Pdeploy
 ```
 
 To debug backend wildfly service you can create remote launcher to address localhost:8787
+
 Postman API collection is available in main directory (`EatMeAll.postman_collection.json`)
 
 ### Finally open Postman and check GET request http://localhost:8080/api/v1/products
