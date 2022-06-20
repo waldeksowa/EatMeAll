@@ -35,13 +35,13 @@ public abstract class AbstractShoppingListSender {
         sendEmailWithAttachedFile(emailTo, file);
     }
 
-    protected ShoppingListFileData parse(ShoppingListDto shoppingList) {
+    private ShoppingListFileData parse(ShoppingListDto shoppingList) {
         return ShoppingListFileDataMapper.mapToFileData(shoppingList);
     }
 
-    public abstract File saveToFile(ShoppingListFileData fileData) throws FileNotFoundException;
+    protected abstract File saveToFile(ShoppingListFileData fileData) throws FileNotFoundException;
 
-    protected void sendEmailWithAttachedFile(String emailTo, File file) {
+    private void sendEmailWithAttachedFile(String emailTo, File file) {
         LocalDate localDate = LocalDate.parse(new SimpleDateFormat("yyyy-MM-dd").format(fileData.getShoppingListDate()));
         String subject = MESSAGE_BODY_PREFIX + localDate.toString();
         String messageBody = subject;
