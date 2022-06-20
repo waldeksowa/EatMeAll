@@ -15,7 +15,7 @@
           flat
           label="Tak"
           color="primary"
-          @click="fetchMemberSheduleData()"
+          @click="fetchRandomSheduleData()"
           v-close-popup
         />
         <q-btn flat label="Nie" color="primary" v-close-popup />
@@ -26,8 +26,8 @@
 <script>
 export default {
   methods: {
-    fetchMemberSheduleData() {
-      this.$emit("fetchMemberSheduleData");
+    fetchRandomSheduleData() {
+      this.$emit("fetchRandomSheduleData");
     },
   },
 };

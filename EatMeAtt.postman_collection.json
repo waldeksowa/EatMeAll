@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "5f19e0d3-7a2f-47c2-87fc-2c14493dae55",
+		"_postman_id": "762f331c-7b1b-4b17-abf3-c43a2afecbe5",
 		"name": "EatMeAtt",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -8,132 +8,6 @@
 		{
 			"name": "v1",
 			"item": [
-				{
-					"name": "MEALS",
-					"item": [
-						{
-							"name": "GET_ALL",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "http://{{SERVER_URL}}/api/v1/meals",
-									"protocol": "http",
-									"host": [
-										"{{SERVER_URL}}"
-									],
-									"path": [
-										"api",
-										"v1",
-										"meals"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "GET_BY_ID",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "http://{{SERVER_URL}}/api/v1/meals/11",
-									"protocol": "http",
-									"host": [
-										"{{SERVER_URL}}"
-									],
-									"path": [
-										"api",
-										"v1",
-										"meals",
-										"11"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "ADD",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"name\": \"test meal\",\r\n    \"author\": \"me\",\r\n    \"description\": \"new\",\r\n    \"mealTime\": [\"BREAKFAST\",\"SECOND_BREAKFAST\"],\r\n    \"prepareTime\": 55,\r\n    \"products\": [\r\n        {\r\n            \"id\": 32,\r\n            \"amount\": 12\r\n        },\r\n        {\r\n            \"id\": 33,\r\n            \"amount\": 13\r\n        }\r\n    ],\r\n    \"steps\": [\r\n        \"first step\",\r\n        \"second step\"\r\n    ]\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "http://{{SERVER_URL}}/api/v1/meals",
-									"protocol": "http",
-									"host": [
-										"{{SERVER_URL}}"
-									],
-									"path": [
-										"api",
-										"v1",
-										"meals"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "REMOVE",
-							"request": {
-								"method": "DELETE",
-								"header": [],
-								"url": {
-									"raw": "http://{{SERVER_URL}}/api/v1/meals/1",
-									"protocol": "http",
-									"host": [
-										"{{SERVER_URL}}"
-									],
-									"path": [
-										"api",
-										"v1",
-										"meals",
-										"1"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "UPDATE",
-							"request": {
-								"method": "PUT",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"name\": \"test meal\",\r\n    \"author\": \"me\",\r\n    \"description\": \"new\",\r\n    \"mealTime\": [\"BREAKFAST\",\"SECOND_BREAKFAST\"],\r\n    \"prepareTime\": 55,\r\n    \"products\": [\r\n        {\r\n            \"id\": 32,\r\n            \"amount\": 12\r\n        },\r\n        {\r\n            \"id\": 33,\r\n            \"amount\": 13\r\n        }\r\n    ],\r\n    \"steps\": [\r\n        \r\n    ]\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "http://{{SERVER_URL}}/api/v1/meals/11",
-									"protocol": "http",
-									"host": [
-										"{{SERVER_URL}}"
-									],
-									"path": [
-										"api",
-										"v1",
-										"meals",
-										"11"
-									]
-								}
-							},
-							"response": []
-						}
-					]
-				},
 				{
 					"name": "PRODUCTS",
 					"item": [
@@ -163,7 +37,7 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "http://{{SERVER_URL}}/api/v1/products/1",
+									"raw": "http://{{SERVER_URL}}/api/v1/products/32",
 									"protocol": "http",
 									"host": [
 										"{{SERVER_URL}}"
@@ -172,7 +46,7 @@
 										"api",
 										"v1",
 										"products",
-										"1"
+										"32"
 									]
 								}
 							},
@@ -259,132 +133,6 @@
 							"response": []
 						}
 					]
-				},
-				{
-					"name": "HOME_PRODUCTS",
-					"item": [
-						{
-							"name": "GET_ALL",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "http://{{SERVER_URL}}/api/v1/home_products",
-									"protocol": "http",
-									"host": [
-										"{{SERVER_URL}}"
-									],
-									"path": [
-										"api",
-										"v1",
-										"home_products"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "GET_BY_ID",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "http://{{SERVER_URL}}/api/v1/home_products/1",
-									"protocol": "http",
-									"host": [
-										"{{SERVER_URL}}"
-									],
-									"path": [
-										"api",
-										"v1",
-										"home_products",
-										"1"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "ADD",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"name\":\"nowy produkt\",\r\n    \"homeProductType\":\"ELECTRONICS\"\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "http://{{SERVER_URL}}/api/v1/home_products",
-									"protocol": "http",
-									"host": [
-										"{{SERVER_URL}}"
-									],
-									"path": [
-										"api",
-										"v1",
-										"home_products"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "REMOVE",
-							"request": {
-								"method": "DELETE",
-								"header": [],
-								"url": {
-									"raw": "http://{{SERVER_URL}}/api/v1/home_products/1",
-									"protocol": "http",
-									"host": [
-										"{{SERVER_URL}}"
-									],
-									"path": [
-										"api",
-										"v1",
-										"home_products",
-										"1"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "UPDATE",
-							"request": {
-								"method": "PUT",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"id\": 2,\r\n    \"name\": \"nowy produkt3\",\r\n    \"homeProductType\": \"ELECTRONICS\"\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "http://{{SERVER_URL}}/api/v1/home_products/1",
-									"protocol": "http",
-									"host": [
-										"{{SERVER_URL}}"
-									],
-									"path": [
-										"api",
-										"v1",
-										"home_products",
-										"1"
-									]
-								}
-							},
-							"response": []
-						}
-					]
 				}
 			]
 		},
@@ -395,10 +143,412 @@
 					"name": "MEMBERS",
 					"item": [
 						{
-							"name": "EXCLUDED PRODUCTS",
+							"name": "SCHEDULES",
 							"item": [
 								{
 									"name": "GET_ALL",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://{{SERVER_URL}}/api/v2/schedules",
+											"protocol": "http",
+											"host": [
+												"{{SERVER_URL}}"
+											],
+											"path": [
+												"api",
+												"v2",
+												"schedules"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "GET_SPECIFIC",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://{{SERVER_URL}}/api/v2/schedules/1",
+											"protocol": "http",
+											"host": [
+												"{{SERVER_URL}}"
+											],
+											"path": [
+												"api",
+												"v2",
+												"schedules",
+												"1"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "GET_RANDOM",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://{{SERVER_URL}}/api/v2/schedules/random",
+											"protocol": "http",
+											"host": [
+												"{{SERVER_URL}}"
+											],
+											"path": [
+												"api",
+												"v2",
+												"schedules",
+												"random"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "GET_FOR_MEMBER",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://{{SERVER_URL}}/api/v2/schedules/member/6",
+											"protocol": "http",
+											"host": [
+												"{{SERVER_URL}}"
+											],
+											"path": [
+												"api",
+												"v2",
+												"schedules",
+												"member",
+												"6"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "GET_RANDOM_FOR_MEMBER",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://{{SERVER_URL}}/api/v2/schedules/member/16/random",
+											"protocol": "http",
+											"host": [
+												"{{SERVER_URL}}"
+											],
+											"path": [
+												"api",
+												"v2",
+												"schedules",
+												"member",
+												"16",
+												"random"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "ADD",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"schedule\": [\r\n        {\r\n            \"date\": \"2021-12-06\",\r\n            \"breakfast\": 1,\r\n            \"secondBreakfast\": 1,\r\n            \"lunch\": 1,\r\n            \"dinner\": 1,\r\n            \"supper\": 1\r\n        }\r\n    ],\r\n    \"memberId\": 11\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "http://{{SERVER_URL}}/api/v2/schedules",
+											"protocol": "http",
+											"host": [
+												"{{SERVER_URL}}"
+											],
+											"path": [
+												"api",
+												"v2",
+												"schedules"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "UPDATE",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"createdAt\": \"2021-11-30T14:02:51.442+0000\",\r\n    \"updatedAt\": \"2021-11-30T14:02:51.442+0000\",\r\n    \"version\": 0,\r\n    \"scheduleDate\": \"2021-09-24\",\r\n    \"schedule\": [\r\n        {\r\n            \"date\": \"2021-09-24\",\r\n            \"breakfast\": 1,\r\n            \"secondBreakfast\": 2,\r\n            \"lunch\": 1,\r\n            \"dinner\": 1,\r\n            \"supper\": 1,\r\n            \"calorific\": 316.0,\r\n            \"carbohydrates\": 68.5,\r\n            \"fat\": 1.5,\r\n            \"protein\": 9.5,\r\n            \"roughage\": 4.0\r\n        },\r\n        {\r\n            \"date\": \"2021-09-25\",\r\n            \"breakfast\": 1,\r\n            \"secondBreakfast\": 1,\r\n            \"lunch\": 1,\r\n            \"dinner\": 1,\r\n            \"supper\": 1,\r\n            \"calorific\": 316.0,\r\n            \"carbohydrates\": 68.5,\r\n            \"fat\": 1.5,\r\n            \"protein\": 9.5,\r\n            \"roughage\": 4.0\r\n        }\r\n    ],\r\n    \"memberId\": 16,\r\n    \"id\": 27\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "http://{{SERVER_URL}}/api/v2/schedules/27",
+											"protocol": "http",
+											"host": [
+												"{{SERVER_URL}}"
+											],
+											"path": [
+												"api",
+												"v2",
+												"schedules",
+												"27"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "DELETE",
+									"request": {
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "http://{{SERVER_URL}}/api/v2/schedules/12",
+											"protocol": "http",
+											"host": [
+												"{{SERVER_URL}}"
+											],
+											"path": [
+												"api",
+												"v2",
+												"schedules",
+												"12"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "TRAINING_PLANS",
+							"item": [
+								{
+									"name": "GET_ALL",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://{{SERVER_URL}}/api/v2/trainingplans/member/13",
+											"protocol": "http",
+											"host": [
+												"{{SERVER_URL}}"
+											],
+											"path": [
+												"api",
+												"v2",
+												"trainingplans",
+												"member",
+												"13"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "GET_BY_ID",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://{{SERVER_URL}}/api/v2/trainingplans/5/member/9",
+											"protocol": "http",
+											"host": [
+												"{{SERVER_URL}}"
+											],
+											"path": [
+												"api",
+												"v2",
+												"trainingplans",
+												"5",
+												"member",
+												"9"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "GET_CURRENT",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://{{SERVER_URL}}/api/v2/trainingplans/member/13/current",
+											"protocol": "http",
+											"host": [
+												"{{SERVER_URL}}"
+											],
+											"path": [
+												"api",
+												"v2",
+												"trainingplans",
+												"member",
+												"13",
+												"current"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "GET_NEXT",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://{{SERVER_URL}}/api/v2/trainingplans/member/13/next",
+											"protocol": "http",
+											"host": [
+												"{{SERVER_URL}}"
+											],
+											"path": [
+												"api",
+												"v2",
+												"trainingplans",
+												"member",
+												"13",
+												"next"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "ADD",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"memberId\" : 13,\r\n    \"trainings\" : [\r\n        {\r\n            \"trainingDate\" : \"2021-11-14\",\r\n            \"trainingId\" : 5\r\n        },\r\n        {\r\n            \"trainingDate\" : \"2021-11-15\",\r\n            \"trainingId\" : 5\r\n        }\r\n    ]\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "http://{{SERVER_URL}}/api/v2/trainingplans",
+											"protocol": "http",
+											"host": [
+												"{{SERVER_URL}}"
+											],
+											"path": [
+												"api",
+												"v2",
+												"trainingplans"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "REMOVE",
+									"request": {
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "http://{{SERVER_URL}}/api/v2/trainingplans/22",
+											"protocol": "http",
+											"host": [
+												"{{SERVER_URL}}"
+											],
+											"path": [
+												"api",
+												"v2",
+												"trainingplans",
+												"22"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "UPDATE",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"id\": 14,\r\n    \"createdAt\": \"2021-11-20T21:02:51.810+0000\",\r\n    \"updatedAt\": \"2021-11-20T21:02:51.810+0000\",\r\n    \"version\": 0,\r\n    \"trainingPlanDate\": \"2021-11-01\",\r\n    \"memberId\": 13,\r\n    \"trainings\": [\r\n        {\r\n            \"trainingDate\": \"2021-11-14\",\r\n            \"trainingId\": 5,\r\n            \"trainingName\": \"first training\",\r\n            \"trainingType\": \"FOR_TIME\",\r\n            \"repetitionResult\": 11,\r\n            \"timeWeightResult\": 2.3,\r\n            \"trainingRating\": null\r\n        },\r\n        {\r\n            \"trainingDate\": \"2021-11-15\",\r\n            \"trainingId\": 5,\r\n            \"trainingName\": \"first training\",\r\n            \"trainingType\": \"FOR_TIME\",\r\n            \"repetitionResult\": null,\r\n            \"timeWeightResult\": null,\r\n            \"trainingRating\": null\r\n        }\r\n    ]\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "http://{{SERVER_URL}}/api/v2/trainingplans/14",
+											"protocol": "http",
+											"host": [
+												"{{SERVER_URL}}"
+											],
+											"path": [
+												"api",
+												"v2",
+												"trainingplans",
+												"14"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "MEMBER_MEALS",
+							"item": [
+								{
+									"name": "ADD",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"name\": \"2 test member meal\",\r\n    \"author\": \"me\",\r\n    \"description\": \"new\",\r\n    \"mealTime\": [\"BREAKFAST\",\"SECOND_BREAKFAST\"],\r\n    \"prepareTime\": 55,\r\n    \"products\": [\r\n        {\r\n            \"id\": 32,\r\n            \"amount\": 50\r\n        },\r\n        {\r\n            \"id\": 33,\r\n            \"amount\": 50\r\n        }\r\n    ],\r\n    \"steps\": [\r\n        \"first step\",\r\n        \"second step\"\r\n    ],\r\n    \"memberId\": 16,\r\n    \"parentMealId\": 6\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "http://{{SERVER_URL}}/api/v2/membermeals",
+											"protocol": "http",
+											"host": [
+												"{{SERVER_URL}}"
+											],
+											"path": [
+												"api",
+												"v2",
+												"membermeals"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "EXCLUDED PRODUCTS",
+							"item": [
+								{
+									"name": "GET_BY_MEMBER",
 									"protocolProfileBehavior": {
 										"disableBodyPruning": true
 									},
@@ -425,6 +575,39 @@
 												"v2",
 												"excludedprods",
 												"member",
+												"22"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "GET_BY_ID",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"method": "GET",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "http://{{SERVER_URL}}/api/v2/excludedprods/22",
+											"protocol": "http",
+											"host": [
+												"{{SERVER_URL}}"
+											],
+											"path": [
+												"api",
+												"v2",
+												"excludedprods",
 												"22"
 											]
 										}
@@ -461,6 +644,27 @@
 									"response": []
 								},
 								{
+									"name": "REMOVE",
+									"request": {
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "http://{{SERVER_URL}}/api/v2/excludedprods/22",
+											"protocol": "http",
+											"host": [
+												"{{SERVER_URL}}"
+											],
+											"path": [
+												"api",
+												"v2",
+												"excludedprods",
+												"22"
+											]
+										}
+									},
+									"response": []
+								},
+								{
 									"name": "UPDATE",
 									"request": {
 										"method": "PUT",
@@ -485,27 +689,6 @@
 												"v2",
 												"excludedprods",
 												"23"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "REMOVE",
-									"request": {
-										"method": "DELETE",
-										"header": [],
-										"url": {
-											"raw": "http://{{SERVER_URL}}/api/v2/excludedprods/22",
-											"protocol": "http",
-											"host": [
-												"{{SERVER_URL}}"
-											],
-											"path": [
-												"api",
-												"v2",
-												"excludedprods",
-												"22"
 											]
 										}
 									},
@@ -573,7 +756,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"name\":\"użytkownik\",\r\n    \"age\":31,\r\n    \"currentWeight\":80.2,\r\n    \"currentFat\":20.1,\r\n    \"currentMussels\":62.1,\r\n    \"currentWater\":53.1,\r\n    \"recommendedCalories\":2875,\r\n    \"recommendedCarbohydrates\":400,\r\n    \"recommendedFat\":75,\r\n    \"recommendedProtein\":150,\r\n    \"recommendedRoughage\":0\r\n}",
+									"raw": "{\r\n    \"name\":\"użytkownik\",\r\n    \"age\":31,\r\n    \"currentWeight\":80.2,\r\n    \"currentFat\":20.1,\r\n    \"currentMussels\":62.1,\r\n    \"currentWater\":53.1,\r\n    \"recommendedCalories\":2000,\r\n    \"recommendedCarbohydrates\":400,\r\n    \"recommendedFat\":75,\r\n    \"recommendedProtein\":150,\r\n    \"recommendedRoughage\":0\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -590,36 +773,6 @@
 										"api",
 										"v2",
 										"members"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "UPDATE",
-							"request": {
-								"method": "PUT",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"name\":\"użytkownik updated\",\r\n    \"age\":31,\r\n    \"currentWeight\":80.2,\r\n    \"currentFat\":20.1,\r\n    \"currentMussels\":62.1,\r\n    \"currentWater\":53.1,\r\n    \"recommendedCalories\":2875,\r\n    \"recommendedCarbohydrates\":400,\r\n    \"recommendedFat\":75,\r\n    \"recommendedProtein\":150,\r\n    \"recommendedRoughage\":0\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "http://{{SERVER_URL}}/api/v2/members/23",
-									"protocol": "http",
-									"host": [
-										"{{SERVER_URL}}"
-									],
-									"path": [
-										"api",
-										"v2",
-										"members",
-										"23"
 									]
 								}
 							},
@@ -645,6 +798,735 @@
 								}
 							},
 							"response": []
+						},
+						{
+							"name": "UPDATE",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n        \"id\": 16,\r\n        \"name\": \"użytkownik\",\r\n        \"age\": 31,\r\n        \"height\": null,\r\n        \"currentWeight\": 80.2,\r\n        \"currentFat\": 20.1,\r\n        \"currentMussels\": 62.1,\r\n        \"currentWater\": 53.1,\r\n        \"recommendedCalories\": 30.0,\r\n        \"recommendedCarbohydrates\": 400.0,\r\n        \"recommendedFat\": 75.0,\r\n        \"recommendedProtein\": 150.0,\r\n        \"recommendedRoughage\": 0.0,\r\n        \"accountId\": 1\r\n    }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://{{SERVER_URL}}/api/v2/members/16",
+									"protocol": "http",
+									"host": [
+										"{{SERVER_URL}}"
+									],
+									"path": [
+										"api",
+										"v2",
+										"members",
+										"16"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "TRAININGS",
+					"item": [
+						{
+							"name": "GET_ALL",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://{{SERVER_URL}}/api/v2/trainings",
+									"protocol": "http",
+									"host": [
+										"{{SERVER_URL}}"
+									],
+									"path": [
+										"api",
+										"v2",
+										"trainings"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET_BY_ID",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://{{SERVER_URL}}/api/v2/trainings/9",
+									"protocol": "http",
+									"host": [
+										"{{SERVER_URL}}"
+									],
+									"path": [
+										"api",
+										"v2",
+										"trainings",
+										"9"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "ADD",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\" : \"second training\",\r\n    \"trainingType\" : \"FOR_TIME\",\r\n    \"exercises\" : [\r\n        {\r\n            \"exerciseId\" : 1,\r\n            \"exerciseType\" : \"REPETITION\",\r\n            \"amount\" : 10\r\n        },\r\n        {\r\n            \"exerciseId\" : 2,\r\n            \"exerciseType\" : \"REPETITION\",\r\n            \"amount\" : 20\r\n        },\r\n        {\r\n            \"exerciseId\" : 3,\r\n            \"exerciseType\" : \"REPETITION\",\r\n            \"amount\" : 30\r\n        }\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://{{SERVER_URL}}/api/v2/trainings",
+									"protocol": "http",
+									"host": [
+										"{{SERVER_URL}}"
+									],
+									"path": [
+										"api",
+										"v2",
+										"trainings"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "REMOVE",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://{{SERVER_URL}}/api/v2/trainings/216",
+									"protocol": "http",
+									"host": [
+										"{{SERVER_URL}}"
+									],
+									"path": [
+										"api",
+										"v2",
+										"trainings",
+										"216"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "UPDATE",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": 9,\r\n    \"name\": \"aaaaa training\",\r\n    \"exercises\": [\r\n        {\r\n            \"trainingExerciseId\": 10,\r\n            \"exerciseId\": 1,\r\n            \"exerciseName\": \"1 exercise\",\r\n            \"exerciseType\": \"REPETITION\",\r\n            \"amount\": 10\r\n        },\r\n        {\r\n            \"trainingExerciseId\": 11,\r\n            \"exerciseId\": 2,\r\n            \"exerciseName\": \"2 exercise\",\r\n            \"exerciseType\": \"REPETITION\",\r\n            \"amount\": 20\r\n        },\r\n        {\r\n            \"trainingExerciseId\": 12,\r\n            \"exerciseId\": 3,\r\n            \"exerciseName\": \"444444 exercise\",\r\n            \"exerciseType\": \"REPETITION\",\r\n            \"amount\": 30\r\n        }\r\n    ],\r\n    \"trainingType\": \"FOR_TIME\",\r\n    \"repetitionResult\": null,\r\n    \"timeWeightResult\": null,\r\n    \"trainingRating\": null\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://{{SERVER_URL}}/api/v2/trainings/9",
+									"protocol": "http",
+									"host": [
+										"{{SERVER_URL}}"
+									],
+									"path": [
+										"api",
+										"v2",
+										"trainings",
+										"9"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "EXERCISES",
+					"item": [
+						{
+							"name": "GET_ALL",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://{{SERVER_URL}}/api/v2/exercises",
+									"protocol": "http",
+									"host": [
+										"{{SERVER_URL}}"
+									],
+									"path": [
+										"api",
+										"v2",
+										"exercises"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET_BY_ID",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://{{SERVER_URL}}/api/v2/exercises/4",
+									"protocol": "http",
+									"host": [
+										"{{SERVER_URL}}"
+									],
+									"path": [
+										"api",
+										"v2",
+										"exercises",
+										"4"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "ADD",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\" : \"4 exercise\",\r\n    \"musclePart\" : [\"SHOULDERS\"]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://{{SERVER_URL}}/api/v2/exercises",
+									"protocol": "http",
+									"host": [
+										"{{SERVER_URL}}"
+									],
+									"path": [
+										"api",
+										"v2",
+										"exercises"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "REMOVE",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://{{SERVER_URL}}/api/v2/exercises/4",
+									"protocol": "http",
+									"host": [
+										"{{SERVER_URL}}"
+									],
+									"path": [
+										"api",
+										"v2",
+										"exercises",
+										"4"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "UPDATE",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": 4,\r\n    \"createdAt\": \"2021-11-20T20:57:48.903+0000\",\r\n    \"updatedAt\": \"2021-11-20T20:57:48.903+0000\",\r\n    \"version\": 0,\r\n    \"name\": \"444444 exercise\",\r\n    \"musclePart\": [\r\n        \"SHOULDERS\"\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://{{SERVER_URL}}/api/v2/exercises/3",
+									"protocol": "http",
+									"host": [
+										"{{SERVER_URL}}"
+									],
+									"path": [
+										"api",
+										"v2",
+										"exercises",
+										"3"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "MEALS",
+					"item": [
+						{
+							"name": "GET_ALL",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://{{SERVER_URL}}/api/v2/meals",
+									"protocol": "http",
+									"host": [
+										"{{SERVER_URL}}"
+									],
+									"path": [
+										"api",
+										"v2",
+										"meals"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET_BY_ID_AND_MEMBER",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://{{SERVER_URL}}/api/v2/meals/1?member=6",
+									"protocol": "http",
+									"host": [
+										"{{SERVER_URL}}"
+									],
+									"path": [
+										"api",
+										"v2",
+										"meals",
+										"1"
+									],
+									"query": [
+										{
+											"key": "member",
+											"value": "6"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET_RANDOM_BY_MEALTIME",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://{{SERVER_URL}}/api/v2/meals/random/2/LUNCH",
+									"protocol": "http",
+									"host": [
+										"{{SERVER_URL}}"
+									],
+									"path": [
+										"api",
+										"v2",
+										"meals",
+										"random",
+										"2",
+										"LUNCH"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET_SPECIAL_AMOUNT_LIST",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://{{SERVER_URL}}/api/v2/meals/product/specialamount",
+									"protocol": "http",
+									"host": [
+										"{{SERVER_URL}}"
+									],
+									"path": [
+										"api",
+										"v2",
+										"meals",
+										"product",
+										"specialamount"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "ADD",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"5 test meal\",\r\n    \"author\": \"me\",\r\n    \"description\": \"new\",\r\n    \"mealTime\": [\"BREAKFAST\",\"SECOND_BREAKFAST\"],\r\n    \"prepareTime\": 55,\r\n    \"products\": [\r\n        {\r\n            \"id\": 32,\r\n            \"amount\": 100\r\n        },\r\n        {\r\n            \"id\": 33,\r\n            \"amount\": 100\r\n        }\r\n    ],\r\n    \"steps\": [\r\n        \"first step\",\r\n        \"second step\"\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://{{SERVER_URL}}/api/v2/meals",
+									"protocol": "http",
+									"host": [
+										"{{SERVER_URL}}"
+									],
+									"path": [
+										"api",
+										"v2",
+										"meals"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "REMOVE",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://{{SERVER_URL}}/api/v2/meals/1",
+									"protocol": "http",
+									"host": [
+										"{{SERVER_URL}}"
+									],
+									"path": [
+										"api",
+										"v2",
+										"meals",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "UPDATE",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"test meal\",\r\n    \"author\": \"me\",\r\n    \"description\": \"new\",\r\n    \"mealTime\": [\"BREAKFAST\",\"SECOND_BREAKFAST\"],\r\n    \"prepareTime\": 55,\r\n    \"products\": [\r\n        {\r\n            \"id\": 32,\r\n            \"amount\": 12\r\n        },\r\n        {\r\n            \"id\": 33,\r\n            \"amount\": 13\r\n        }\r\n    ],\r\n    \"steps\": [\r\n        \r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://{{SERVER_URL}}/api/v2/meals/11",
+									"protocol": "http",
+									"host": [
+										"{{SERVER_URL}}"
+									],
+									"path": [
+										"api",
+										"v2",
+										"meals",
+										"11"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "SHOPPING_LISTS",
+					"item": [
+						{
+							"name": "GET_CURRENT",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://{{SERVER_URL}}/api/v2/shoppinglist/current",
+									"protocol": "http",
+									"host": [
+										"{{SERVER_URL}}"
+									],
+									"path": [
+										"api",
+										"v2",
+										"shoppinglist",
+										"current"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET_BY_MEMBER_AND_DAY",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://{{SERVER_URL}}/api/v2/shoppinglist?day=MONDAY&member=6",
+									"protocol": "http",
+									"host": [
+										"{{SERVER_URL}}"
+									],
+									"path": [
+										"api",
+										"v2",
+										"shoppinglist"
+									],
+									"query": [
+										{
+											"key": "day",
+											"value": "MONDAY"
+										},
+										{
+											"key": "member",
+											"value": "6"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET_BY_ID",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://{{SERVER_URL}}/api/v2/shoppinglist/208",
+									"protocol": "http",
+									"host": [
+										"{{SERVER_URL}}"
+									],
+									"path": [
+										"api",
+										"v2",
+										"shoppinglist",
+										"208"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "ADD",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"accountId\": 1,\r\n    \"items\": [\r\n        {\r\n            \"productId\": 1,\r\n            \"amount\": 100,\r\n            \"isBuyed\": false\r\n        },\r\n        {\r\n            \"productId\": 6,\r\n            \"specialAmount\": 200,\r\n            \"isBuyed\": true\r\n        }\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://{{SERVER_URL}}/api/v2/shoppinglist",
+									"protocol": "http",
+									"host": [
+										"{{SERVER_URL}}"
+									],
+									"path": [
+										"api",
+										"v2",
+										"shoppinglist"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "REMOVE",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://{{SERVER_URL}}/api/v2/shoppinglist/22",
+									"protocol": "http",
+									"host": [
+										"{{SERVER_URL}}"
+									],
+									"path": [
+										"api",
+										"v2",
+										"shoppinglist",
+										"22"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "UPDATE",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": 1,\r\n    \"createdAt\": \"2021-10-19T17:07:53.526+0000\",\r\n    \"updatedAt\": \"2021-10-19T17:07:53.526+0000\",\r\n    \"version\": 0,\r\n    \"items\": [\r\n        {\r\n            \"id\": 2,\r\n            \"createdAt\": \"2021-10-19T17:07:53.545+0000\",\r\n            \"updatedAt\": \"2021-10-19T17:07:53.545+0000\",\r\n            \"version\": 0,\r\n            \"product\": {\r\n                \"id\": 1,\r\n                \"createdAt\": \"2021-10-19T17:06:42.097+0000\",\r\n                \"updatedAt\": \"2021-10-19T17:06:42.097+0000\",\r\n                \"version\": 0,\r\n                \"name\": \"Bagietki francuskie\",\r\n                \"calorific\": 283.0,\r\n                \"protein\": 8.7,\r\n                \"fat\": 1.7,\r\n                \"carbohydrates\": 59.2,\r\n                \"roughage\": 2.0,\r\n                \"productType\": \"CEREALS\"\r\n            },\r\n            \"amount\": 100,\r\n            \"buyed\": true\r\n        },\r\n        {\r\n            \"id\": 3,\r\n            \"createdAt\": \"2021-10-19T17:07:53.553+0000\",\r\n            \"updatedAt\": \"2021-10-19T17:07:53.553+0000\",\r\n            \"version\": 0,\r\n            \"product\": {\r\n                \"id\": 6,\r\n                \"createdAt\": \"2021-10-19T17:06:42.097+0000\",\r\n                \"updatedAt\": \"2021-10-19T17:06:42.097+0000\",\r\n                \"version\": 0,\r\n                \"name\": \"Bułki mieszane, z cebulą\",\r\n                \"calorific\": 284.0,\r\n                \"protein\": 7.9,\r\n                \"fat\": 3.5,\r\n                \"carbohydrates\": 58.4,\r\n                \"roughage\": 4.0,\r\n                \"productType\": \"CEREALS\"\r\n            },\r\n            \"amount\": 200,\r\n            \"buyed\": true\r\n        }\r\n    ],\r\n    \"shoppingListDate\": \"2021-10-19T17:07:53.426+0000\",\r\n    \"accountId\": 1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://{{SERVER_URL}}/api/v2/shoppinglist/23",
+									"protocol": "http",
+									"host": [
+										"{{SERVER_URL}}"
+									],
+									"path": [
+										"api",
+										"v2",
+										"shoppinglist",
+										"23"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "EMAILS",
+					"item": [
+						{
+							"name": "SEND PDF",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": 43,\r\n    \"createdAt\": \"2022-01-28T10:58:48.364+0000\",\r\n    \"updatedAt\": \"2022-01-28T10:58:48.364+0000\",\r\n    \"version\": 0,\r\n    \"accountId\": 1,\r\n    \"shoppingListDate\": \"2022-01-28T00:00:00.000+0000\",\r\n    \"items\": [\r\n        {\r\n            \"id\": 44,\r\n            \"createdAt\": \"2022-01-28T10:58:48.369+0000\",\r\n            \"updatedAt\": \"2022-01-28T10:58:48.369+0000\",\r\n            \"version\": 0,\r\n            \"productId\": 1,\r\n            \"productName\": \"Bagietki francuskie\",\r\n            \"amount\": 100,\r\n            \"specialAmount\": 0,\r\n            \"buyed\": false\r\n        },\r\n        {\r\n            \"id\": 45,\r\n            \"createdAt\": \"2022-01-28T10:58:48.373+0000\",\r\n            \"updatedAt\": \"2022-01-28T10:58:48.373+0000\",\r\n            \"version\": 0,\r\n            \"productId\": 6,\r\n            \"productName\": \"Bułki mieszane, z cebulą\",\r\n            \"amount\": 0,\r\n            \"specialAmount\": 200,\r\n            \"buyed\": false\r\n        }\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://{{SERVER_URL}}/api/v2/shoppinglistemails/pdf?recipient=waldek@szkola-dobrego-kodu.pl",
+									"protocol": "http",
+									"host": [
+										"{{SERVER_URL}}"
+									],
+									"path": [
+										"api",
+										"v2",
+										"shoppinglistemails",
+										"pdf"
+									],
+									"query": [
+										{
+											"key": "recipient",
+											"value": "waldek@szkola-dobrego-kodu.pl"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "SEND EXCEL",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": 43,\r\n    \"createdAt\": \"2022-01-28T10:58:48.364+0000\",\r\n    \"updatedAt\": \"2022-01-28T10:58:48.364+0000\",\r\n    \"version\": 0,\r\n    \"accountId\": 1,\r\n    \"shoppingListDate\": \"2022-01-28T00:00:00.000+0000\",\r\n    \"items\": [\r\n        {\r\n            \"id\": 44,\r\n            \"createdAt\": \"2022-01-28T10:58:48.369+0000\",\r\n            \"updatedAt\": \"2022-01-28T10:58:48.369+0000\",\r\n            \"version\": 0,\r\n            \"productId\": 1,\r\n            \"productName\": \"Bagietki francuskie\",\r\n            \"amount\": 100,\r\n            \"specialAmount\": 0,\r\n            \"buyed\": false\r\n        },\r\n        {\r\n            \"id\": 45,\r\n            \"createdAt\": \"2022-01-28T10:58:48.373+0000\",\r\n            \"updatedAt\": \"2022-01-28T10:58:48.373+0000\",\r\n            \"version\": 0,\r\n            \"productId\": 6,\r\n            \"productName\": \"Bułki mieszane, z cebulą\",\r\n            \"amount\": 0,\r\n            \"specialAmount\": 200,\r\n            \"buyed\": false\r\n        }\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://{{SERVER_URL}}/api/v2/shoppinglistemails/excel?recipient=waldek@szkola-dobrego-kodu.pl",
+									"protocol": "http",
+									"host": [
+										"{{SERVER_URL}}"
+									],
+									"path": [
+										"api",
+										"v2",
+										"shoppinglistemails",
+										"excel"
+									],
+									"query": [
+										{
+											"key": "recipient",
+											"value": "waldek@szkola-dobrego-kodu.pl"
+										}
+									]
+								}
+							},
+							"response": []
 						}
 					]
 				},
@@ -664,7 +1546,7 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"if (pm.response.code === 200){\r",
+									"if (pm.response.code == 200){\r",
 									"    pm.environment.set('AUTH_TOKEN', pm.response.json().token);\r",
 									"}"
 								],
@@ -730,6 +1612,36 @@
 					}
 				}
 			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "SERVER_URL",
+			"value": "localhost:8080"
+		},
+		{
+			"key": "AUTH_TOKEN",
+			"value": ""
 		}
 	]
 }

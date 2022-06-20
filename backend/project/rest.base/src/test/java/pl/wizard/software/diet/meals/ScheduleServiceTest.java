@@ -6,13 +6,17 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
+import pl.wizard.software.diet.MealService;
 import pl.wizard.software.diet.ScheduleService;
+import pl.wizard.software.diet.members.MemberDao;
+import pl.wizard.software.diet.members.MemberEntity;
 import pl.wizard.software.diet.products.ProductEntity;
 import pl.wizard.software.diet.schedules.ScheduleDao;
 import pl.wizard.software.dto.ScheduleForWeekDto;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import static java.time.DayOfWeek.MONDAY;
@@ -25,13 +29,17 @@ public class ScheduleServiceTest {
     private ScheduleService scheduleService;
 
     @Mock
-    MealDao mealRepository;
-    @Mock
     ScheduleDao scheduleRepository;
+    @Mock
+    MemberDao memberRepository;
+    @Mock
+    MealService mealService;
+    @Mock
+    MemberMealDao memberMealRepository;
 
     @Before
     public void init() {
-        scheduleService = new ScheduleService(mealRepository, scheduleRepository);
+        scheduleService = new ScheduleService(mealService, scheduleRepository, memberRepository, memberMealRepository);
     }
 
     @Test
@@ -62,7 +70,7 @@ public class ScheduleServiceTest {
         for (int i = 0; i < 35; i++) {
             mockList.add(meal);
         }
-        when(mealRepository.findRandomByMealTime(Mockito.anyInt(),Mockito.anyInt())).thenReturn(mockList);
+        when(mealService.findRandomByMealTime(Mockito.anyInt(),Mockito.anyInt())).thenReturn(mockList);
 
         //when
         ScheduleForWeekDto result = scheduleService.getScheduleByMealTime();
@@ -117,7 +125,7 @@ public class ScheduleServiceTest {
         for (int i = 0; i < 35; i++) {
             mockList.add(meal);
         }
-        when(mealRepository.findRandomByMealTime(Mockito.anyInt(),Mockito.anyInt())).thenReturn(mockList);
+        when(mealService.findRandomByMealTime(Mockito.anyInt(),Mockito.anyInt())).thenReturn(mockList);
 
         //when
         ScheduleForWeekDto result = scheduleService.getScheduleByMealTime();
@@ -240,11 +248,11 @@ public class ScheduleServiceTest {
         meal_supper.setMealTime(Set.of(MealTimeEnum.SUPPER));
         meal_supper.init();
 
-        when(mealRepository.findRandomByMealTime(1, 7)).thenReturn(new ArrayList<>(List.of(meal_breakfast)));
-        when(mealRepository.findRandomByMealTime(2, 7)).thenReturn(new ArrayList<>(List.of(meal_second_breakfast)));
-        when(mealRepository.findRandomByMealTime(3, 7)).thenReturn(new ArrayList<>(List.of(meal_lunch)));
-        when(mealRepository.findRandomByMealTime(4, 7)).thenReturn(new ArrayList<>(List.of(meal_dinner)));
-        when(mealRepository.findRandomByMealTime(5, 7)).thenReturn(new ArrayList<>(List.of(meal_supper)));
+        when(mealService.findRandomByMealTime(1, 7)).thenReturn(new ArrayList<>(List.of(meal_breakfast)));
+        when(mealService.findRandomByMealTime(2, 7)).thenReturn(new ArrayList<>(List.of(meal_second_breakfast)));
+        when(mealService.findRandomByMealTime(3, 7)).thenReturn(new ArrayList<>(List.of(meal_lunch)));
+        when(mealService.findRandomByMealTime(4, 7)).thenReturn(new ArrayList<>(List.of(meal_dinner)));
+        when(mealService.findRandomByMealTime(5, 7)).thenReturn(new ArrayList<>(List.of(meal_supper)));
 
         //when
         ScheduleForWeekDto result = scheduleService.getScheduleByMealTime();
@@ -258,4 +266,68 @@ public class ScheduleServiceTest {
 
     }
 
+    @Test
+    public void shouldAddMemberMealsToScheduleWhenExists() {
+        //given
+        MemberEntity member = new MemberEntity();
+        member.setName("test member");
+        member.setId(200L);
+
+        MealEntity meal_breakfast = new MealEntity();
+        meal_breakfast.setId(1L);
+        meal_breakfast.setName("test meal BREAKFAST");
+        meal_breakfast.setMealTime(Set.of(MealTimeEnum.BREAKFAST));
+
+        MealEntity meal_second_breakfast = new MealEntity();
+        meal_second_breakfast.setId(2L);
+        meal_second_breakfast.setName("test meal SECOND_BREAKFAST");
+        meal_second_breakfast.setMealTime(Set.of(MealTimeEnum.SECOND_BREAKFAST));
+
+        MealEntity meal_lunch = new MealEntity();
+        meal_lunch.setId(3L);
+        meal_lunch.setName("test meal LUNCH");
+        meal_lunch.setMealTime(Set.of(MealTimeEnum.LUNCH));
+
+        MealEntity meal_dinner = new MealEntity();
+        meal_dinner.setId(4L);
+        meal_dinner.setName("test meal DINNER");
+        meal_dinner.setMealTime(Set.of(MealTimeEnum.DINNER));
+
+        MealEntity meal_supper = new MealEntity();
+        meal_supper.setId(5L);
+        meal_supper.setName("test meal SUPPER");
+        meal_supper.setMealTime(Set.of(MealTimeEnum.SUPPER));
+
+        MemberMealEntity member_meal_lunch = new MemberMealEntity();
+        member_meal_lunch.setId(103L);
+        member_meal_lunch.setName("test member meal LUNCH");
+        member_meal_lunch.setMealTime(Set.of(MealTimeEnum.LUNCH));
+        member_meal_lunch.setMember(member);
+        member_meal_lunch.setParentMeal(meal_lunch);
+
+        MemberMealEntity member_meal_dinner = new MemberMealEntity();
+        member_meal_dinner.setId(104L);
+        member_meal_dinner.setName("test member meal DINNER");
+        member_meal_dinner.setMealTime(Set.of(MealTimeEnum.DINNER));
+        member_meal_dinner.setMember(member);
+        member_meal_dinner.setParentMeal(meal_dinner);
+
+        when(mealService.findRandomByMealTime(1, 7)).thenReturn(new ArrayList<>(List.of(meal_breakfast)));
+        when(mealService.findRandomByMealTime(2, 7)).thenReturn(new ArrayList<>(List.of(meal_second_breakfast)));
+        when(mealService.findRandomByMealTime(3, 7)).thenReturn(new ArrayList<>(List.of(meal_lunch)));
+        when(mealService.findRandomByMealTime(4, 7)).thenReturn(new ArrayList<>(List.of(meal_dinner)));
+        when(mealService.findRandomByMealTime(5, 7)).thenReturn(new ArrayList<>(List.of(meal_supper)));
+        when(memberMealRepository.findByMemberAndParentMeal(member.getId(), meal_lunch.getId())).thenReturn(Optional.of(member_meal_lunch));
+        when(memberMealRepository.findByMemberAndParentMeal(member.getId(), meal_dinner.getId())).thenReturn(Optional.of(member_meal_dinner));
+
+        //when
+        ScheduleForWeekDto result = scheduleService.getScheduleByMealTime(member.getId());
+
+        //then
+        assertEquals(meal_breakfast.getId(), result.getSchedule().get(MONDAY.ordinal()).getBreakfast());
+        assertEquals(meal_second_breakfast.getId(), result.getSchedule().get(MONDAY.ordinal()).getSecondBreakfast());
+        assertEquals(member_meal_lunch.getId(), result.getSchedule().get(MONDAY.ordinal()).getLunch());
+        assertEquals(member_meal_dinner.getId(), result.getSchedule().get(MONDAY.ordinal()).getDinner());
+        assertEquals(meal_supper.getId(), result.getSchedule().get(MONDAY.ordinal()).getSupper());
+    }
 }

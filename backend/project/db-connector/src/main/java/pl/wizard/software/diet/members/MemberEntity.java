@@ -30,7 +30,7 @@ public class MemberEntity extends AbstractBaseEntity {
     private Double recommendedProtein;
     private Double recommendedRoughage;
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-    @JoinColumn(name = "memberId")
+    @JoinColumn(name = "member_id")
     private Set<ScheduleEntity> schedules;
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     @JoinColumn(name = "memberId")

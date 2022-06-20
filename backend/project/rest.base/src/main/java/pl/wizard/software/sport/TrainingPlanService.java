@@ -12,11 +12,11 @@ import pl.wizard.software.dto.CreateTrainingPlanDto;
 import pl.wizard.software.dto.TrainingPlanDto;
 import pl.wizard.software.dto.TrainingPlanItemDto;
 import pl.wizard.software.exception.InvalidRequestBodyException;
-import pl.wizard.software.mapper.TrainingPlanDtoMapper;
 import pl.wizard.software.sport.trainings.TrainingDao;
 import pl.wizard.software.sport.trainings.TrainingEntity;
 import pl.wizard.software.sport.trainings.TrainingPlanDao;
 import pl.wizard.software.sport.trainings.TrainingPlanEntity;
+import pl.wizard.software.util.ByteConverter;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
@@ -70,7 +70,7 @@ public class TrainingPlanService {
         TrainingPlanEntity trainingPlanEntity = TrainingPlanEntity.builder()
                 .trainingPlanDate(firstTrainingDate.withDayOfMonth(1))
                 .member(memberEntity)
-                .trainings(TrainingPlanDtoMapper.convertToBytes(trainingPlanItemDtos))
+                .trainings(ByteConverter.convertToBytes(trainingPlanItemDtos))
                 .build();
 
         return save(trainingPlanEntity);
@@ -105,7 +105,7 @@ public class TrainingPlanService {
                 .orElseThrow(() -> new NoSuchElementException("Could not find member with id " + training.getMemberId()));
         trainingPlanEntity.setMember(memberEntity);
         trainingPlanEntity.setTrainingPlanDate(training.getTrainingPlanDate().withDayOfMonth(1));
-        trainingPlanEntity.setTrainings(TrainingPlanDtoMapper.convertToBytes(trainingPlanItemDtos));
+        trainingPlanEntity.setTrainings(ByteConverter.convertToBytes(trainingPlanItemDtos));
 
         return save(trainingPlanEntity);
     }

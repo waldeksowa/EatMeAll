@@ -172,6 +172,7 @@ CREATE TABLE public.members
     version integer NOT NULL,
     name character varying(255) NOT NULL,
     age integer,
+    height integer,
     current_weight double precision NOT NULL,
     current_fat double precision,
     current_mussels double precision,
@@ -355,6 +356,28 @@ CREATE TABLE public.training_plans (
 
 ALTER TABLE public.training_plans OWNER to eatmeall;
 
+
+CREATE TABLE public.member_meals
+(
+    id bigint NOT NULL,
+    member_id bigint,
+    parent_meal_id bigint,
+    CONSTRAINT member_meals_pkey PRIMARY KEY (id),
+    CONSTRAINT fk_member_meals_parent_meal_id FOREIGN KEY (parent_meal_id)
+            REFERENCES public.meals (id) MATCH SIMPLE
+            ON UPDATE NO ACTION
+            ON DELETE NO ACTION,
+    CONSTRAINT fk_member_meals_meal_id FOREIGN KEY (id)
+                REFERENCES public.meals (id) MATCH SIMPLE
+                ON UPDATE NO ACTION
+                ON DELETE NO ACTION,
+    CONSTRAINT fk_member_meals_member_id FOREIGN KEY (member_id)
+        REFERENCES public.members (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+);
+
+ALTER TABLE public.member_meals OWNER to eatmeall;
 
 
 INSERT INTO public.products(

@@ -122,7 +122,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions("store", ["errorMesage", "notifySucessful"]),
+    ...mapActions("store", ["notifyError", "notifySucessful"]),
     addNewUser() {
       if (
         this.name ||
@@ -166,9 +166,8 @@ export default {
         this.recommendedRoughage = null;
         this.notifySucessful("Użytkownik został dodany pomyślnie");
       } else {
-        this.errorMesage("Uzupelnij wszystkie pola");
+        this.notifyError("Uzupelnij wszystkie pola");
       }
-    
     },
   },
 };
